@@ -182,8 +182,7 @@ public class Utils {
         if (APP_ID.equals("")) {
             return "1";
         }
-        JvmPlugin jvmPlugin = new JavaPluginMain();
-        Path news_file_path = PluginManager.INSTANCE.getPluginsDataPath().resolve(jvmPlugin.getDescription().getName());
+        Path news_file_path = get_plugins_data_path();
         int random_num = get_random_num(0, 10000);
         String filename = get_time() + random_num + ".mp3";
         // 初始化一个AipSpeech
@@ -245,32 +244,37 @@ public class Utils {
     }
 
 
-    public void rewrite_data(File file) {
+    public void rewrite_data(File file, String qian) {
         try {
             BufferedWriter out = new BufferedWriter(new FileWriter(file));
-            out.write(get_time1());
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("date", get_time1());
+            jsonObject.put("qian", qian);
+            out.write(String.valueOf(jsonObject));
             out.close();
         } catch (IOException e) {
         }
     }
 
-    public boolean read_data(File file) {
+    public String read_data(File file) {
         BufferedReader in = null;
         try {
             in = new BufferedReader(new FileReader(file));
-            String time = in.readLine();
+            String data = in.readLine();
+            JSONObject jsonObject = JSONObject.parseObject(data);
+            String time = jsonObject.getString("date");
+            String qian = jsonObject.getString("qian");
             if (time.equals(get_time1())) {
-                return false;
+                return qian;
             } else {
-                rewrite_data(file);
-                return true;
+                return "1";
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return false;
+        return "0";
     }
 
 

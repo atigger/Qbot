@@ -121,8 +121,7 @@ public class MessageDeal {
             //燃鹅相关
             if (msg.equals("燃鹅菜单")) {
                 chain = new MessageChainBuilder()
-                        .append(new At(sender_id))
-                        .append(new PlainText("授权燃鹅命令：授权\n登录燃鹅命令：登录\n每日签到命令：签到\n一键补签命令：补签\n燃鹅信息命令：我的燃鹅\n免费抽奖命令：免费抽奖(已关闭,稍后删除)\n兑换奖券命令：兑换+兑换数(已关闭,稍后删除)\n抽奖命令：超级抽奖/普通抽奖+抽奖数\n抽奖记录命令：抽奖记录\n刷金币命令：开始跑分/停止跑分/跑分状态(已关闭,稍后删除)\nPS:请不要频繁操作，如果出现无权限或者时序异常请重新发送登录命令，且授权命令和登录命令绑定，授权完后无需登录\n**********\n因此功能不稳定因素太多，且维护比较麻烦，将相继下线一些功能，凌晨12-1点可能服务器不稳定，可能出现没有响应，就需要稍后重试。"))
+                        .append(new PlainText("授权燃鹅命令：授权\n登录燃鹅命令：登录\n每日签到命令：签到\n一键补签命令：补签\n燃鹅信息命令：我的燃鹅\n抽奖命令：超级抽奖/普通抽奖+抽奖数\n抽奖记录命令：抽奖记录\n燃鹅查询命令：燃鹅查询，补挂，状态查询。\n如果出现密码错误，请私聊小助手发送：修改密码+新密码（无需加号，例：修改密码123456）再发送补挂即可\nPS:请不要频繁操作，如果出现无权限或者时序异常请重新发送登录命令，且授权命令和登录命令绑定，授权完后无需登录\n"))
                         .build();
                 group.sendMessage(chain);
                 return;
@@ -203,7 +202,7 @@ public class MessageDeal {
                     chain = new At(sender_id).plus(new PlainText(msg));
                     group.sendMessage(chain);
                 } else {
-                    group.sendMessage(new At(sender_id).plus(new PlainText("\n请先授权")));
+                    group.sendMessage(new At(sender_id).plus(new PlainText("\n请先授权登录")));
                 }
                 return;
             }
@@ -267,11 +266,6 @@ public class MessageDeal {
                 return;
             }
 
-            //未来删除
-            if (msg.equals("开始跑分") || msg.equals("停止跑分") || msg.equals("跑分状态") || msg.contains("兑换") || msg.contains("免费抽奖")) {
-                group.sendMessage(new At(sender_id).plus(new PlainText("\n此功能已关闭(命令即将下线)\n详情请发送 燃鹅菜单")));
-                return;
-            }
 
             if (msg.equals("燃鹅查询")) {
                 DgUtils dgUtils = new DgUtils();
@@ -351,21 +345,20 @@ public class MessageDeal {
 
         if (msg.equals("求签") || msg.equals("观音求签")) {
             File qq_file = new File(utils.get_plugins_data_path() + "/cache/qq/" + sender_id + ".cache");
+            String qian = null;
             if (qq_file.exists()) {
-                if (!utils.read_data(qq_file)) {
-                    chain = new MessageChainBuilder()
-                            .append(new At(sender_id))
-                            .append(new PlainText("\n今天已抽签,请明天再来吧"))
-                            .build();
-                    group.sendMessage(chain);
-                    return;
+                qian = utils.read_data(qq_file);
+                if (qian.equals("1")) {
+                    qian = plugin.get_cq();
+                    utils.rewrite_data(qq_file, qian);
                 }
             } else {
-                utils.rewrite_data(qq_file);
+                qian = plugin.get_cq();
+                utils.rewrite_data(qq_file, qian);
             }
             chain = new MessageChainBuilder()
                     .append(new At(sender_id))
-                    .append(new PlainText("\n" + plugin.get_cq()))
+                    .append(new PlainText("\n" + qian))
                     .build();
             group.sendMessage(chain);
             return;
@@ -381,7 +374,7 @@ public class MessageDeal {
             Image image = get_image_add(filepath);
             chain = new MessageChainBuilder()
                     .append(new At(sender_id))
-                    .append(new PlainText("\n当前版本1.0.0\n更新日期2021年6月11日\n本项目已开源\n戳↓↓↓↓↓"))
+                    .append(new PlainText("\n当前版本1.0.1\n更新日期2021年6月16日\n本项目已开源\n戳↓↓↓↓↓"))
                     .append(image)
                     .build();
             group.sendMessage(chain);
