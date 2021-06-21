@@ -46,8 +46,26 @@ public class MessageDeal {
             return;
         }
 
+        if (msg.contains("听歌")) {
+            msg = msg.replace("听歌", "");
+            if (msg.equals("")) {
+                chain = new PlainText("？ \n你总得告诉我要听什么吧？").plus(new Face(244));
+                group.sendMessage(chain);
+                return;
+            }
+            Plugin plugin = new Plugin();
+            MusicShare musicShare = plugin.get_music(msg);
+            group.sendMessage(musicShare);
+            return;
+        }
+
         if (msg.contains("说")) {
             msg = msg.replaceFirst("说", "");
+            if (msg.equals("")) {
+                chain = new PlainText("？ \n你总得告诉我要说什么吧？").plus(new Face(244));
+                group.sendMessage(chain);
+                return;
+            }
             Plugin plugin = new Plugin();
             ExternalResource voice = plugin.get_voice(group, msg);
             if (voice == null) {
@@ -57,14 +75,6 @@ public class MessageDeal {
             Voice voice1 = group.uploadVoice(voice);
             group.sendMessage(voice1);
             voice.close();
-            return;
-        }
-
-        if (msg.contains("听歌")) {
-            msg = msg.replace("听歌", "");
-            Plugin plugin = new Plugin();
-            MusicShare musicShare = plugin.get_music(msg);
-            group.sendMessage(musicShare);
             return;
         }
 
@@ -374,7 +384,7 @@ public class MessageDeal {
             Image image = get_image_add(filepath);
             chain = new MessageChainBuilder()
                     .append(new At(sender_id))
-                    .append(new PlainText("\n当前版本1.0.1\n更新日期2021年6月16日\n本项目已开源\n戳↓↓↓↓↓"))
+                    .append(new PlainText("\n当前版本1.0.2\n更新日期2021年6月21日\n本项目已开源\n戳↓↓↓↓↓"))
                     .append(image)
                     .build();
             group.sendMessage(chain);
