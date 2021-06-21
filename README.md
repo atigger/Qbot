@@ -1,6 +1,6 @@
 # QQBOT
 
-本项目基于 [mirai-console](https://github.com/mamoe/mirai-console) [![Version](https://img.shields.io/badge/version-2.6.6-red)](https://github.com/mamoe/mirai/releases/tag/v2.6.6)开发
+本项目基于 [mirai-console](https://github.com/mamoe/mirai-console) [![Version](https://img.shields.io/badge/version-2.7.M1-green)](https://github.com/mamoe/mirai/releases/tag/v2.7-M1)开发
 
 [如何使用](https://github.com/mamoe/mirai-console#%E5%AE%89%E8%A3%85-jar-%E6%8F%92%E4%BB%B6)？
 
@@ -24,6 +24,14 @@
 
 
 更新日志：
+
+2021年6月21日v1.0.2更新
+
+1.更新支持到 mirai-console到2.7-M1
+
+2.优化语言和歌曲分享逻辑
+
+---
 
 2021年6月16日 v1.0.1更新
 
