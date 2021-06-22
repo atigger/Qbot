@@ -46,7 +46,7 @@ public class MessageDeal {
             return;
         }
 
-        if (msg.contains("听歌")) {
+        if (msg.indexOf("听歌") == 0) {
             msg = msg.replace("听歌", "");
             if (msg.equals("")) {
                 chain = new PlainText("？ \n你总得告诉我要听什么吧？").plus(new Face(244));
@@ -59,7 +59,7 @@ public class MessageDeal {
             return;
         }
 
-        if (msg.contains("说")) {
+        if (msg.indexOf("说") == 0) {
             msg = msg.replaceFirst("说", "");
             if (msg.equals("")) {
                 chain = new PlainText("？ \n你总得告诉我要说什么吧？").plus(new Face(244));
@@ -379,12 +379,46 @@ public class MessageDeal {
             return;
         }
 
+        if (msg.equals("福利") || msg.equals("羊毛") || msg.equals("羊毛福利")) {
+            try {
+                utils.gift();
+                Image image = get_image_add(utils.get_plugins_data_path() + "/fl.jpg");
+                chain = new MessageChainBuilder()
+                        .append(new At(sender_id))
+                        .append(new PlainText("\n请输入想查看的福利序号\n例：序号1"))
+                        .append(image)
+                        .build();
+                group.sendMessage(chain);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return;
+        }
+
+        if (msg.indexOf("序号") == 0) {
+            msg = msg.replace("序号", "");
+            try {
+                int i = Integer.parseInt(msg);
+                if (i > 10) {
+                    group.sendMessage("请正确输入");
+                    return;
+                }
+                String filepath = utils.get_gift(i);
+                Image image = get_image_add(filepath);
+                group.sendMessage(image);
+                return;
+            } catch (Exception e) {
+                group.sendMessage("请正确输入");
+                return;
+            }
+        }
+
         if (msg.equals("关于") || msg.equals("关于作者")) {
             String filepath = utils.get_plugins_data_path() + "/qrcode.png";
             Image image = get_image_add(filepath);
             chain = new MessageChainBuilder()
                     .append(new At(sender_id))
-                    .append(new PlainText("\n当前版本1.0.2\n更新日期2021年6月21日\n本项目已开源\n戳↓↓↓↓↓"))
+                    .append(new PlainText("\n当前版本1.0.3\n更新日期2021年6月22日\n本项目已开源\n戳↓↓↓↓↓"))
                     .append(image)
                     .build();
             group.sendMessage(chain);
@@ -453,6 +487,10 @@ public class MessageDeal {
                 .append(new PlainText("\n"))
                 .append(new Face(190))
                 .append(new PlainText("美女图片  战力查询"))
+                .append(new Face(190))
+                .append(new PlainText("\n"))
+                .append(new Face(190))
+                .append(new PlainText("羊毛福利  敬请期待"))
                 .append(new Face(190))
                 .append(new PlainText("\n"))
                 .append(new Face(190))

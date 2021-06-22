@@ -277,6 +277,92 @@ public class Utils {
         return "0";
     }
 
+    public void gift() throws Exception {
+        String url = "https://www.jishuqq.com";
+        Document doc = Jsoup.connect(url).timeout(10000).get();
+        Elements url_list = doc.getElementsByClass("home-last half-50");
+        int size = url_list.size();
+        if (size > 10) {
+            size = 10;
+        }
+        String message = "";
+        for (int i = 0; i < size; i++) {
+            String url_1 = url + url_list.get(i).getElementsByTag("a").attr("href");
+            String title = url_list.get(i).getElementsByTag("a").attr("title");
+            String a = url_list.get(i).getElementsByTag("span").text();
+            message = message + (i + 1) + "." + title + " " + a + "\n\n";
+            System.out.println(title + " " + url_1 + " " + a);
+        }
+        String[] strArr = message.split("\n");
+        int image_height = 700; // 每张图片的高度
+        int line_height = 20; // 每行或者每个文字的高度
+        int every_line = image_height / line_height; // 每张图片有多少行文字
+        createImage(strArr, new Font("黑体", Font.PLAIN, 20), 800, image_height, every_line, line_height);
+    }
 
+    public String get_gift(int i) throws IOException {
+        i = i - 1;
+        String url = "https://www.jishuqq.com";
+        Document doc = Jsoup.connect(url).timeout(10000).get();
+        Elements url_list = doc.getElementsByClass("home-last half-50");
+        String url_1 = url + url_list.get(i).getElementsByTag("a").attr("href");
+        QRCodeUtil qrCodeUtil = new QRCodeUtil();
+        String code_path = String.valueOf(get_plugins_data_path()) + "/code1.png";
+        // 生成二维码
+        qrCodeUtil.encodeQRCode(url_1, code_path);
+        return code_path;
+    }
+
+    public void createImage(String[] strArr, Font font,
+                            int width, int image_height, int every_line, int line_height) throws Exception {
+        FontMetrics fm = sun.font.FontDesignMetrics.getMetrics(font);
+        int stringWidth = fm.charWidth('字');// 标点符号也算一个字
+        int line_string_num = width % stringWidth == 0 ? (width / stringWidth) : (width / stringWidth) + 1;
+        line_string_num = line_string_num + 7;
+        System.out.println("每行=" + line_string_num);
+
+        java.util.List<String> listStr = new ArrayList<String>();
+        List<String> newList = new ArrayList<String>();
+        for (int h = 0; h < strArr.length; h++) {
+            listStr.add(strArr[h]);
+        }
+        for (int j = 0; j < listStr.size(); j++) {
+            if (listStr.get(j).length() > line_string_num) {
+                newList.add(listStr.get(j).substring(0, line_string_num));
+                listStr.add(j + 1, listStr.get(j).substring(line_string_num));
+                listStr.set(j, listStr.get(j).substring(0, line_string_num));
+            } else {
+                newList.add(listStr.get(j));
+            }
+        }
+
+        int a = newList.size();
+        int b = every_line;
+        int imgNum = a % b == 0 ? (a / b) : (a / b) + 1;
+        image_height = a * 22;
+        for (int m = 0; m < imgNum; m++) {
+            String filePath = get_plugins_data_path() + "/fl.jpg";
+            File outFile = new File(filePath);
+// 创建图片
+            BufferedImage image = new BufferedImage(width, image_height,
+                    BufferedImage.TYPE_INT_BGR);
+            Graphics g = image.getGraphics();
+            g.setClip(0, 0, width, image_height);
+            g.setColor(Color.white); // 背景色白色
+            g.fillRect(0, 0, width, image_height);
+            g.setColor(Color.black);// 字体颜色黑色
+            g.setFont(font);// 设置画笔字体
+// 每张多少行，当到最后一张时判断是否填充满
+            for (int i = 0; i < every_line; i++) {
+                int index = i + m * every_line;
+                if (newList.size() - 1 >= index) {
+                    System.out.println("每行实际=" + newList.get(index).length());
+                    g.drawString(newList.get(index), 0, line_height * (i + 1));
+                }
+            }
+            g.dispose();
+            ImageIO.write(image, "jpg", outFile);// 输出png图片
+        }
+    }
 }
 
