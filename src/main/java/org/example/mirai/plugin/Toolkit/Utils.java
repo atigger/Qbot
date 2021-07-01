@@ -6,11 +6,9 @@ import com.baidu.aip.speech.TtsResponse;
 import com.baidu.aip.util.Util;
 import net.mamoe.mirai.console.plugin.PluginManager;
 import net.mamoe.mirai.console.plugin.jvm.JvmPlugin;
-import okhttp3.Call;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
+import okhttp3.*;
 import org.example.mirai.plugin.JavaPluginMain;
+import org.jetbrains.annotations.NotNull;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
@@ -70,7 +68,7 @@ public class Utils {
         return week;
     }
 
-    //获取时间
+    //获取日期
     public String get_time() {
         SimpleDateFormat sdf = new SimpleDateFormat();// 格式化时间
         sdf.applyPattern("MMddHHmmss");// a为am/pm的标记
@@ -313,7 +311,7 @@ public class Utils {
         return code_path;
     }
 
-    public void createImage(String[] strArr, Font font,
+    public void createImage(@NotNull String[] strArr, Font font,
                             int width, int image_height, int every_line, int line_height) throws Exception {
         FontMetrics fm = sun.font.FontDesignMetrics.getMetrics(font);
         int stringWidth = fm.charWidth('字');// 标点符号也算一个字
@@ -364,5 +362,34 @@ public class Utils {
             ImageIO.write(image, "jpg", outFile);// 输出png图片
         }
     }
+    public boolean getnews(){
+        String url = "http://api.03c3.cn/zb";
+        OkHttpClient okHttpClient = new OkHttpClient();
+        Request getRequest = new Request.Builder()
+                .url(url)
+                .get()
+                .build();
+        Call call = okHttpClient.newCall(getRequest);
+        try {
+            Response response = call.execute();
+            ResponseBody body = response.body();
+            //获取流
+            InputStream in = body.byteStream();
+            //转化为bitmap
+            FileOutputStream fo = new FileOutputStream(new File(get_plugins_data_path()+"/cache/"+get_time1()+".jpg"));
+            byte[] buf = new byte[1024];
+            int length = 0;
+            while ((length = in.read(buf, 0, buf.length)) != -1) {
+                fo.write(buf, 0, length);
+            }
+            in.close();
+            fo.close();
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
 }
 

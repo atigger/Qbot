@@ -45,34 +45,16 @@ public class Plugin {
 
     //获取新闻
     public String get_news() {
-        SimpleDateFormat sdf = new SimpleDateFormat();// 格式化时间
-        sdf.applyPattern("MMdd");// a为am/pm的标记
-        Date date = new Date();// 获取当前时间
-        String now_data = sdf.format(date);
-
-        Path dataFolderPath = utils.get_plugins_data_path();
-        File newsfile = new File(String.valueOf(dataFolderPath) + "/cache/news.cache");
-
-        try {
-            BufferedReader in = new BufferedReader(new FileReader(newsfile));
-            String str;
-            String to_json_str = null;
-            while ((str = in.readLine()) != null) {
-                to_json_str = str;
-            }
-            if (to_json_str == null) {
-                return "失败";
-            }
-            JSONObject json_data = JSONObject.parseObject(to_json_str);
-            String data = json_data.getString("data");
-            String imgurl = json_data.getString("url");
-            if (data.equals(now_data)) {
-                return imgurl;
+        String now_day = utils.get_time1();
+        File news_file = new File(utils.get_plugins_data_path() + "/cache/" + now_day + ".jpg");
+        if (news_file.exists()) {
+            return news_file.getPath();
+        } else {
+            if (utils.getnews()) {
+                return news_file.getPath();
             } else {
                 return "失败";
             }
-        } catch (IOException e) {
-            return "失败";
         }
     }
 

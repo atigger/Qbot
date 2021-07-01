@@ -322,11 +322,12 @@ public class MessageDeal {
         if (msg.equals("新闻") || msg.equals("今日新闻")) {
             String news_img_url = plugin.get_news();
             if (!news_img_url.contains("失败")) {
+                Image image = get_image_add(news_img_url);
                 chain = new MessageChainBuilder()
-                        .append(Image.fromId(news_img_url))
+                        .append(image)
                         .build();
             } else {
-                chain = new At(sender_id).plus(new PlainText("\n获取失败，今日未更新"));
+                chain = new At(sender_id).plus(new PlainText("\n获取失败"));
             }
             group.sendMessage(chain);
             return;
@@ -418,7 +419,7 @@ public class MessageDeal {
             Image image = get_image_add(filepath);
             chain = new MessageChainBuilder()
                     .append(new At(sender_id))
-                    .append(new PlainText("\n当前版本1.0.3\n更新日期2021年6月22日\n本项目已开源\n戳↓↓↓↓↓"))
+                    .append(new PlainText("\n当前版本1.0.4\n更新日期2021年7月1日\n本项目已开源\n戳↓↓↓↓↓"))
                     .append(image)
                     .build();
             group.sendMessage(chain);
