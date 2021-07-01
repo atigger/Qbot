@@ -208,7 +208,8 @@ public final class JavaPluginMain extends JavaPlugin {
             autoGetFortuneThread.start();
         }
         boolean AutoTips = setting.getAutoTips();
-        if (AutoTips) {
+        boolean AutoNews = setting.getAutoNews();
+        if (AutoTips || AutoNews) {
             getLogger().info("开启自动发送小提醒线程成功！");
             AutoThread autoThread = new AutoThread();
             autoThread.start();

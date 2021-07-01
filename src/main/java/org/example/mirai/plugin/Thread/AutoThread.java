@@ -35,20 +35,25 @@ public class AutoThread extends Thread {
         Bot bot = Bot.getInstance(BOTQQ);
         while (true) {
             try {
-                if (utils.get_now_time().equals("08:00")) {
+                boolean AutoTips = setting.getAutoTips();
+                boolean AutoNews = setting.getAutoNews();
+                if (utils.get_now_time().equals("11:35") && AutoNews) {
                     for (int i = 0; i < group_list.size(); i++) {
                         Group group = bot.getGroup(group_list.getLong(i));
                         String news_img_url = plugin.get_news();
                         if (!news_img_url.contains("失败")) {
+                            ExternalResource img = ExternalResource.create(new File(news_img_url));
+                            Image image = group.uploadImage(img);
+                            img.close();
                             MessageChain chain = new MessageChainBuilder()
                                     .append(new PlainText("今日新闻"))
-                                    .append(Image.fromId(news_img_url))
+                                    .append(image)
                                     .build();
                             group.sendMessage(chain);
                         }
                     }
                     sleep(60000);
-                } else if (utils.get_now_time().equals("15:00")) {
+                } else if (utils.get_now_time().equals("15:00") && AutoTips) {
                     for (int i = 0; i < group_list.size(); i++) {
                         Group group = bot.getGroup(group_list.getLong(i));
                         ExternalResource img = ExternalResource.create(new File(String.valueOf(file1)));
@@ -63,7 +68,7 @@ public class AutoThread extends Thread {
                     sleep(60000);
                 }
                 sleep(30000);
-            } catch (InterruptedException e) {
+            } catch (InterruptedException | IOException e) {
                 e.printStackTrace();
             }
 
