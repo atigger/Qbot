@@ -362,7 +362,8 @@ public class Utils {
             ImageIO.write(image, "jpg", outFile);// 输出png图片
         }
     }
-    public boolean getnews(){
+
+    public boolean getnews() {
         String url = "http://api.03c3.cn/zb";
         OkHttpClient okHttpClient = new OkHttpClient();
         Request getRequest = new Request.Builder()
@@ -376,7 +377,7 @@ public class Utils {
             //获取流
             InputStream in = body.byteStream();
             //转化为bitmap
-            FileOutputStream fo = new FileOutputStream(new File(get_plugins_data_path()+"/cache/"+get_time1()+".jpg"));
+            FileOutputStream fo = new FileOutputStream(new File(get_plugins_data_path() + "/cache/" + get_time1() + ".jpg"));
             byte[] buf = new byte[1024];
             int length = 0;
             while ((length = in.read(buf, 0, buf.length)) != -1) {

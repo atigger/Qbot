@@ -1,5 +1,7 @@
 package org.example.mirai.plugin.Toolkit;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import net.mamoe.mirai.console.plugin.PluginManager;
 import net.mamoe.mirai.console.plugin.jvm.JvmPlugin;
@@ -175,5 +177,25 @@ public class Plugin {
         int random_num = utils.get_random_num(0, max_file - 1);
         String file_path = String.valueOf(fs[random_num]);
         return file_path;
+    }
+
+    //奥运排名
+    public String medal_rank() {
+        String url = "https://act.e.mi.com/olympic/medal_rank";
+        String html = utils.okHttpClient_get(url);
+        JSONObject jsonObject = JSON.parseObject(html);
+        JSONArray json_data = jsonObject.getJSONArray("data");
+        String paihang = "";
+        for (int i = 0; i < 5; i++) {
+            String country = json_data.getJSONObject(i).getString("country_name");
+            String rank = json_data.getJSONObject(i).getString("rank");
+            String medal_gold_count = json_data.getJSONObject(i).getString("medal_gold_count");
+            String medal_silver_count = json_data.getJSONObject(i).getString("medal_silver_count");
+            String medal_bronze_count = json_data.getJSONObject(i).getString("medal_bronze_count");
+            String medal_sum_count = json_data.getJSONObject(i).getString("medal_sum_count");
+            String list1 = "第" + rank + "名:" + country + "\n金牌:" + medal_gold_count + " 银牌:" + medal_silver_count + " 铜牌:" + medal_bronze_count + " 总数:" + medal_sum_count + "\n";
+            paihang = paihang + list1;
+        }
+        return paihang;
     }
 }

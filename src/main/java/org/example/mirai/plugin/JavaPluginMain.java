@@ -7,7 +7,6 @@ import net.mamoe.mirai.contact.Group;
 import net.mamoe.mirai.event.GlobalEventChannel;
 import net.mamoe.mirai.event.events.*;
 import net.mamoe.mirai.message.data.*;
-import org.example.mirai.plugin.Dg.DgUtils;
 import org.example.mirai.plugin.Thread.AutoGetFortuneThread;
 import org.example.mirai.plugin.Thread.AutoThread;
 
@@ -97,32 +96,6 @@ public final class JavaPluginMain extends JavaPlugin {
                 f.getSender().sendMessage(chain);
                 getLogger().info(String.valueOf(chain));
             }
-            if (friend_msg.contains("修改密码")) {
-                DgUtils dgUtils = new DgUtils();
-                friend_msg = friend_msg.replace("修改密码", "");
-                friend_msg = friend_msg.replace(" ", "");
-                friend_msg = friend_msg.replace("\n", "");
-                String msg = dgUtils.get_pass(f.getSender().getId(), friend_msg);
-                f.getSender().sendMessage(msg);
-            }
-            MessageChain chain;
-            if (friend_msg.indexOf("补挂") != -1) {
-                DgUtils dgUtils = new DgUtils();
-                String rane_msg = dgUtils.get_bugua(f.getSender().getId());
-                chain = new MessageChainBuilder()
-                        .append(rane_msg)
-                        .build();
-                f.getSender().sendMessage(chain);
-            }
-
-            if (friend_msg.indexOf("状态查询") != -1) {
-                DgUtils dgUtils = new DgUtils();
-                String rane_msg = dgUtils.get_zt(f.getSender().getId());
-                chain = new MessageChainBuilder()
-                        .append(rane_msg)
-                        .build();
-                f.getSender().sendMessage(chain);
-            }
         });
 
         GlobalEventChannel.INSTANCE.subscribeAlways(GroupTempMessageEvent.class, f -> {
@@ -134,35 +107,6 @@ public final class JavaPluginMain extends JavaPlugin {
                 f.getSender().sendMessage(chain);
                 getLogger().info(String.valueOf(chain));
             }
-            if (friend_msg.contains("修改密码")) {
-                DgUtils dgUtils = new DgUtils();
-                friend_msg = friend_msg.replace("修改密码", "");
-                friend_msg = friend_msg.replace(" ", "");
-                friend_msg = friend_msg.replace("\n", "");
-                String msg = dgUtils.get_pass(f.getSender().getId(), friend_msg);
-                f.getSender().sendMessage(msg);
-            }
-
-            MessageChain chain;
-            if (friend_msg.indexOf("补挂") != -1) {
-                DgUtils dgUtils = new DgUtils();
-                String rane_msg = dgUtils.get_bugua(f.getSender().getId());
-                chain = new MessageChainBuilder()
-                        .append(rane_msg)
-                        .build();
-                f.getSender().sendMessage(chain);
-            }
-
-            if (friend_msg.indexOf("状态查询") != -1) {
-                DgUtils dgUtils = new DgUtils();
-                String rane_msg = dgUtils.get_zt(f.getSender().getId());
-                chain = new MessageChainBuilder()
-                        .append(rane_msg)
-                        .build();
-                f.getSender().sendMessage(chain);
-            }
-
-
         });
 
         GlobalEventChannel.INSTANCE.subscribeAlways(NewFriendRequestEvent.class, a -> {

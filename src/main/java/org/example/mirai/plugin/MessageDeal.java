@@ -5,7 +5,6 @@ import net.mamoe.mirai.contact.Group;
 import net.mamoe.mirai.message.data.*;
 import net.mamoe.mirai.message.data.Image;
 import net.mamoe.mirai.utils.ExternalResource;
-import org.example.mirai.plugin.Dg.DgUtils;
 import org.example.mirai.plugin.Rane.RaneBase;
 import org.example.mirai.plugin.Rane.RaneUtil;
 import org.example.mirai.plugin.Toolkit.Plugin;
@@ -131,7 +130,7 @@ public class MessageDeal {
             //燃鹅相关
             if (msg.equals("燃鹅菜单")) {
                 chain = new MessageChainBuilder()
-                        .append(new PlainText("授权燃鹅命令：授权\n登录燃鹅命令：登录\n每日签到命令：签到\n一键补签命令：补签\n燃鹅信息命令：我的燃鹅\n抽奖命令：超级抽奖/普通抽奖+抽奖数\n抽奖记录命令：抽奖记录\n燃鹅查询命令：燃鹅查询，补挂，状态查询。\n如果出现密码错误，请私聊小助手发送：修改密码+新密码（无需加号，例：修改密码123456）再发送补挂即可\nPS:请不要频繁操作，如果出现无权限或者时序异常请重新发送登录命令，且授权命令和登录命令绑定，授权完后无需登录\n"))
+                        .append(new PlainText("授权燃鹅命令：授权\n登录燃鹅命令：登录\n每日签到命令：签到\n一键补签命令：补签\n燃鹅信息命令：我的燃鹅\n抽奖命令：超级抽奖/普通抽奖+抽奖数\n抽奖记录命令：抽奖记录\nPS:请不要频繁操作，如果出现无权限或者时序异常请重新发送登录命令，且授权命令和登录命令绑定，授权完后无需登录\n"))
                         .build();
                 group.sendMessage(chain);
                 return;
@@ -275,37 +274,17 @@ public class MessageDeal {
                 group.sendMessage(new At(sender_id).plus(new PlainText(msg)));
                 return;
             }
+        }
 
-
-            if (msg.equals("燃鹅查询")) {
-                DgUtils dgUtils = new DgUtils();
-                String rane_msg = dgUtils.get_dg(sender_id);
-                chain = new MessageChainBuilder()
-                        .append(rane_msg)
-                        .build();
-                group.sendMessage(chain);
-                return;
+        if (msg.equals("奥运") || msg.contains("奥运排行")) {
+            String message = plugin.medal_rank();
+            if (message != null) {
+                group.sendMessage(message);
+            }else {
+                group.sendMessage("获取失败");
             }
 
-            if (msg.equals("补挂")) {
-                DgUtils dgUtils = new DgUtils();
-                String rane_msg = dgUtils.get_bugua(sender_id);
-                chain = new MessageChainBuilder()
-                        .append(rane_msg)
-                        .build();
-                group.sendMessage(chain);
-                return;
-            }
-
-            if (msg.equals("状态查询")) {
-                DgUtils dgUtils = new DgUtils();
-                String rane_msg = dgUtils.get_zt(sender_id);
-                chain = new MessageChainBuilder()
-                        .append(rane_msg)
-                        .build();
-                group.sendMessage(chain);
-                return;
-            }
+            return;
         }
 
         if (msg.equals("运势") || msg.equals("今日运势")) {
@@ -419,7 +398,7 @@ public class MessageDeal {
             Image image = get_image_add(filepath);
             chain = new MessageChainBuilder()
                     .append(new At(sender_id))
-                    .append(new PlainText("\n当前版本1.0.4\n更新日期2021年7月1日\n本项目已开源\n戳↓↓↓↓↓"))
+                    .append(new PlainText("\n当前版本1.0.5\n更新日期2021年7月28日\n本项目已开源\n戳↓↓↓↓↓"))
                     .append(image)
                     .build();
             group.sendMessage(chain);
@@ -491,7 +470,7 @@ public class MessageDeal {
                 .append(new Face(190))
                 .append(new PlainText("\n"))
                 .append(new Face(190))
-                .append(new PlainText("羊毛福利  敬请期待"))
+                .append(new PlainText("羊毛福利  奥运排行"))
                 .append(new Face(190))
                 .append(new PlainText("\n"))
                 .append(new Face(190))

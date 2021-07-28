@@ -37,7 +37,7 @@ public class AutoThread extends Thread {
             try {
                 boolean AutoTips = setting.getAutoTips();
                 boolean AutoNews = setting.getAutoNews();
-                if (utils.get_now_time().equals("11:35") && AutoNews) {
+                if (utils.get_now_time().equals("08:00") && AutoNews) {
                     for (int i = 0; i < group_list.size(); i++) {
                         Group group = bot.getGroup(group_list.getLong(i));
                         String news_img_url = plugin.get_news();
