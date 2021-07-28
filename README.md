@@ -1,6 +1,6 @@
 # QQBOT
 
-本项目基于 [mirai-console](https://github.com/mamoe/mirai-console) [![Version](https://img.shields.io/badge/version-2.7.M1-green)](https://github.com/mamoe/mirai/releases/tag/v2.7-M1)开发
+本项目基于 [mirai-console](https://github.com/mamoe/mirai-console) [![Version](https://img.shields.io/badge/version-2.7.M2-green)](https://github.com/mamoe/mirai/releases/tag/v2.7-M1)开发
 
 [如何使用](https://github.com/mamoe/mirai-console#%E5%AE%89%E8%A3%85-jar-%E6%8F%92%E4%BB%B6)？
 
@@ -18,20 +18,27 @@
 - [x] 发送语音（需要前往[百度开发者平台](https://ai.baidu.com/tech/speech)获取key）
 - [x] 王者战力查询
 - [x] 随机发送~~美女~~图片 需要手动将图片放到（/data/org.qbot.plugin/image）内
-- [x] 燃鹅小助手（将删除）
 - [ ] 群管理插件（关键字撤回、自动审核入群申请）
 
 
 
 更新日志：
 
+2021年7月28日v1.0.5更新
+
+1.新增奥运查询功能
+
+2.mirai-console更新到2.7-M2
+
+3.删除一些无用代码
+
+---
+
 2021年7月1日v1.0.4更新
 
 1.优化新闻获取逻辑，无需再手动更新
 
 2.修复自动发送逻辑错误
-
----
 
 2021年6月22日v1.0.3更新
 
