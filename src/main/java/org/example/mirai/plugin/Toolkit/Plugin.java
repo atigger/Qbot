@@ -27,6 +27,9 @@ public class Plugin {
         Utils utils = new Utils();
         String Url = "https://m.weibo.cn/api/container/getIndex?type=uid&value=7230522444&containerid=1076037230522444";
         String html = utils.okHttpClient_get(Url);
+        if(html==null){
+            return "获取失败";
+        }
         JSONObject json;
         json = JSONObject.parseObject(html);
         json = JSONObject.parseObject(String.valueOf(json.getJSONObject("data").getJSONArray("cards").get(0)));

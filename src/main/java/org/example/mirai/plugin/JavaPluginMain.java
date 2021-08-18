@@ -126,7 +126,7 @@ public final class JavaPluginMain extends JavaPlugin {
                 String yz_message = a.getMessage();
                 Long group_id = a.getGroupId();
                 if (group_id == 1132747000) {
-                    if (yz_message.indexOf("毓") != -1 || yz_message.indexOf("秀") != -1 || yz_message.indexOf("迎") != -1 || yz_message.indexOf("曦") != -1) {
+                    if (yz_message.indexOf("毓") != -1 || yz_message.indexOf("秀") != -1 || yz_message.indexOf("迎") != -1 || yz_message.indexOf("曦") != -1 || yz_message.indexOf("邀请") != -1) {
                         a.accept();
                     } else {
                         a.reject(false, "请确认答案是否正确");
