@@ -398,7 +398,7 @@ public class MessageDeal {
             Image image = get_image_add(filepath);
             chain = new MessageChainBuilder()
                     .append(new At(sender_id))
-                    .append(new PlainText("\n当前版本1.0.6\n更新日期2021年8月18日\n本项目已开源\n戳↓↓↓↓↓"))
+                    .append(new PlainText("\n当前版本1.0.6-1\n更新日期2021年8月19日\n本项目已开源\n戳↓↓↓↓↓"))
                     .append(image)
                     .build();
             group.sendMessage(chain);

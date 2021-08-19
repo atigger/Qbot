@@ -37,7 +37,7 @@ public class Plugin {
         String wb_time = String.valueOf(json.getJSONObject("mblog").getString("created_at"));
         String now_week = utils.getWeek();
         if (wb_time.indexOf(now_week) != -1) {
-            if (txt.indexOf("日运播报") != -1) {
+            if (txt.contains("播报")) {
                 txt = txt.replace("<br />", "\n");
             } else {
                 txt = "获取失败，获取到广告了";
