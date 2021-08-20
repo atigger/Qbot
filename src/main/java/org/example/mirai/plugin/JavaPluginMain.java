@@ -1,23 +1,25 @@
 package org.example.mirai.plugin;
 
-import com.alibaba.fastjson.JSONObject;
+import net.mamoe.mirai.console.command.CommandManager;
 import net.mamoe.mirai.console.plugin.jvm.JavaPlugin;
 import net.mamoe.mirai.console.plugin.jvm.JvmPluginDescriptionBuilder;
 import net.mamoe.mirai.contact.Group;
 import net.mamoe.mirai.event.GlobalEventChannel;
 import net.mamoe.mirai.event.events.*;
-import net.mamoe.mirai.message.data.*;
+import net.mamoe.mirai.message.data.At;
+import net.mamoe.mirai.message.data.MessageChain;
+import net.mamoe.mirai.message.data.MessageChainBuilder;
+import net.mamoe.mirai.message.data.PlainText;
+import org.example.mirai.plugin.Command.CloseMaintainCommand;
+import org.example.mirai.plugin.Command.OnMaintainCommand;
 import org.example.mirai.plugin.Thread.AutoGetFortuneThread;
 import org.example.mirai.plugin.Thread.AutoThread;
 
 import org.example.mirai.plugin.Toolkit.*;
-import org.yaml.snakeyaml.Yaml;
 
 import javax.script.ScriptException;
 import java.io.*;
 import java.nio.file.Path;
-import java.util.HashMap;
-import java.util.Map;
 
 /*
 使用java请把
@@ -35,13 +37,15 @@ public final class JavaPluginMain extends JavaPlugin {
     public static final JavaPluginMain INSTANCE = new JavaPluginMain();
 
     public JavaPluginMain() {
-        super(new JvmPluginDescriptionBuilder("org.qbot.plugin", "0.1.0")
+        super(new JvmPluginDescriptionBuilder("org.qbot.plugin", "1.0.7")
                 .info("EG")
                 .build());
     }
 
     @Override
     public void onEnable() {
+        CommandManager.INSTANCE.registerCommand(OnMaintainCommand.INSTANCE, true);
+        CommandManager.INSTANCE.registerCommand(CloseMaintainCommand.INSTANCE, true);
         getLogger().info("启动中。。。");
         Path configFolderPath = getConfigFolderPath();
         Path dataFolderPath = getDataFolderPath();
@@ -59,19 +63,28 @@ public final class JavaPluginMain extends JavaPlugin {
             Group group = g.getGroup(); //获取群对象
             Long BOT_QQ = setting.getQQ();
             if (group_msg.contains(String.valueOf(BOT_QQ))) {
-                group_msg = group_msg.replace("@" + BOT_QQ, "");
-                group_msg = group_msg.replace("[图片]", "");
-                group_msg = group_msg.replace(" ", "");
-                try {
-                    messagedeal.msg_del(sender_id, group, group_msg);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (ScriptException e) {
-                    e.printStackTrace();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                } catch (NoSuchMethodException e) {
-                    e.printStackTrace();
+                File file = new File(configFolderPath + "/wh.wh");
+                if (!file.exists()) {
+                    group_msg = group_msg.replace("@" + BOT_QQ, "");
+                    group_msg = group_msg.replace("[图片]", "");
+                    group_msg = group_msg.replace(" ", "");
+                    try {
+                        messagedeal.msg_del(sender_id, group, group_msg);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (ScriptException e) {
+                        e.printStackTrace();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    } catch (NoSuchMethodException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    MessageChain chain = new MessageChainBuilder()
+                            .append(new At(sender_id))
+                            .append(new PlainText("\n系统升级中，请稍后再试"))
+                            .build();
+                    group.sendMessage(chain);
                 }
             }
         });
@@ -122,17 +135,20 @@ public final class JavaPluginMain extends JavaPlugin {
         GlobalEventChannel.INSTANCE.subscribeAlways(MemberJoinRequestEvent.class, a -> {
             //监听入群消息
             boolean finalAutoJoinRequestEvent = setting.getAgreeIngroup();
-            if (finalAutoJoinRequestEvent) {
-                String yz_message = a.getMessage();
-                Long group_id = a.getGroupId();
-                if (group_id == 1132747000) {
-                    if (yz_message.indexOf("毓") != -1 || yz_message.indexOf("秀") != -1 || yz_message.indexOf("迎") != -1 || yz_message.indexOf("曦") != -1 || yz_message.indexOf("邀请") != -1) {
-                        a.accept();
-                    } else {
-                        a.reject(false, "请确认答案是否正确");
+            File file = new File(configFolderPath + "/wh.wh");
+            if (!file.exists()) {
+                if (finalAutoJoinRequestEvent) {
+                    String yz_message = a.getMessage();
+                    Long group_id = a.getGroupId();
+                    if (group_id == 1132747000) {
+                        if (yz_message.indexOf("毓") != -1 || yz_message.indexOf("秀") != -1 || yz_message.indexOf("迎") != -1 || yz_message.indexOf("曦") != -1 || yz_message.indexOf("邀请") != -1) {
+                            a.accept();
+                        } else {
+                            a.reject(false, "请确认答案是否正确");
+                        }
                     }
+                    getLogger().info(yz_message);
                 }
-                getLogger().info(yz_message);
             }
         });
 
@@ -158,7 +174,6 @@ public final class JavaPluginMain extends JavaPlugin {
             AutoThread autoThread = new AutoThread();
             autoThread.start();
         }
-
     }
 
 
