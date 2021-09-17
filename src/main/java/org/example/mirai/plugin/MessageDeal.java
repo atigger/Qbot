@@ -276,16 +276,6 @@ public class MessageDeal {
             }
         }
 
-        if (msg.equals("奥运") || msg.contains("奥运排行")) {
-            String message = plugin.medal_rank();
-            if (message != null) {
-                group.sendMessage(message);
-            }else {
-                group.sendMessage("获取失败");
-            }
-
-            return;
-        }
 
         if (msg.equals("运势") || msg.equals("今日运势")) {
             String replace_msg = plugin.get_fortune();
@@ -391,18 +381,6 @@ public class MessageDeal {
                 group.sendMessage("请正确输入");
                 return;
             }
-        }
-
-        if (msg.equals("关于") || msg.equals("关于作者")) {
-            String filepath = utils.get_plugins_data_path() + "/qrcode.png";
-            Image image = get_image_add(filepath);
-            chain = new MessageChainBuilder()
-                    .append(new At(sender_id))
-                    .append(new PlainText("\n当前版本1.0.7\n更新日期2021年8月20日\n本项目已开源\n戳↓↓↓↓↓"))
-                    .append(image)
-                    .build();
-            group.sendMessage(chain);
-            return;
         } else if (setting.getAI()) {
             String URL = "http://api.qingyunke.com/api.php?key=free&appid=0&msg=" + msg;
             String data = utils.okHttpClient_get(URL);
@@ -470,11 +448,7 @@ public class MessageDeal {
                 .append(new Face(190))
                 .append(new PlainText("\n"))
                 .append(new Face(190))
-                .append(new PlainText("羊毛福利  奥运排行"))
-                .append(new Face(190))
-                .append(new PlainText("\n"))
-                .append(new Face(190))
-                .append(new PlainText("燃鹅菜单  关于作者"))
+                .append(new PlainText("羊毛福利  燃鹅菜单"))
                 .append(new Face(190))
                 .append(new PlainText("\n◇━━━━━━━━◇\nPS:@我并发相应文字查看指令"))
                 .build();

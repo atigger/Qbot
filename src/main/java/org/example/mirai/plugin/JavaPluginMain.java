@@ -37,7 +37,7 @@ public final class JavaPluginMain extends JavaPlugin {
     public static final JavaPluginMain INSTANCE = new JavaPluginMain();
 
     public JavaPluginMain() {
-        super(new JvmPluginDescriptionBuilder("org.qbot.plugin", "1.0.7")
+        super(new JvmPluginDescriptionBuilder("org.qbot.plugin", "1.0.8")
                 .info("EG")
                 .build());
     }
