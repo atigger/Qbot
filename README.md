@@ -1,6 +1,6 @@
 # QQBOT
 
-本项目基于 [mirai-console](https://github.com/mamoe/mirai-console) [![Version](https://img.shields.io/badge/version-2.7.0-red)](https://github.com/mamoe/mirai/releases/tag/v2.7.0)开发
+本项目基于 [mirai-console](https://github.com/mamoe/mirai-console) [![Version](https://img.shields.io/badge/version-2.7.1-green)](https://github.com/mamoe/mirai/releases/tag/v2.7.1)开发
 
 [如何使用](https://github.com/mamoe/mirai-console#%E5%AE%89%E8%A3%85-jar-%E6%8F%92%E4%BB%B6)？
 
@@ -24,15 +24,27 @@
 
 更新日志：
 
-2021年月17日v1.0.8更新
+2021年9月22日v1.0.9更新
+
+1.mirai更新到2.7.1
+
+2.修复当image文件夹中只有一张图片时无法正常发送的问题
+
+3.删除福利功能
+
+4.优化代码结构，规范代码
+
+注:本次更新代码改动较大，可能出现无法预知的bug，请谨慎升级
+
+---
+
+2021年9月17日v1.0.8更新
 
 1.mirai更新到2.7.0
 
 2.依赖更新
 
 3.删除无用代码
-
----
 
 2021年8月20日v1.0.7更新
 
