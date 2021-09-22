@@ -2,11 +2,11 @@ plugins {
     val kotlinVersion = "1.5.0"
     kotlin("jvm") version kotlinVersion
     kotlin("plugin.serialization") version kotlinVersion
-    id("net.mamoe.mirai-console") version "2.7.0"
+    id("net.mamoe.mirai-console") version "2.7.1"
 }
 
 group = "org.qbot"
-version = "1.0.8"
+version = "1.0.9"
 
 repositories {
     maven { url = uri("https://maven.aliyun.com/nexus/content/groups/public/") }
