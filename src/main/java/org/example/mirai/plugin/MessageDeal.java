@@ -5,14 +5,13 @@ import net.mamoe.mirai.contact.Group;
 import net.mamoe.mirai.message.data.*;
 import net.mamoe.mirai.message.data.Image;
 import net.mamoe.mirai.utils.ExternalResource;
-import org.example.mirai.plugin.Rane.RaneBase;
-import org.example.mirai.plugin.Rane.RaneUtil;
-import org.example.mirai.plugin.Toolkit.Plugin;
-import org.example.mirai.plugin.Toolkit.Setting;
-import org.example.mirai.plugin.Toolkit.Utils;
+import org.example.mirai.plugin.rane.RaneBase;
+import org.example.mirai.plugin.rane.RaneUtil;
+import org.example.mirai.plugin.toolkit.Plugin;
+import org.example.mirai.plugin.toolkit.Setting;
+import org.example.mirai.plugin.toolkit.Utils;
 
 import javax.script.ScriptException;
-import java.awt.*;
 import java.io.*;
 import java.nio.file.Path;
 import java.text.SimpleDateFormat;
@@ -20,6 +19,12 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
+/**
+ * MessageDeal class
+ *
+ * @author 649953543@qq.com
+ * @date 2021/09/22
+ */
 
 public class MessageDeal {
     Plugin plugin = new Plugin();
@@ -29,15 +34,49 @@ public class MessageDeal {
     RaneBase raneBase = new RaneBase();
     Setting setting = new Setting();
 
-    public void msg_del(Long sender_id, Group group, String msg) throws IOException, InterruptedException, ScriptException, NoSuchMethodException {
+    String stringListentomusic = "听歌";
+    String stringQq = "qq";
+    String stringSay = "说";
+    String stringWeChat = "微信";
+    String stringHoroscope = "星座运势";
+    String stringCombatPowerQuery = "战力查询";
+    String stringMusicSystem = "音乐系统";
+    String stringRaneMenu = "燃鹅菜单";
+    String stringAuthorization = "授权";
+    String stringFail = "失败";
+    String stringTimeOut = "超时";
+    String stringLogin = "登录";
+    String stringSign = "签到";
+    String stringReissue = "补签";
+    String stringLotteryRecord = "抽奖记录";
+    String stringSuperLottery = "超级抽奖";
+    String stringNormalLottery = "普通抽奖";
+    String stringMineRane = "我的燃鹅";
+    String stringFortune = "运势";
+    String stringTodayFortune = "今日运势";
+    String stringGetFailed = "获取失败";
+    String stringNews = "新闻";
+    String stringTodayNews = "今日新闻";
+    String stringBeauty = "美女";
+    String stringBeautyPictures = "美女图片";
+    String stringGetSign = "求签";
+    String stringGuanyinGetSign = "观音求签";
+    String stringMenu = "菜单";
+    String stringWeather = "天气";
+
+    String numOne = "1";
+    int numEleven = 11;
+
+
+    public void msgDel(Long senderId, Group group, String msg) throws IOException, InterruptedException, ScriptException, NoSuchMethodException {
         MessageChain chain;
-        ArrayList<String> twelveHoroscop = get_twelveHoroscope_list();
+        ArrayList<String> twelveHoroscop = getTwelveHoroscopeList();
         this.group = group;
         System.out.println("收到的消息:" + msg + " 消息长度:" + msg.length());
 
-        if (msg.equals("")) {
+        if ("".equals(msg)) {
             chain = new MessageChainBuilder()
-                    .append(new At(sender_id))
+                    .append(new At(senderId))
                     .append(new PlainText("\n你没得事情干唛？@我作甚么？"))
                     .append(new Face(312))
                     .build();
@@ -45,81 +84,81 @@ public class MessageDeal {
             return;
         }
 
-        if (msg.indexOf("听歌") == 0) {
-            msg = msg.replace("听歌", "");
-            if (msg.equals("")) {
+        if (msg.indexOf(stringListentomusic) == 0) {
+            msg = msg.replace(stringListentomusic, "");
+            if ("".equals(msg)) {
                 chain = new PlainText("？ \n你总得告诉我要听什么吧？").plus(new Face(244));
                 group.sendMessage(chain);
                 return;
             }
             Plugin plugin = new Plugin();
-            MusicShare musicShare = plugin.get_music(msg);
+            MusicShare musicShare = plugin.getMusic(msg);
             group.sendMessage(musicShare);
             return;
         }
 
-        if (msg.indexOf("说") == 0) {
-            msg = msg.replaceFirst("说", "");
-            if (msg.equals("")) {
+        if (msg.indexOf(stringSay) == 0) {
+            msg = msg.replaceFirst(stringSay, "");
+            if ("".equals(msg)) {
                 chain = new PlainText("？ \n你总得告诉我要说什么吧？").plus(new Face(244));
                 group.sendMessage(chain);
                 return;
             }
             Plugin plugin = new Plugin();
-            ExternalResource voice = plugin.get_voice(group, msg);
-            if (voice == null) {
+            ExternalResource audio = plugin.getVoice(msg);
+            if (audio == null) {
                 group.sendMessage("语音系统未配置，请联系管理员");
                 return;
             }
-            Voice voice1 = group.uploadVoice(voice);
-            group.sendMessage(voice1);
-            voice.close();
+            Audio audio1 = group.uploadAudio(audio);
+            group.sendMessage(audio1);
+            audio.close();
             return;
         }
 
-        if (msg.contains("qq")) {
-            msg = msg.replace("qq", "");
+        if (msg.contains(stringQq)) {
+            msg = msg.replace(stringQq, "");
             msg = msg.replace(" ", "");
             chain = new MessageChainBuilder()
-                    .append(new At(sender_id))
-                    .append(new PlainText("\n" + plugin.get_power(msg, "qq")))
+                    .append(new At(senderId))
+                    .append(new PlainText("\n" + plugin.getPower(msg, "qq")))
                     .build();
             group.sendMessage(chain);
             return;
         }
 
-        if (msg.contains("微信")) {
-            msg = msg.replace("微信", "");
+        if (msg.contains(stringWeChat)) {
+            msg = msg.replace(stringWeChat, "");
             msg = msg.replace(" ", "");
             chain = new MessageChainBuilder()
-                    .append(new At(sender_id))
-                    .append(new PlainText("\n" + plugin.get_power(msg, "wx")))
+                    .append(new At(senderId))
+                    .append(new PlainText("\n" + plugin.getPower(msg, "wx")))
                     .build();
             group.sendMessage(chain);
             return;
         }
 
-        if (msg.equals("星座运势")) {
+        if (stringHoroscope.equals(msg)) {
             chain = new MessageChainBuilder()
-                    .append(new At(sender_id))
+                    .append(new At(senderId))
                     .append(new PlainText("\n请@我并发送星座名\n例如@XXX 白羊"))
                     .build();
             group.sendMessage(chain);
             return;
         }
 
-        if (msg.equals("战力查询")) {
+        if (stringCombatPowerQuery.equals(msg)) {
             chain = new MessageChainBuilder()
-                    .append(new At(sender_id))
+                    .append(new At(senderId))
                     .append(new PlainText("\n请@我并发送qq/微信+英雄名\n例如@XXX qq 伽罗"))
                     .build();
             group.sendMessage(chain);
             return;
         }
 
-        if (msg.equals("音乐系统")) {
+        if (stringMusicSystem.equals(msg)) {
             chain = new MessageChainBuilder()
-                    .append(new At(sender_id))
+                    .append(new At(senderId))
                     .append(new PlainText("\n请@我并发送听歌+音乐名\n例如@XXX 听歌稻香"))
                     .build();
             group.sendMessage(chain);
@@ -128,7 +167,7 @@ public class MessageDeal {
 
         if (setting.getRane()) {
             //燃鹅相关
-            if (msg.equals("燃鹅菜单")) {
+            if (stringRaneMenu.equals(msg)) {
                 chain = new MessageChainBuilder()
                         .append(new PlainText("授权燃鹅命令：授权\n登录燃鹅命令：登录\n每日签到命令：签到\n一键补签命令：补签\n燃鹅信息命令：我的燃鹅\n抽奖命令：超级抽奖/普通抽奖+抽奖数\n抽奖记录命令：抽奖记录\nPS:请不要频繁操作，如果出现无权限或者时序异常请重新发送登录命令，且授权命令和登录命令绑定，授权完后无需登录\n"))
                         .build();
@@ -136,258 +175,229 @@ public class MessageDeal {
                 return;
             }
 
-            if (msg.equals("授权")) {
-                String codes = raneUtil.get_login_link();
-                if (!codes.contains("失败")) {
-                    String login_url = "https://h5.qzone.qq.com/qqq/code/" + codes + "?_proxy=1&from=ide";
-                    String qrcode = utils.get_code(login_url);
+            if (stringAuthorization.equals(msg)) {
+                String codes = raneUtil.getLoginLink();
+                if (!codes.contains(stringFail)) {
+                    String loginUrl = "https://h5.qzone.qq.com/qqq/code/" + codes + "?_proxy=1&from=ide";
+                    String qrcode = utils.getCode(loginUrl);
                     ExternalResource img = ExternalResource.create(new File(qrcode));
                     Image image = group.uploadImage(img);
-                    chain = new At(sender_id).plus(new PlainText("\n请在1分钟内授权").plus(image));
+                    chain = new At(senderId).plus(new PlainText("\n请在1分钟内授权").plus(image));
                     group.sendMessage(chain);
-                    String msg1 = raneUtil.get_login_ticket(codes);
-                    if (!msg1.contains("超时")) {
+                    String msg1 = raneUtil.getLoginTicket(codes);
+                    if (!msg1.contains(stringTimeOut)) {
                         group.sendMessage(msg1);
-                        group.sendMessage(new At(sender_id).plus(new PlainText("\n正在登录，请稍后")));
-                        group.sendMessage(raneUtil.login(String.valueOf(sender_id)));
+                        group.sendMessage(new At(senderId).plus(new PlainText("\n正在登录，请稍后")));
+                        group.sendMessage(raneUtil.login(String.valueOf(senderId)));
                     } else {
-                        group.sendMessage(new At(sender_id).plus(new PlainText("\n授权超时")));
+                        group.sendMessage(new At(senderId).plus(new PlainText("\n授权超时")));
                     }
                 } else {
-                    group.sendMessage(new At(sender_id).plus(new PlainText("\n获取授权链接失败，请稍后再试")));
+                    group.sendMessage(new At(senderId).plus(new PlainText("\n获取授权链接失败，请稍后再试")));
                 }
                 return;
             }
 
-            if (msg.equals("登录")) {
-                group.sendMessage(new At(sender_id).plus(new PlainText("\n正在登录，请稍后")));
-                msg = raneUtil.login(String.valueOf(sender_id));
-                chain = new At(sender_id).plus(new PlainText("\n" + msg));
+            if (stringLogin.equals(msg)) {
+                group.sendMessage(new At(senderId).plus(new PlainText("\n正在登录，请稍后")));
+                msg = raneUtil.login(String.valueOf(senderId));
+                chain = new At(senderId).plus(new PlainText("\n" + msg));
                 group.sendMessage(chain);
                 return;
             }
 
-            if (msg.equals("签到")) {
-                group.sendMessage(new At(sender_id).plus(new PlainText("\n正在签到，请稍后")));
-                msg = raneUtil.get_sign(String.valueOf(sender_id));
-                chain = new At(sender_id).plus(new PlainText("\n" + msg));
+            if (stringSign.equals(msg)) {
+                group.sendMessage(new At(senderId).plus(new PlainText("\n正在签到，请稍后")));
+                msg = raneUtil.getSign(String.valueOf(senderId));
+                chain = new At(senderId).plus(new PlainText("\n" + msg));
                 group.sendMessage(chain);
                 Calendar calendar = Calendar.getInstance();
                 int week = calendar.get(Calendar.DAY_OF_WEEK) - 1;
                 if (week == 0) {
-                    group.sendMessage(new At(sender_id).plus(new PlainText("\n正在超级签到，请稍后")));
+                    group.sendMessage(new At(senderId).plus(new PlainText("\n正在超级签到，请稍后")));
                     Thread.sleep(5000);
-                    msg = raneUtil.get_super_sign(String.valueOf(sender_id));
-                    chain = new At(sender_id).plus(new PlainText("\n" + msg));
+                    msg = raneUtil.getSuperSign(String.valueOf(senderId));
+                    chain = new At(senderId).plus(new PlainText("\n" + msg));
                     group.sendMessage(chain);
                 }
                 return;
             }
 
-            if (msg.equals("补签")) {
-                group.sendMessage(new At(sender_id).plus(new PlainText("\n正在补签，请稍后")));
-                String[] msglist1 = raneUtil.get_reissue_sign(String.valueOf(sender_id));
+            if (stringReissue.equals(msg)) {
+                group.sendMessage(new At(senderId).plus(new PlainText("\n正在补签，请稍后")));
+                String[] msglist1 = raneUtil.getReissueSign(String.valueOf(senderId));
                 if (msglist1 != null) {
+                    StringBuilder msgBuilder = new StringBuilder(msg);
                     for (int i = 0; i < msglist1.length; i++) {
                         int i1 = i + 1;
-                        msg = msg + "\nday" + i1 + ":" + msglist1[i];
+                        msgBuilder.append("\nday").append(i1).append(":").append(msglist1[i]);
                     }
-                    chain = new At(sender_id).plus(new PlainText(msg));
+                    msg = msgBuilder.toString();
+                    chain = new At(senderId).plus(new PlainText(msg));
                     group.sendMessage(chain);
                 } else {
-                    group.sendMessage(new At(sender_id).plus(new PlainText("\n请先授权")));
+                    group.sendMessage(new At(senderId).plus(new PlainText("\n请先授权")));
                 }
                 return;
             }
 
-            if (msg.equals("抽奖记录")) {
-                group.sendMessage(new At(sender_id).plus(new PlainText("\n正在查询，请稍后")));
-                String[] msglist2 = raneUtil.get_gift_list(String.valueOf(sender_id));
+            if (stringLotteryRecord.equals(msg)) {
+                group.sendMessage(new At(senderId).plus(new PlainText("\n正在查询，请稍后")));
+                String[] msglist2 = raneUtil.getGiftList(String.valueOf(senderId));
                 if (msglist2 != null) {
-                    for (int i = 0; i < msglist2.length; i++) {
-                        int i1 = i + 1;
-                        msg = msg + "\n" + msglist2[i];
+                    StringBuilder msgBuilder = new StringBuilder(msg);
+                    for (String s : msglist2) {
+                        msgBuilder.append("\n").append(s);
                     }
-                    chain = new At(sender_id).plus(new PlainText(msg));
+                    msg = msgBuilder.toString();
+                    chain = new At(senderId).plus(new PlainText(msg));
                     group.sendMessage(chain);
                 } else {
-                    group.sendMessage(new At(sender_id).plus(new PlainText("\n请先授权登录")));
+                    group.sendMessage(new At(senderId).plus(new PlainText("\n请先授权登录")));
                 }
                 return;
             }
 
-            if (msg.contains("超级抽奖")) {
+            if (msg.contains(stringSuperLottery)) {
                 msg = msg.replaceAll("[^0-9]", "");
-                if (!msg.equals("")) {
+                if (!"".equals(msg)) {
                     int cs = Integer.parseInt(msg);
                     System.out.println("将要进行" + msg + "次抽奖");
-                    if (cs < 11) {
-                        group.sendMessage(new At(sender_id).plus(new PlainText("\n正在超级抽奖，请稍后")));
-                        String msg1 = "";
+                    if (cs < numEleven) {
+                        group.sendMessage(new At(senderId).plus(new PlainText("\n正在超级抽奖，请稍后")));
+                        StringBuilder msg1 = new StringBuilder();
                         for (int i = 0; i < cs; i++) {
-                            msg1 = msg1 + "\n超级抽奖:" + raneUtil.super_lottery(String.valueOf(sender_id));
-                            if (msg1.contains("时序") || msg1.contains("奖券") || msg1.contains("失败")) {
+                            msg1.append("\n超级抽奖:").append(raneUtil.superLottery(String.valueOf(senderId)));
+                            if (msg1.toString().contains("时序") || msg1.toString().contains("奖券") || msg1.toString().contains("失败")) {
                                 break;
                             }
                             Thread.sleep(5000);
                         }
-                        group.sendMessage(new At(sender_id).plus(new PlainText(msg1)));
+                        group.sendMessage(new At(senderId).plus(new PlainText(msg1.toString())));
                     } else {
-                        group.sendMessage(new At(sender_id).plus(new PlainText("\n超级抽奖次数限制在10次以内")));
+                        group.sendMessage(new At(senderId).plus(new PlainText("\n超级抽奖次数限制在10次以内")));
                     }
                 } else {
-                    group.sendMessage(new At(sender_id).plus(new PlainText("\n请输入抽奖次数")));
+                    group.sendMessage(new At(senderId).plus(new PlainText("\n请输入抽奖次数")));
                 }
                 return;
             }
 
-            if (msg.contains("普通抽奖")) {
+            if (msg.contains(stringNormalLottery)) {
                 msg = msg.replaceAll("[^0-9]", "");
-                if (!msg.equals("")) {
+                if (!"".equals(msg)) {
                     int cs = Integer.parseInt(msg);
                     System.out.println("将要进行" + msg + "次抽奖");
-                    if (cs < 11) {
-                        group.sendMessage(new At(sender_id).plus(new PlainText("\n正在普通抽奖，请稍后")));
-                        String msg1 = "";
+                    if (cs < numEleven) {
+                        group.sendMessage(new At(senderId).plus(new PlainText("\n正在普通抽奖，请稍后")));
+                        StringBuilder msg1 = new StringBuilder();
                         for (int i = 0; i < cs; i++) {
-                            msg1 = msg1 + "\n普通抽奖:" + raneUtil.normal_lottery(String.valueOf(sender_id));
-                            if (msg1.contains("时序") || msg1.contains("奖券") || msg1.contains("失败")) {
+                            msg1.append("\n普通抽奖:").append(raneUtil.normalLottery(String.valueOf(senderId)));
+                            if (msg1.toString().contains("时序") || msg1.toString().contains("奖券") || msg1.toString().contains("失败")) {
                                 break;
                             }
                             Thread.sleep(5000);
                         }
-                        group.sendMessage(new At(sender_id).plus(new PlainText(msg1)));
+                        group.sendMessage(new At(senderId).plus(new PlainText(msg1.toString())));
                     } else {
-                        group.sendMessage(new At(sender_id).plus(new PlainText("\n普通抽奖次数限制在10次以内")));
+                        group.sendMessage(new At(senderId).plus(new PlainText("\n普通抽奖次数限制在10次以内")));
                     }
                 } else {
-                    group.sendMessage(new At(sender_id).plus(new PlainText("\n请输入抽奖次数")));
+                    group.sendMessage(new At(senderId).plus(new PlainText("\n请输入抽奖次数")));
                 }
                 return;
             }
 
-            if (msg.equals("我的燃鹅")) {
-                JSONObject jsondata = raneBase.read_user_file(String.valueOf(sender_id));
+            if (stringMineRane.equals(msg)) {
+                JSONObject jsondata = raneBase.readUserFile(String.valueOf(senderId));
                 String money = jsondata.getString("金币");
                 String gfc = jsondata.getString("奖券");
-                msg = "\nQQ:" + sender_id + "\n金币:" + money + "\n奖券:" + gfc;
-                group.sendMessage(new At(sender_id).plus(new PlainText(msg)));
+                msg = "\nQQ:" + senderId + "\n金币:" + money + "\n奖券:" + gfc;
+                group.sendMessage(new At(senderId).plus(new PlainText(msg)));
                 return;
             }
         }
 
 
-        if (msg.equals("运势") || msg.equals("今日运势")) {
-            String replace_msg = plugin.get_fortune();
-            if (replace_msg.indexOf("获取失败") == -1) {
-                chain = new At(sender_id).plus(new PlainText("\n" + replace_msg));
+        if (stringFortune.equals(msg) || stringTodayFortune.equals(msg)) {
+            String replaceMsg = plugin.getFortune();
+            if (!replaceMsg.contains(stringGetFailed)) {
+                chain = new At(senderId).plus(new PlainText("\n" + replaceMsg));
             } else {
-                chain = new At(sender_id).plus(new PlainText("\n" + replace_msg).plus(new Face(263)));
+                chain = new At(senderId).plus(new PlainText("\n" + replaceMsg).plus(new Face(263)));
             }
             group.sendMessage(chain);
             return;
         }
 
-        if (msg.equals("新闻") || msg.equals("今日新闻")) {
-            String news_img_url = plugin.get_news();
-            if (!news_img_url.contains("失败")) {
-                Image image = get_image_add(news_img_url);
+        if (stringNews.equals(msg) || stringTodayNews.equals(msg)) {
+            String newsImgUrl = plugin.getNews();
+            if (!newsImgUrl.contains(stringFail)) {
+                Image image = getImageAdd(newsImgUrl);
                 chain = new MessageChainBuilder()
                         .append(image)
                         .build();
             } else {
-                chain = new At(sender_id).plus(new PlainText("\n获取失败"));
+                chain = new At(senderId).plus(new PlainText("\n获取失败"));
             }
             group.sendMessage(chain);
             return;
         }
 
-        if (msg.equals("美女") || msg.equals("美女图片")) {
-            String filepath = plugin.get_image();
-            Image image = get_image_add(filepath);
+        if (stringBeauty.equals(msg) || stringBeautyPictures.equals(msg)) {
+            String filepath = plugin.getImage();
+            if (filepath.contains(stringFail)) {
+                group.sendMessage(filepath);
+                return;
+            }
+            Image image = getImageAdd(filepath);
             FlashImage flashImage = FlashImage.from(image);
             group.sendMessage(flashImage);
             return;
         }
 
         //获取星座运势
-        for (
-                int i = 0; i < twelveHoroscop.size(); i++) {
-            if (msg.equals(twelveHoroscop.get(i)) || msg.equals(twelveHoroscop.get(i) + "座")) {
+        for (String s : twelveHoroscop) {
+            if (msg.equals(s) || msg.equals(s + "座")) {
                 chain = new MessageChainBuilder()
-                        .append(new At(sender_id))
-                        .append(new PlainText("\n" + twelveHoroscop.get(i) + "座运势\n" + plugin.get_horoscope(twelveHoroscop.get(i))))
+                        .append(new At(senderId))
+                        .append(new PlainText("\n" + s + "座运势\n" + plugin.getHoroscope(s)))
                         .build();
                 group.sendMessage(chain);
                 return;
             }
         }
 
-        if (msg.equals("求签") || msg.equals("观音求签")) {
-            File qq_file = new File(utils.get_plugins_data_path() + "/cache/qq/" + sender_id + ".cache");
-            String qian = null;
-            if (qq_file.exists()) {
-                qian = utils.read_data(qq_file);
-                if (qian.equals("1")) {
-                    qian = plugin.get_cq();
-                    utils.rewrite_data(qq_file, qian);
+        if (stringGetSign.equals(msg) || stringGuanyinGetSign.equals(msg)) {
+            File qqFile = new File(utils.getPluginsDataPath() + "/cache/qq/" + senderId + ".cache");
+            String qian;
+            if (qqFile.exists()) {
+                qian = utils.readData(qqFile);
+                if (numOne.equals(qian)) {
+                    qian = plugin.getCq();
+                    utils.rewriteData(qqFile, qian);
                 }
             } else {
-                qian = plugin.get_cq();
-                utils.rewrite_data(qq_file, qian);
+                qian = plugin.getCq();
+                utils.rewriteData(qqFile, qian);
             }
             chain = new MessageChainBuilder()
-                    .append(new At(sender_id))
+                    .append(new At(senderId))
                     .append(new PlainText("\n" + qian))
                     .build();
             group.sendMessage(chain);
             return;
         }
 
-        if (msg.equals("菜单")) {
-            group.sendMessage(get_menu_txt());
-            return;
-        }
-
-        if (msg.equals("福利") || msg.equals("羊毛") || msg.equals("羊毛福利")) {
-            try {
-                utils.gift();
-                Image image = get_image_add(utils.get_plugins_data_path() + "/fl.jpg");
-                chain = new MessageChainBuilder()
-                        .append(new At(sender_id))
-                        .append(new PlainText("\n请输入想查看的福利序号\n例：序号1"))
-                        .append(image)
-                        .build();
-                group.sendMessage(chain);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return;
-        }
-
-        if (msg.indexOf("序号") == 0) {
-            msg = msg.replace("序号", "");
-            try {
-                int i = Integer.parseInt(msg);
-                if (i > 10) {
-                    group.sendMessage("请正确输入");
-                    return;
-                }
-                String filepath = utils.get_gift(i);
-                Image image = get_image_add(filepath);
-                group.sendMessage(image);
-                return;
-            } catch (Exception e) {
-                group.sendMessage("请正确输入");
-                return;
-            }
-        } else if (setting.getAI()) {
-            String URL = "http://api.qingyunke.com/api.php?key=free&appid=0&msg=" + msg;
-            String data = utils.okHttpClient_get(URL);
+        if (stringMenu.equals(msg)) {
+            group.sendMessage(getMenuTxt());
+        } else if (setting.getAi()) {
+            String url = "http://api.qingyunke.com/api.php?key=free&appid=0&msg=" + msg;
+            String data = utils.okHttpClientGet(url);
             JSONObject jsonObject = JSONObject.parseObject(data);
             String txt = jsonObject.getString("content");
             txt = txt.replace("{br}", "\n");
-            if (!msg.contains("天气")) {
+            if (!msg.contains(stringWeather)) {
                 chain = new MessageChainBuilder()
                         .append(new PlainText(txt))
                         .build();
@@ -397,20 +407,24 @@ public class MessageDeal {
 
     }
 
-    //更新新闻
-    public String friend_msg_del(String img_url) {
+    /**
+     * 更新新闻
+     */
+    public String friendMsgDel(String imgUrl) {
 
-        Path news_file_path = utils.get_plugins_data_path();
-        File newsfile = new File(String.valueOf(news_file_path) + "/cache/news.cache");
-
-        SimpleDateFormat sdf = new SimpleDateFormat();// 格式化时间
-        sdf.applyPattern("MMdd");// a为am/pm的标记
-        Date date = new Date();// 获取当前时间
-        String now_data = sdf.format(date);
+        Path newsFilePath = utils.getPluginsDataPath();
+        File newsfile = new File(newsFilePath + "/cache/news.cache");
+        // 格式化时间
+        SimpleDateFormat sdf = new SimpleDateFormat();
+        // a为am/pm的标记
+        sdf.applyPattern("MMdd");
+        // 获取当前时间
+        Date date = new Date();
+        String nowData = sdf.format(date);
 
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("data", now_data);
-        jsonObject.put("url", img_url);
+        jsonObject.put("data", nowData);
+        jsonObject.put("url", imgUrl);
 
         try {
             BufferedWriter out = new BufferedWriter(new FileWriter(String.valueOf(newsfile)));
@@ -424,9 +438,11 @@ public class MessageDeal {
 
     }
 
-    //菜单
-    public MessageChain get_menu_txt() {
-        MessageChain chain = new MessageChainBuilder()
+    /**
+     * 菜单
+     */
+    public MessageChain getMenuTxt() {
+        return new MessageChainBuilder()
                 .append(new Face(147))
                 .append(new PlainText("           菜单          "))
                 .append(new Face(147))
@@ -448,33 +464,32 @@ public class MessageDeal {
                 .append(new Face(190))
                 .append(new PlainText("\n"))
                 .append(new Face(190))
-                .append(new PlainText("羊毛福利  燃鹅菜单"))
+                .append(new PlainText("燃鹅菜单  敬请期待"))
                 .append(new Face(190))
                 .append(new PlainText("\n◇━━━━━━━━◇\nPS:@我并发相应文字查看指令"))
                 .build();
-        return chain;
     }
 
-    public ArrayList<String> get_twelveHoroscope_list() {
+    public ArrayList<String> getTwelveHoroscopeList() {
 
-        ArrayList<String> TwelveHoroscope = new ArrayList<>();
-        TwelveHoroscope.add("白羊");
-        TwelveHoroscope.add("金牛");
-        TwelveHoroscope.add("双子");
-        TwelveHoroscope.add("巨蟹");
-        TwelveHoroscope.add("狮子");
-        TwelveHoroscope.add("处女");
-        TwelveHoroscope.add("天秤");
-        TwelveHoroscope.add("天蝎");
-        TwelveHoroscope.add("射手");
-        TwelveHoroscope.add("摩羯");
-        TwelveHoroscope.add("水瓶");
-        TwelveHoroscope.add("双鱼");
+        ArrayList<String> twelveHoroscope = new ArrayList<>();
+        twelveHoroscope.add("白羊");
+        twelveHoroscope.add("金牛");
+        twelveHoroscope.add("双子");
+        twelveHoroscope.add("巨蟹");
+        twelveHoroscope.add("狮子");
+        twelveHoroscope.add("处女");
+        twelveHoroscope.add("天秤");
+        twelveHoroscope.add("天蝎");
+        twelveHoroscope.add("射手");
+        twelveHoroscope.add("摩羯");
+        twelveHoroscope.add("水瓶");
+        twelveHoroscope.add("双鱼");
 
-        return TwelveHoroscope;
+        return twelveHoroscope;
     }
 
-    public Image get_image_add(String filepath) throws IOException {
+    public Image getImageAdd(String filepath) throws IOException {
         ExternalResource img = ExternalResource.create(new File(filepath));
         Image image = this.group.uploadImage(img);
         img.close();

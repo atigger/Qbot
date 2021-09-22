@@ -1,22 +1,35 @@
-package org.example.mirai.plugin.Rane;
+package org.example.mirai.plugin.rane;
 
 import com.alibaba.fastjson.JSONObject;
 import okhttp3.*;
-import org.example.mirai.plugin.Toolkit.Utils;
+import org.example.mirai.plugin.toolkit.Utils;
 
 import javax.script.*;
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
+import java.util.Objects;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * RaneBase class
+ *
+ * @author 649953543@qq.com
+ * @date 2021/09/22
+ */
+
 public class RaneBase {
     Utils utils = new Utils();
-    final String js_path = utils.get_plugins_data_path() + "/rane/codes.js";
-    final String data_path = utils.get_plugins_data_path() + "/rane/";
+    final String js_path = utils.getPluginsDataPath() + "/rane/codes.js";
+    final String data_path = utils.getPluginsDataPath() + "/rane/";
 
-    //okhttp get请求
-    public String okHttpClient_get(String url) {
+    /**
+     *
+     * okhttp get请求
+     *
+     */
+    public String okHttpClientGet(String url) {
         OkHttpClient httpClient = new OkHttpClient();
         //请求超时设置
         httpClient.newBuilder()
@@ -29,8 +42,7 @@ public class RaneBase {
         Call call = httpClient.newCall(getRequest);
         try {
             Response response = call.execute();
-            String html = response.body().string();
-            return html;
+            return Objects.requireNonNull(response.body()).string();
         } catch (IOException e) {
             e.printStackTrace();
             return "{\"code\":-1}";
@@ -38,16 +50,22 @@ public class RaneBase {
 
     }
 
-    //okhttp 获取codes post请求
-    public String okHttpClient_login_post(String url, String json) {
+
+    /**
+     *
+     * okhttp 获取codes post请求
+     *
+     */
+    public String okHttpClientLoginPost(String url, String json) {
         OkHttpClient httpClient = new OkHttpClient();
         //请求超时设置
         httpClient.newBuilder()
                 .connectTimeout(30, TimeUnit.SECONDS)
                 .readTimeout(30, TimeUnit.SECONDS).build();
 
-        RequestBody body = RequestBody.create(
-                MediaType.parse("application/json"), json);
+
+        RequestBody body = RequestBody.create(json,
+                MediaType.parse("application/json"));
 
         Request getRequest = new Request.Builder()
                 .url(url)
@@ -56,8 +74,7 @@ public class RaneBase {
         Call call = httpClient.newCall(getRequest);
         try {
             Response response = call.execute();
-            String html = response.body().string();
-            return html;
+            return Objects.requireNonNull(response.body()).string();
         } catch (IOException e) {
             e.printStackTrace();
             return "{\"code\":\"-1\"}";
@@ -65,8 +82,13 @@ public class RaneBase {
 
     }
 
-    //okhttp 燃鹅操作 post请求
-    public String okHttpClient_post(String url, int t, String v) {
+    /**
+     *
+     * okhttp 燃鹅操作 post请求
+     *
+     */
+    public String okHttpClientPost(String url, int t, String v) {
+        int statusCode = 200;
         OkHttpClient httpClient = new OkHttpClient();
         FormBody formBody = new FormBody.Builder()
                 .add("t", String.valueOf(t))
@@ -89,9 +111,8 @@ public class RaneBase {
         Call call = httpClient.newCall(getRequest);
         try {
             Response response = call.execute();
-            if (response.code() == 200) {
-                String html = response.body().string();
-                return html;
+            if (response.code() == statusCode) {
+                return Objects.requireNonNull(response.body()).string();
             } else {
                 return "{\"code\":-1}";
             }
@@ -102,9 +123,13 @@ public class RaneBase {
 
     }
 
-    //写文件
-    public void write_user_file(String ticket, String uin, String uid, String token, int money, int gfc, int sx) throws IOException {
-        String qq_file_path = data_path + uin + ".txt";
+    /**
+     *
+     * 写文件
+     *
+     */
+    public void writeUserFile(String ticket, String uin, String uid, String token, int money, int gfc, int sx) throws IOException {
+        String qqFilePath = data_path + uin + ".txt";
         JSONObject json = new JSONObject();
         json.put("ticket", ticket);
         json.put("qq", uin);
@@ -113,76 +138,94 @@ public class RaneBase {
         json.put("金币", money);
         json.put("奖券", gfc);
         json.put("时序", sx);
-        BufferedWriter out = new BufferedWriter(new FileWriter(qq_file_path));
+        BufferedWriter out = new BufferedWriter(new FileWriter(qqFilePath));
         out.write(String.valueOf(json));
         out.close();
     }
 
-    //覆盖写入登录code
-    public void rewrite_login_code(String qq, String uid, String token, int money, int gfc) throws IOException {
-        JSONObject strat_file_data = read_user_file(qq);
-        strat_file_data.put("uid", uid);
-        strat_file_data.put("token", token);
-        strat_file_data.put("金币", money);
-        strat_file_data.put("奖券", gfc);
-        strat_file_data.put("时序", 1);
-        strat_file_data.put("跑分状态", 0);
-        String qq_file_path = data_path + qq + ".txt";
-        BufferedWriter out = new BufferedWriter(new FileWriter(qq_file_path));
-        out.write(String.valueOf(strat_file_data));
+    /**
+     *
+     * 覆盖写入登录code
+     *
+     */
+    public void rewriteLoginCode(String qq, String uid, String token, int money, int gfc) throws IOException {
+        JSONObject startFileData = readUserFile(qq);
+        startFileData.put("uid", uid);
+        startFileData.put("token", token);
+        startFileData.put("金币", money);
+        startFileData.put("奖券", gfc);
+        startFileData.put("时序", 1);
+        startFileData.put("跑分状态", 0);
+        String qqFilePath = data_path + qq + ".txt";
+        BufferedWriter out = new BufferedWriter(new FileWriter(qqFilePath));
+        out.write(String.valueOf(startFileData));
         out.close();
     }
 
-    //覆盖写入时序
-    public void rewrite_ts(String qq, int ts) throws IOException {
+    /**
+     *
+     * 覆盖写入时序
+     *
+     */
+    public void rewriteTs(String qq, int ts) throws IOException {
         ts++;
-        JSONObject strat_file_data = read_user_file(qq);
-        strat_file_data.put("时序", ts);
-        String qq_file_path = data_path + qq + ".txt";
-        BufferedWriter out = new BufferedWriter(new FileWriter(qq_file_path));
-        out.write(String.valueOf(strat_file_data));
+        JSONObject startFileData = readUserFile(qq);
+        startFileData.put("时序", ts);
+        String qqFilePath = data_path + qq + ".txt";
+        BufferedWriter out = new BufferedWriter(new FileWriter(qqFilePath));
+        out.write(String.valueOf(startFileData));
         out.close();
     }
 
-    //读文件
-    public JSONObject read_user_file(String qq) throws IOException {
-        String qq_file_path = data_path + qq + ".txt";
-        BufferedReader in = new BufferedReader(new FileReader(qq_file_path));
+    /**
+     *
+     * 读文件
+     *
+     */
+    public JSONObject readUserFile(String qq) throws IOException {
+        String qqFilePath = data_path + qq + ".txt";
+        BufferedReader in = new BufferedReader(new FileReader(qqFilePath));
         String str;
-        String to_json_str = null;
+        String toJsonStr = null;
         while ((str = in.readLine()) != null) {
-            to_json_str = str;
+            toJsonStr = str;
         }
-        JSONObject json_data = JSONObject.parseObject(to_json_str);
-        return json_data;
+        return JSONObject.parseObject(toJsonStr);
     }
 
-    //获取随机数
-    public int get_random_num(int min, int max) {
+    /**
+     *
+     * 获取随机数
+     *
+     */
+    public int getRandomNum(int min, int max) {
         Random random = new Random();
-        int s = random.nextInt(max) % (max - min + 1) + min;
-        return s;
+        return random.nextInt(max) % (max - min + 1) + min;
     }
 
-    //加密
+    /**
+     *
+     * 加密
+     *
+     */
     public String encode(int t, String v) throws FileNotFoundException, ScriptException, NoSuchMethodException {
         // 获取JS执行引擎
         ScriptEngine se = new ScriptEngineManager().getEngineByName("javascript");
         // 获取变量
-//        Bindings bindings = se.createBindings();
-//        bindings.put("number", 3);
-//        se.setBindings(bindings, ScriptContext.ENGINE_SCOPE);
         se.eval(new FileReader(js_path));
         // 是否可调用
         if (se instanceof Invocable) {
             Invocable in = (Invocable) se;
-            String result = (String) in.invokeFunction("encode", t, v);
-            return result;
+            return (String) in.invokeFunction("encode", t, v);
         }
         return null;
     }
 
-    //解密
+    /**
+     *
+     * 解密
+     *
+     */
     public String decode(int t, String v) throws FileNotFoundException, ScriptException, NoSuchMethodException {
         // 获取JS执行引擎
         ScriptEngine se = new ScriptEngineManager().getEngineByName("javascript");
@@ -194,23 +237,26 @@ public class RaneBase {
         // 是否可调用
         if (se instanceof Invocable) {
             Invocable in = (Invocable) se;
-            String result = (String) in.invokeFunction("decode", t, v);
-            return result;
+            return (String) in.invokeFunction("decode", t, v);
         }
         return null;
     }
 
-    //获取MD5
-    public String getMD5(String dataStr) {
+    /**
+     *
+     * 获取MD5
+     *
+     */
+    public String getMd5(String dataStr) {
         try {
             MessageDigest m = MessageDigest.getInstance("MD5");
-            m.update(dataStr.getBytes("UTF8"));
-            byte s[] = m.digest();
-            String result = "";
-            for (int i = 0; i < s.length; i++) {
-                result += Integer.toHexString((0x000000FF & s[i]) | 0xFFFFFF00).substring(6);
+            m.update(dataStr.getBytes(StandardCharsets.UTF_8));
+            byte[] s = m.digest();
+            StringBuilder result = new StringBuilder();
+            for (byte b : s) {
+                result.append(Integer.toHexString((0x000000FF & b) | 0xFFFFFF00).substring(6));
             }
-            return result;
+            return result.toString();
         } catch (Exception e) {
             e.printStackTrace();
         }

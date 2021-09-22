@@ -1,4 +1,4 @@
-package org.example.mirai.plugin.Toolkit;
+package org.example.mirai.plugin.toolkit;
 
 import com.alibaba.fastjson.JSONObject;
 import com.baidu.aip.speech.AipSpeech;
@@ -8,26 +8,28 @@ import net.mamoe.mirai.console.plugin.PluginManager;
 import net.mamoe.mirai.console.plugin.jvm.JvmPlugin;
 import okhttp3.*;
 import org.example.mirai.plugin.JavaPluginMain;
-import org.jetbrains.annotations.NotNull;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
-import javax.imageio.ImageIO;
-import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.*;
 import java.nio.file.Path;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-import java.util.Random;
+import java.util.*;
+
+/**
+ * Utils class
+ *
+ * @author 649953543@qq.com
+ * @date 2021/09/22
+ */
 
 public class Utils {
-    //okhttp get请求
-    public String okHttpClient_get(String url) {
+
+    /**
+     * okhttp get请求
+     */
+    public String okHttpClientGet(String url) {
         OkHttpClient httpClient = new OkHttpClient();
         Request getRequest = new Request.Builder()
                 .url(url)
@@ -37,8 +39,7 @@ public class Utils {
         Call call = httpClient.newCall(getRequest);
         try {
             Response response = call.execute();
-            String html = response.body().string();
-            return html;
+            return Objects.requireNonNull(response.body()).string();
         } catch (IOException e) {
             e.printStackTrace();
             return null;
@@ -46,39 +47,46 @@ public class Utils {
 
     }
 
-    //获取插件配置文件目录
-    public Path get_plugins_path() {
+    /**
+     * 获取插件配置文件目录
+     */
+    public Path getPluginsPath() {
         JvmPlugin jvmPlugin = new JavaPluginMain();
-        Path news_file_path = PluginManager.INSTANCE.getPluginsConfigPath().resolve(jvmPlugin.getDescription().getName());
-        return news_file_path;
+        return PluginManager.INSTANCE.getPluginsConfigPath().resolve(jvmPlugin.getDescription().getName());
     }
 
-    //获取插件数据文件目录
-    public Path get_plugins_data_path() {
+    /**
+     * 获取插件数据文件目录
+     */
+    public Path getPluginsDataPath() {
         JvmPlugin jvmPlugin = new JavaPluginMain();
-        Path news_file_path = PluginManager.INSTANCE.getPluginsDataPath().resolve(jvmPlugin.getDescription().getName());
-        return news_file_path;
+        return PluginManager.INSTANCE.getPluginsDataPath().resolve(jvmPlugin.getDescription().getName());
     }
 
-    //获取星期
+    /**
+     * 获取星期
+     */
     public String getWeek() {
         Date date = new Date();
         SimpleDateFormat formatter = new SimpleDateFormat("E", Locale.ENGLISH);
-        String week = formatter.format(date);
-        return week;
+        return formatter.format(date);
     }
 
-    //获取日期
-    public String get_time() {
-        SimpleDateFormat sdf = new SimpleDateFormat();// 格式化时间
-        sdf.applyPattern("MMddHHmmss");// a为am/pm的标记
-        Date date = new Date();// 获取当前时间
-        String now_data = sdf.format(date);
-        return now_data;
+    /**
+     * 获取日期
+     */
+    public String getTime() {
+        // 格式化时间
+        SimpleDateFormat sdf = new SimpleDateFormat();
+        // a为am/pm的标记
+        sdf.applyPattern("MMddHHmmss");
+        // 获取当前时间
+        Date date = new Date();
+        return sdf.format(date);
 
     }
 
-    public String format_text(String text) {
+    public String formatText(String text) {
         text = text.replace("<table class=\"tb\"> \n", "");
         text = text.replace(" <tbody>\n", "");
         text = text.replace("  <tr> \n", "");
@@ -96,28 +104,30 @@ public class Utils {
         return text;
     }
 
-    public String get_horoscope_text(String url) {
+    public String getHoroscopeText(String url) {
         try {
             Document doc = Jsoup.connect(url).get();
             Elements html = doc.select("table");
             String html1 = String.valueOf(html);
-            String text = format_text(html1);
-            return text;
+            return formatText(html1);
         } catch (IOException e) {
             e.printStackTrace();
             return null;
         }
     }
 
-    //获取范围随机数
-    public int get_random_num(int min, int max) {
+    /**
+     * 获取范围随机数
+     */
+    public int getRandomNum(int min, int max) {
         Random random = new Random();
-        int s = random.nextInt(max) % (max - min + 1) + min;
-        return s;
+        return random.nextInt(max) % (max - min + 1) + min;
     }
 
-    //获取文件行数
-    public int get_file_len(String path) {
+    /**
+     * 获取文件行数
+     */
+    public int getFileLen(String path) {
         try {
             File file = new File(path);
             if (file.exists()) {
@@ -137,54 +147,59 @@ public class Utils {
         }
     }
 
-    //获取音乐信息
-    public JSONObject get_music_info(String music_name) {
-        String url = "http://music.163.com/api/search/get/web?s=" + music_name + "&type=1&limit=1";
-        String html = okHttpClient_get(url);
+    /**
+     * 获取音乐信息
+     */
+    public JSONObject getMusicInfo(String musicName) {
+        String url = "http://music.163.com/api/search/get/web?s=" + musicName + "&type=1&limit=1";
+        String html = okHttpClientGet(url);
         JSONObject json = JSONObject.parseObject(html);
-        Object music_data_json = json.getJSONObject("result").getJSONArray("songs").get(0);
-        JSONObject music_info_json = (JSONObject) music_data_json;
-        JSONObject artists = (JSONObject) music_info_json.getJSONArray("artists").get(0);
+        Object musicDataJson = json.getJSONObject("result").getJSONArray("songs").get(0);
+        JSONObject musicInfoJson = (JSONObject) musicDataJson;
+        JSONObject artists = (JSONObject) musicInfoJson.getJSONArray("artists").get(0);
 
-        String song_name = music_info_json.getString("name");
-        String songer_name = artists.getString("name");
-        String cover_url = music_info_json.getJSONObject("album").getJSONObject("artist").getString("img1v1Url");
-        int song_id = music_info_json.getInteger("id");
+        String songName = musicInfoJson.getString("name");
+        String songerName = artists.getString("name");
+        String coverUrl = musicInfoJson.getJSONObject("album").getJSONObject("artist").getString("img1v1Url");
+        int songId = musicInfoJson.getInteger("id");
 
-        JSONObject music_info = new JSONObject();
-        music_info.put("song_name", song_name);
-        music_info.put("songer_name", songer_name);
-        music_info.put("cover_url", cover_url);
-        music_info.put("song_id", song_id);
-        return music_info;
+        JSONObject musicInfo = new JSONObject();
+        musicInfo.put("song_name", songName);
+        musicInfo.put("songer_name", songerName);
+        musicInfo.put("cover_url", coverUrl);
+        musicInfo.put("song_id", songId);
+        return musicInfo;
     }
 
-    //获取二维码路径
-    public String get_code(String url) {
-        QRCodeUtil qrCodeUtil = new QRCodeUtil();
-        String code_path = String.valueOf(get_plugins_data_path()) + "/code.png";
+    /**
+     * 获取二维码路径
+     */
+    public String getCode(String url) {
+        String codePath = getPluginsDataPath() + "/code.png";
         // 生成二维码
-        qrCodeUtil.encodeQRCode(url, code_path);
-        return code_path;
+        QrCodeUtil.encodeQrCode(url, codePath);
+        return codePath;
     }
 
 
-    //生成语音文件并返回目录
-    public String make_voice(String txt) {
+    /**
+     * 生成语音文件并返回目录
+     */
+    public String makeVoice(String txt) {
         Setting setting = new Setting();
 
-        String APP_ID = setting.getAPP_ID();
-        String API_KEY = setting.getAPI_KEY();
-        String SECRET_KEY = setting.getSECRET_KEY();
+        String appId = setting.getAppId();
+        String apiKey = setting.getApiKey();
+        String secretKey = setting.getSecretKey();
 
-        if (APP_ID.equals("")) {
+        if ("".equals(appId)) {
             return "1";
         }
-        Path news_file_path = get_plugins_data_path();
-        int random_num = get_random_num(0, 10000);
-        String filename = get_time() + random_num + ".mp3";
+        Path newsFilePath = getPluginsDataPath();
+        int randomNum = getRandomNum(0, 10000);
+        String filename = getTime() + randomNum + ".mp3";
         // 初始化一个AipSpeech
-        AipSpeech client = new AipSpeech(APP_ID, API_KEY, SECRET_KEY);
+        AipSpeech client = new AipSpeech(appId, apiKey, secretKey);
 
         // 可选：设置网络连接参数
         client.setConnectionTimeoutInMillis(2000);
@@ -196,7 +211,7 @@ public class Utils {
         org.json.JSONObject res1 = res.getResult();
         if (data != null) {
             try {
-                String filepath = String.valueOf(news_file_path) + "/cache/voice/" + filename;
+                String filepath = newsFilePath + "/cache/voice/" + filename;
                 Util.writeBytesToFileSystem(data, filepath);
                 return filepath;
             } catch (IOException e) {
@@ -211,159 +226,88 @@ public class Utils {
         return "0";
     }
 
-    //获取当前小时分钟
-    public String get_now_time() {
-        SimpleDateFormat sdf = new SimpleDateFormat();// 格式化时间
-        sdf.applyPattern("HH:mm");// a为am/pm的标记
-        Date date = new Date();// 获取当前时间
-        String now_time = sdf.format(date); // 输出已经格式化的现在时间（24小时制）
-        return now_time;
+    /**
+     * 获取当前小时分钟
+     */
+    public String getNowTime() {
+        // 格式化时间
+        SimpleDateFormat sdf = new SimpleDateFormat();
+        // a为am/pm的标记
+        sdf.applyPattern("HH:mm");
+        // 获取当前时间
+        Date date = new Date();
+        // 输出已经格式化的现在时间（24小时制）
+        return sdf.format(date);
     }
 
 
-    //获取时间
-    public String get_time1() {
-        SimpleDateFormat sdf = new SimpleDateFormat();// 格式化时间
-        sdf.applyPattern("MMdd");// a为am/pm的标记
-        Date date = new Date();// 获取当前时间
-        String now_data = sdf.format(date);
-        return now_data;
+    /**
+     * 获取时间
+     */
+    public String getTime1() {
+        // 格式化时间
+        SimpleDateFormat sdf = new SimpleDateFormat();
+        // a为am/pm的标记
+        sdf.applyPattern("MMdd");
+        // 获取当前时间
+        Date date = new Date();
+        return sdf.format(date);
 
     }
 
+    /**
+     * 重写星期文件
+     */
     public void rewrite(int week) {
         try {
-            File weekcacheFile = new File(get_plugins_data_path() + "/cache/week.cache");
+            File weekcacheFile = new File(getPluginsDataPath() + "/cache/week.cache");
             BufferedWriter out = new BufferedWriter(new FileWriter(weekcacheFile));
             out.write(String.valueOf(week));
             out.close();
         } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
-
-    public void rewrite_data(File file, String qian) {
+    /**
+     * 重写日期文件
+     */
+    public void rewriteData(File file, String qian) {
         try {
             BufferedWriter out = new BufferedWriter(new FileWriter(file));
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put("date", get_time1());
+            jsonObject.put("date", getTime1());
             jsonObject.put("qian", qian);
             out.write(String.valueOf(jsonObject));
             out.close();
         } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
-    public String read_data(File file) {
-        BufferedReader in = null;
+    /**
+     * 获取已抽签文件
+     */
+    public String readData(File file) {
+        BufferedReader in;
         try {
             in = new BufferedReader(new FileReader(file));
             String data = in.readLine();
             JSONObject jsonObject = JSONObject.parseObject(data);
             String time = jsonObject.getString("date");
             String qian = jsonObject.getString("qian");
-            if (time.equals(get_time1())) {
+            if (time.equals(getTime1())) {
                 return qian;
             } else {
                 return "1";
             }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
         return "0";
     }
 
-    public void gift() throws Exception {
-        String url = "https://www.jishuqq.com";
-        Document doc = Jsoup.connect(url).timeout(10000).get();
-        Elements url_list = doc.getElementsByClass("home-last half-50");
-        int size = url_list.size();
-        if (size > 10) {
-            size = 10;
-        }
-        String message = "";
-        for (int i = 0; i < size; i++) {
-            String url_1 = url + url_list.get(i).getElementsByTag("a").attr("href");
-            String title = url_list.get(i).getElementsByTag("a").attr("title");
-            String a = url_list.get(i).getElementsByTag("span").text();
-            message = message + (i + 1) + "." + title + " " + a + "\n\n";
-            System.out.println(title + " " + url_1 + " " + a);
-        }
-        String[] strArr = message.split("\n");
-        int image_height = 700; // 每张图片的高度
-        int line_height = 20; // 每行或者每个文字的高度
-        int every_line = image_height / line_height; // 每张图片有多少行文字
-        createImage(strArr, new Font("黑体", Font.PLAIN, 20), 800, image_height, every_line, line_height);
-    }
-
-    public String get_gift(int i) throws IOException {
-        i = i - 1;
-        String url = "https://www.jishuqq.com";
-        Document doc = Jsoup.connect(url).timeout(10000).get();
-        Elements url_list = doc.getElementsByClass("home-last half-50");
-        String url_1 = url + url_list.get(i).getElementsByTag("a").attr("href");
-        QRCodeUtil qrCodeUtil = new QRCodeUtil();
-        String code_path = String.valueOf(get_plugins_data_path()) + "/code1.png";
-        // 生成二维码
-        qrCodeUtil.encodeQRCode(url_1, code_path);
-        return code_path;
-    }
-
-    public void createImage(@NotNull String[] strArr, Font font,
-                            int width, int image_height, int every_line, int line_height) throws Exception {
-        FontMetrics fm = sun.font.FontDesignMetrics.getMetrics(font);
-        int stringWidth = fm.charWidth('字');// 标点符号也算一个字
-        int line_string_num = width % stringWidth == 0 ? (width / stringWidth) : (width / stringWidth) + 1;
-        line_string_num = line_string_num + 7;
-        System.out.println("每行=" + line_string_num);
-
-        java.util.List<String> listStr = new ArrayList<String>();
-        List<String> newList = new ArrayList<String>();
-        for (int h = 0; h < strArr.length; h++) {
-            listStr.add(strArr[h]);
-        }
-        for (int j = 0; j < listStr.size(); j++) {
-            if (listStr.get(j).length() > line_string_num) {
-                newList.add(listStr.get(j).substring(0, line_string_num));
-                listStr.add(j + 1, listStr.get(j).substring(line_string_num));
-                listStr.set(j, listStr.get(j).substring(0, line_string_num));
-            } else {
-                newList.add(listStr.get(j));
-            }
-        }
-
-        int a = newList.size();
-        int b = every_line;
-        int imgNum = a % b == 0 ? (a / b) : (a / b) + 1;
-        image_height = a * 22;
-        for (int m = 0; m < imgNum; m++) {
-            String filePath = get_plugins_data_path() + "/fl.jpg";
-            File outFile = new File(filePath);
-// 创建图片
-            BufferedImage image = new BufferedImage(width, image_height,
-                    BufferedImage.TYPE_INT_BGR);
-            Graphics g = image.getGraphics();
-            g.setClip(0, 0, width, image_height);
-            g.setColor(Color.white); // 背景色白色
-            g.fillRect(0, 0, width, image_height);
-            g.setColor(Color.black);// 字体颜色黑色
-            g.setFont(font);// 设置画笔字体
-// 每张多少行，当到最后一张时判断是否填充满
-            for (int i = 0; i < every_line; i++) {
-                int index = i + m * every_line;
-                if (newList.size() - 1 >= index) {
-                    System.out.println("每行实际=" + newList.get(index).length());
-                    g.drawString(newList.get(index), 0, line_height * (i + 1));
-                }
-            }
-            g.dispose();
-            ImageIO.write(image, "jpg", outFile);// 输出png图片
-        }
-    }
-
-    public boolean getnews() {
+    public boolean getNews() {
         String url = "http://api.03c3.cn/zb";
         OkHttpClient okHttpClient = new OkHttpClient();
         Request getRequest = new Request.Builder()
@@ -375,11 +319,12 @@ public class Utils {
             Response response = call.execute();
             ResponseBody body = response.body();
             //获取流
+            assert body != null;
             InputStream in = body.byteStream();
             //转化为bitmap
-            FileOutputStream fo = new FileOutputStream(new File(get_plugins_data_path() + "/cache/" + get_time1() + ".jpg"));
+            FileOutputStream fo = new FileOutputStream(getPluginsDataPath() + "/cache/" + getTime1() + ".jpg");
             byte[] buf = new byte[1024];
-            int length = 0;
+            int length;
             while ((length = in.read(buf, 0, buf.length)) != -1) {
                 fo.write(buf, 0, length);
             }

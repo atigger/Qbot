@@ -1,4 +1,4 @@
-package org.example.mirai.plugin.Toolkit;
+package org.example.mirai.plugin.toolkit;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -8,35 +8,28 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.Map;
 
+/**
+ * Setting class
+ *
+ * @author 649953543@qq.com
+ * @date 2021/09/22
+ */
+
 public class Setting {
-    private long QQ;
-    private String APP_ID;
-    private String API_KEY;
-    private String SECRET_KEY;
-    private boolean Rane;
-    private boolean AgreeIngroup;
-    private boolean AgreeFriend;
-    private boolean AgreeGroup;
-    private boolean AI;
-    private boolean AutoFortune;
-    private boolean AutoNews;
-    private boolean AutoTips;
-    private long[] Group;
 
-
-    public long getQQ() {
+    public long getQq() {
         return main().getLong("QQ");
     }
 
-    public String getAPP_ID() {
+    public String getAppId() {
         return main().getJSONObject("BaiDuAPI").getString("APP_ID");
     }
 
-    public String getAPI_KEY() {
+    public String getApiKey() {
         return main().getJSONObject("BaiDuAPI").getString("API_KEY");
     }
 
-    public String getSECRET_KEY() {
+    public String getSecretKey() {
         return main().getJSONObject("BaiDuAPI").getString("SECRET_KEY");
     }
 
@@ -56,7 +49,7 @@ public class Setting {
         return main().getBoolean("AgreeGroup");
     }
 
-    public boolean getAI() {
+    public boolean getAi() {
         return main().getBoolean("AI");
     }
 
@@ -78,16 +71,16 @@ public class Setting {
 
     public JSONObject main() {
         Utils utils = new Utils();
-        String file_path = utils.get_plugins_path() + "/setting.yml";
+        String filePath = utils.getPluginsPath() + "/setting.yml";
         Yaml yaml = new Yaml();
         Map<String, Object> map = null;
         try {
-            map = yaml.load(new FileInputStream(file_path));
+            map = yaml.load(new FileInputStream(filePath));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        JSONObject jsonObject = new JSONObject(map);
-        return jsonObject;
+        assert map != null;
+        return new JSONObject(map);
     }
 
 }

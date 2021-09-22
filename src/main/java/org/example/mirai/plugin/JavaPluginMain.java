@@ -10,12 +10,12 @@ import net.mamoe.mirai.message.data.At;
 import net.mamoe.mirai.message.data.MessageChain;
 import net.mamoe.mirai.message.data.MessageChainBuilder;
 import net.mamoe.mirai.message.data.PlainText;
-import org.example.mirai.plugin.Command.CloseMaintainCommand;
-import org.example.mirai.plugin.Command.OnMaintainCommand;
-import org.example.mirai.plugin.Thread.AutoGetFortuneThread;
-import org.example.mirai.plugin.Thread.AutoThread;
+import org.example.mirai.plugin.command.CloseMaintainCommand;
+import org.example.mirai.plugin.command.OnMaintainCommand;
+import org.example.mirai.plugin.thread.AutoGetFortuneThread;
+import org.example.mirai.plugin.thread.AutoThread;
 
-import org.example.mirai.plugin.Toolkit.*;
+import org.example.mirai.plugin.toolkit.*;
 
 import javax.script.ScriptException;
 import java.io.*;
@@ -33,11 +33,18 @@ build.gradle.kts里改依赖库和插件版本
 用runmiraikt这个配置可以在ide里运行，不用复制到mcl或其他启动器
  */
 
+/**
+ * JavaPluginMain class
+ *
+ * @author 649953543@qq.com
+ * @date 2021/09/22
+ */
+
 public final class JavaPluginMain extends JavaPlugin {
     public static final JavaPluginMain INSTANCE = new JavaPluginMain();
 
     public JavaPluginMain() {
-        super(new JvmPluginDescriptionBuilder("org.qbot.plugin", "1.0.8")
+        super(new JvmPluginDescriptionBuilder("org.qbot.plugin", "1.0.9")
                 .info("EG")
                 .build());
     }
@@ -48,40 +55,32 @@ public final class JavaPluginMain extends JavaPlugin {
         CommandManager.INSTANCE.registerCommand(CloseMaintainCommand.INSTANCE, true);
         getLogger().info("启动中。。。");
         Path configFolderPath = getConfigFolderPath();
-        Path dataFolderPath = getDataFolderPath();
 
         CreateFile createFile = new CreateFile();
-        createFile.create_file();
+        createFile.createFile();
 
         Setting setting = new Setting();
         MessageDeal messagedeal = new MessageDeal();
-        Utils utils = new Utils();
         GlobalEventChannel.INSTANCE.subscribeAlways(GroupMessageEvent.class, g -> {
             //监听群消息
-            String group_msg = g.getMessage().contentToString();//获取消息
-            Long sender_id = g.getSender().getId(); //获取发送者QQ
+            String groupMsg = g.getMessage().contentToString();//获取消息
+            long senderId = g.getSender().getId(); //获取发送者QQ
             Group group = g.getGroup(); //获取群对象
-            Long BOT_QQ = setting.getQQ();
-            if (group_msg.contains(String.valueOf(BOT_QQ))) {
+            Long botQq = setting.getQq();
+            if (groupMsg.contains(String.valueOf(botQq))) {
                 File file = new File(configFolderPath + "/wh.wh");
                 if (!file.exists()) {
-                    group_msg = group_msg.replace("@" + BOT_QQ, "");
-                    group_msg = group_msg.replace("[图片]", "");
-                    group_msg = group_msg.replace(" ", "");
+                    groupMsg = groupMsg.replace("@" + botQq, "");
+                    groupMsg = groupMsg.replace("[图片]", "");
+                    groupMsg = groupMsg.replace(" ", "");
                     try {
-                        messagedeal.msg_del(sender_id, group, group_msg);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    } catch (ScriptException e) {
-                        e.printStackTrace();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    } catch (NoSuchMethodException e) {
+                        messagedeal.msgDel(senderId, group, groupMsg);
+                    } catch (IOException | ScriptException | InterruptedException | NoSuchMethodException e) {
                         e.printStackTrace();
                     }
                 } else {
                     MessageChain chain = new MessageChainBuilder()
-                            .append(new At(sender_id))
+                            .append(new At(senderId))
                             .append(new PlainText("\n系统升级中，请稍后再试"))
                             .build();
                     group.sendMessage(chain);
@@ -91,34 +90,34 @@ public final class JavaPluginMain extends JavaPlugin {
 
         GlobalEventChannel.INSTANCE.subscribeAlways(FriendMessageEvent.class, f -> {
             //监听好友消息
-            String friend_msg = f.getMessage().serializeToMiraiCode();
-            if (friend_msg.indexOf("新闻") != -1) {
-                friend_msg = friend_msg.replace("[mirai:image:", "");
-                friend_msg = friend_msg.replace("]", "");
-                friend_msg = friend_msg.replace("新闻", "");
-                friend_msg = friend_msg.replace("\\n", "");
-                String news_url = friend_msg;
-                getLogger().info(news_url);
+            String friendMsg = f.getMessage().serializeToMiraiCode();
+            if (friendMsg.contains("新闻")) {
+                friendMsg = friendMsg.replace("[mirai:image:", "");
+                friendMsg = friendMsg.replace("]", "");
+                friendMsg = friendMsg.replace("新闻", "");
+                friendMsg = friendMsg.replace("\\n", "");
+                String newsUrl = friendMsg;
+                getLogger().info(newsUrl);
                 MessageDeal messageDeal = new MessageDeal();
-                String msg = messageDeal.friend_msg_del(news_url);
+                String msg = messageDeal.friendMsgDel(newsUrl);
                 f.getSender().sendMessage(msg);
             }
-            if (friend_msg.indexOf("运势") != -1) {
+            if (friendMsg.contains("运势")) {
                 Plugin plugin = new Plugin();
-                String chain = plugin.get_fortune();
+                String chain = plugin.getFortune();
                 f.getSender().sendMessage(chain);
-                getLogger().info(String.valueOf(chain));
+                getLogger().info(chain);
             }
         });
 
         GlobalEventChannel.INSTANCE.subscribeAlways(GroupTempMessageEvent.class, f -> {
             //监听临时消息
-            String friend_msg = f.getMessage().contentToString();
-            if (friend_msg.indexOf("运势") != -1) {
+            String friendMsg = f.getMessage().contentToString();
+            if (friendMsg.contains("运势")) {
                 Plugin plugin = new Plugin();
-                String chain = plugin.get_fortune();
+                String chain = plugin.getFortune();
                 f.getSender().sendMessage(chain);
-                getLogger().info(String.valueOf(chain));
+                getLogger().info(chain);
             }
         });
 
@@ -138,16 +137,16 @@ public final class JavaPluginMain extends JavaPlugin {
             File file = new File(configFolderPath + "/wh.wh");
             if (!file.exists()) {
                 if (finalAutoJoinRequestEvent) {
-                    String yz_message = a.getMessage();
-                    Long group_id = a.getGroupId();
-                    if (group_id == 1132747000) {
-                        if (yz_message.indexOf("毓") != -1 || yz_message.indexOf("秀") != -1 || yz_message.indexOf("迎") != -1 || yz_message.indexOf("曦") != -1 || yz_message.indexOf("邀请") != -1) {
+                    String yzMessage = a.getMessage();
+                    long groupId = a.getGroupId();
+                    if (groupId == 1132747000) {
+                        if (yzMessage.contains("毓") || yzMessage.contains("秀") || yzMessage.contains("迎") || yzMessage.contains("曦") || yzMessage.contains("邀请")) {
                             a.accept();
                         } else {
                             a.reject(false, "请确认答案是否正确");
                         }
                     }
-                    getLogger().info(yz_message);
+                    getLogger().info(yzMessage);
                 }
             }
         });
@@ -161,15 +160,15 @@ public final class JavaPluginMain extends JavaPlugin {
         });
 
         //自动化线程
-        boolean AutoFortune = setting.getAutoFortune();
-        if (AutoFortune) {
+        boolean autoFortune = setting.getAutoFortune();
+        if (autoFortune) {
             getLogger().info("开启自动获取运势线程成功！");
             AutoGetFortuneThread autoGetFortuneThread = new AutoGetFortuneThread();
             autoGetFortuneThread.start();
         }
-        boolean AutoTips = setting.getAutoTips();
-        boolean AutoNews = setting.getAutoNews();
-        if (AutoTips || AutoNews) {
+        boolean autotips = setting.getAutoTips();
+        boolean autoNews = setting.getAutoNews();
+        if (autotips || autoNews) {
             getLogger().info("开启自动发送小提醒线程成功！");
             AutoThread autoThread = new AutoThread();
             autoThread.start();

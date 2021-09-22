@@ -1,7 +1,14 @@
-package org.example.mirai.plugin.Toolkit;
+package org.example.mirai.plugin.toolkit;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+
+/**
+ * SetSetting class
+ *
+ * @author 649953543@qq.com
+ * @date 2021/09/22
+ */
 
 public class SetSetting {
     String config = "#机器人QQ\n" +
@@ -32,15 +39,16 @@ public class SetSetting {
             "  #需要自动发送的群列表 用,隔开\n" +
             "  Group: []";
 
-    public void set_file() {
+    public void setFile() {
         Utils utils = new Utils();
-        File file = new File(utils.get_plugins_path() + "/setting.yml");
+        File file = new File(utils.getPluginsPath() + "/setting.yml");
         try {
             FileOutputStream writerStream = new FileOutputStream(file);
             BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(writerStream, StandardCharsets.UTF_8));
             writer.write(config);
             writer.close();
         } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

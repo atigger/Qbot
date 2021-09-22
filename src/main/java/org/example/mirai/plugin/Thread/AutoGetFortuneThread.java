@@ -1,26 +1,31 @@
-package org.example.mirai.plugin.Thread;
+package org.example.mirai.plugin.thread;
 
 import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
 import net.mamoe.mirai.Bot;
 import net.mamoe.mirai.contact.Group;
 import net.mamoe.mirai.message.data.*;
-import org.example.mirai.plugin.Toolkit.Plugin;
-import org.example.mirai.plugin.Toolkit.Setting;
-import org.example.mirai.plugin.Toolkit.Utils;
+import org.example.mirai.plugin.toolkit.Plugin;
+import org.example.mirai.plugin.toolkit.Setting;
+import org.example.mirai.plugin.toolkit.Utils;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.nio.file.Path;
 import java.util.Calendar;
+
+/**
+ * AutoGetFortuneThread class
+ *
+ * @author 649953543@qq.com
+ * @date 2021/09/22
+ */
 
 public class AutoGetFortuneThread extends Thread {
     @Override
+    @SuppressWarnings("InfiniteLoopStatement")
     public void run() {
         Utils utils = new Utils();
-        String file_path = utils.get_plugins_data_path() + "/cache/week.cache";
+        String filePath = utils.getPluginsDataPath() + "/cache/week.cache";
         Plugin plugin = new Plugin();
 
         try {
@@ -36,29 +41,30 @@ public class AutoGetFortuneThread extends Thread {
                 Calendar calendar = Calendar.getInstance();
                 int week1 = calendar.get(Calendar.DAY_OF_WEEK);
 
-                BufferedReader in = new BufferedReader(new FileReader(file_path));
+                BufferedReader in = new BufferedReader(new FileReader(filePath));
                 int week = Integer.parseInt(in.readLine());
 
-                long BOTQQ = setting.getQQ();
-                JSONArray group_list = setting.getGroup();
-                Bot bot = Bot.getInstance(BOTQQ);
+                long botqq = setting.getQq();
+                JSONArray groupList = setting.getGroup();
+                Bot bot = Bot.getInstance(botqq);
                 if (week != week1) {
-                    String txt = plugin.get_fortune();
+                    String txt = plugin.getFortune();
                     if (!txt.contains("失败")) {
-                        for (int i = 0; i < group_list.size(); i++) {
-                            Group group = bot.getGroup(group_list.getLong(i));
+                        for (int i = 0; i < groupList.size(); i++) {
+                            Group group = bot.getGroup(groupList.getLong(i));
                             MessageChain chain = new MessageChainBuilder()
                                     .append(new PlainText("滴滴滴"))
                                     .append(new Face(307))
                                     .append(new PlainText("\n" + txt))
                                     .build();
+                            assert group != null;
                             group.sendMessage(chain);
                             Thread.sleep(1000);
                         }
                         utils.rewrite(week1);
                     }
                 }
-                sleep(600000);
+                Thread.sleep(600000);
             } catch (IOException | InterruptedException e) {
                 e.printStackTrace();
             }
