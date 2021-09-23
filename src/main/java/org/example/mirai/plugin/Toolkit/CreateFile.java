@@ -18,6 +18,12 @@ public class CreateFile {
         Path dataFolderPath = utils.getPluginsDataPath();
         Path configFolderPath = utils.getPluginsPath();
 
+        File heroHeadDirectory = new File(dataFolderPath + "/cache/hero");
+        heroHeadDirectory.mkdir();
+
+        File NewsDirectory = new File(dataFolderPath + "/cache/news");
+        NewsDirectory.mkdir();
+
         File voiceDirectory = new File(dataFolderPath + "/cache/voice");
         voiceDirectory.mkdir();
 

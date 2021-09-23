@@ -307,8 +307,7 @@ public class Utils {
         return "0";
     }
 
-    public boolean getNews() {
-        String url = "http://api.03c3.cn/zb";
+    public boolean downloadImg(String url,String filePath) {
         OkHttpClient okHttpClient = new OkHttpClient();
         Request getRequest = new Request.Builder()
                 .url(url)
@@ -322,7 +321,7 @@ public class Utils {
             assert body != null;
             InputStream in = body.byteStream();
             //转化为bitmap
-            FileOutputStream fo = new FileOutputStream(getPluginsDataPath() + "/cache/" + getTime1() + ".jpg");
+            FileOutputStream fo = new FileOutputStream(filePath);
             byte[] buf = new byte[1024];
             int length;
             while ((length = in.read(buf, 0, buf.length)) != -1) {

@@ -60,11 +60,13 @@ public class Plugin {
      */
     public String getNews() {
         String nowDay = utils.getTime1();
-        File newsFile = new File(utils.getPluginsDataPath() + "/cache/" + nowDay + ".jpg");
+        File newsFile = new File(utils.getPluginsDataPath() + "/cache/news/" + nowDay + ".jpg");
+        String filePath = utils.getPluginsDataPath() + "/cache/news/" + utils.getTime1() + ".jpg";
+        String url = "http://api.03c3.cn/zb";
         if (newsFile.exists()) {
             return newsFile.getPath();
         } else {
-            if (utils.getNews()) {
+            if (utils.downloadImg(url, filePath)) {
                 return newsFile.getPath();
             } else {
                 return "失败";
@@ -166,22 +168,38 @@ public class Plugin {
     /**
      * 战力查询
      */
-    public String getPower(String hero, String qu) {
+    public JSONObject getPower(String hero, String qu) {
         String heroUrl = "https://www.sapi.run/hero/select.php?hero=" + hero + "&type=" + qu;
         String data = utils.okHttpClientGet(heroUrl);
         JSONObject jsonData = JSONObject.parseObject(data);
         int code = jsonData.getInteger("code");
         if (code == statuscode) {
-            String heroName = jsonData.getJSONObject("data").getString("heroName");
+            String heroName = jsonData.getJSONObject("data").getString("name");
             String area = jsonData.getJSONObject("data").getString("area");
             String areaPower = jsonData.getJSONObject("data").getString("areaPower");
             String city = jsonData.getJSONObject("data").getString("city");
             String cityPower = jsonData.getJSONObject("data").getString("cityPower");
             String province = jsonData.getJSONObject("data").getString("province");
             String provincePower = jsonData.getJSONObject("data").getString("provincePower");
-            return "英雄名:" + heroName + "\n最低县标:" + area + "\n县标战力:" + areaPower + "\n最低市标:" + city + "\n市标战力:" + cityPower + "\n最低省标:" + province + "\n省标战力:" + provincePower;
+            String heroPhoto = jsonData.getJSONObject("data").getString("photo");
+            String heroPower = "英雄名:" + heroName + "\n最低县标:" + area + "\n县标战力:" + areaPower + "\n最低市标:" + city + "\n市标战力:" + cityPower + "\n最低省标:" + province + "\n省标战力:" + provincePower;
+            JSONObject heroInfo = new JSONObject();
+            heroInfo.put("data", heroPower);
+            String filePath = utils.getPluginsDataPath() + "/cache/hero/" + heroName + ".jpg";
+            File heroImgPath = new File(filePath);
+            if(heroImgPath.exists()){
+                heroInfo.put("img", heroImgPath.toString());
+                return heroInfo;
+            }else{
+                if (utils.downloadImg(heroPhoto,filePath)){
+                    heroInfo.put("img", heroImgPath.toString());
+                    return heroInfo;
+                }
+                return null;
+            }
+
         }
-        return "获取失败";
+        return null;
     }
 
     /**

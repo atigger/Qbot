@@ -119,9 +119,18 @@ public class MessageDeal {
         if (msg.contains(stringQq)) {
             msg = msg.replace(stringQq, "");
             msg = msg.replace(" ", "");
+            JSONObject jsonObject = plugin.getPower(msg, "qq");
+            if(jsonObject==null){
+                group.sendMessage("获取失败");
+                return;
+            }
+            String heroInfo = jsonObject.getString("data");
+            String heroImg = jsonObject.getString("img");
+            Image image = getImageAdd(heroImg);
             chain = new MessageChainBuilder()
                     .append(new At(senderId))
-                    .append(new PlainText("\n" + plugin.getPower(msg, "qq")))
+                    .append(image)
+                    .append(new PlainText("\n" + heroInfo))
                     .build();
             group.sendMessage(chain);
             return;
@@ -130,9 +139,18 @@ public class MessageDeal {
         if (msg.contains(stringWeChat)) {
             msg = msg.replace(stringWeChat, "");
             msg = msg.replace(" ", "");
+            JSONObject jsonObject = plugin.getPower(msg, "wx");
+            if(jsonObject==null){
+                group.sendMessage("获取失败");
+                return;
+            }
+            String heroInfo = jsonObject.getString("data");
+            String heroImg = jsonObject.getString("img");
+            Image image = getImageAdd(heroImg);
             chain = new MessageChainBuilder()
                     .append(new At(senderId))
-                    .append(new PlainText("\n" + plugin.getPower(msg, "wx")))
+                    .append(image)
+                    .append(new PlainText("\n" + heroInfo))
                     .build();
             group.sendMessage(chain);
             return;
