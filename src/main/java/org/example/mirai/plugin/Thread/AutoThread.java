@@ -26,11 +26,7 @@ public class AutoThread extends Thread {
     public void run() {
         Utils utils = new Utils();
         Setting setting = new Setting();
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        System.out.println("开启自动发送小提醒线程成功！");
         Path dataFolderPath = utils.getPluginsDataPath();
         Plugin plugin = new Plugin();
         File file1 = new File(dataFolderPath + "/yc.jpg");

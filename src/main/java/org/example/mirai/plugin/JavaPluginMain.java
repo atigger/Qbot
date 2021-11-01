@@ -12,9 +12,8 @@ import net.mamoe.mirai.message.data.MessageChainBuilder;
 import net.mamoe.mirai.message.data.PlainText;
 import org.example.mirai.plugin.command.CloseMaintainCommand;
 import org.example.mirai.plugin.command.OnMaintainCommand;
-import org.example.mirai.plugin.thread.AutoGetFortuneThread;
-import org.example.mirai.plugin.thread.AutoThread;
 
+import org.example.mirai.plugin.thread.StartThread;
 import org.example.mirai.plugin.toolkit.*;
 
 import javax.script.ScriptException;
@@ -44,7 +43,7 @@ public final class JavaPluginMain extends JavaPlugin {
     public static final JavaPluginMain INSTANCE = new JavaPluginMain();
 
     public JavaPluginMain() {
-        super(new JvmPluginDescriptionBuilder("org.qbot.plugin", "1.1.0")
+        super(new JvmPluginDescriptionBuilder("org.qbot.plugin", "1.1.1")
                 .info("EG")
                 .build());
     }
@@ -140,13 +139,16 @@ public final class JavaPluginMain extends JavaPlugin {
                     String yzMessage = a.getMessage();
                     long groupId = a.getGroupId();
                     if (groupId == 1132747000) {
-                        if (yzMessage.contains("毓") || yzMessage.contains("秀") || yzMessage.contains("迎") || yzMessage.contains("曦") || yzMessage.contains("邀请")) {
+                        if (yzMessage.contains("毓") || yzMessage.contains("秀") || yzMessage.contains("迎") || yzMessage.contains("曦") || yzMessage.contains("北")) {
                             a.accept();
+                        } else if (yzMessage.contains("邀请")){
+                            getLogger().info("被邀请");
                         } else {
                             a.reject(false, "请确认答案是否正确");
                         }
+                        getLogger().info(yzMessage);
                     }
-                    getLogger().info(yzMessage);
+
                 }
             }
         });
@@ -159,20 +161,8 @@ public final class JavaPluginMain extends JavaPlugin {
             }
         });
 
-        //自动化线程
-        boolean autoFortune = setting.getAutoFortune();
-        if (autoFortune) {
-            getLogger().info("开启自动获取运势线程成功！");
-            AutoGetFortuneThread autoGetFortuneThread = new AutoGetFortuneThread();
-            autoGetFortuneThread.start();
-        }
-        boolean autotips = setting.getAutoTips();
-        boolean autoNews = setting.getAutoNews();
-        if (autotips || autoNews) {
-            getLogger().info("开启自动发送小提醒线程成功！");
-            AutoThread autoThread = new AutoThread();
-            autoThread.start();
-        }
+        StartThread startThread = new StartThread();
+        startThread.start();
     }
 
 

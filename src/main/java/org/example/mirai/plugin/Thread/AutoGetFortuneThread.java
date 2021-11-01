@@ -24,16 +24,11 @@ public class AutoGetFortuneThread extends Thread {
     @Override
     @SuppressWarnings("InfiniteLoopStatement")
     public void run() {
+        super.run();
         Utils utils = new Utils();
         String filePath = utils.getPluginsDataPath() + "/cache/week.cache";
         Plugin plugin = new Plugin();
-
-        try {
-            sleep(10000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
+        System.out.println("开启自动获取运势线程成功！");
         while (true) {
             System.out.println("正在获取运势...");
             try {
@@ -68,7 +63,6 @@ public class AutoGetFortuneThread extends Thread {
             } catch (IOException | InterruptedException e) {
                 e.printStackTrace();
             }
-
         }
     }
 }
