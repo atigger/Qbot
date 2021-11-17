@@ -19,6 +19,7 @@ import org.example.mirai.plugin.toolkit.*;
 import javax.script.ScriptException;
 import java.io.*;
 import java.nio.file.Path;
+import java.text.ParseException;
 
 /*
 使用java请把
@@ -43,7 +44,7 @@ public final class JavaPluginMain extends JavaPlugin {
     public static final JavaPluginMain INSTANCE = new JavaPluginMain();
 
     public JavaPluginMain() {
-        super(new JvmPluginDescriptionBuilder("org.qbot.plugin", "1.1.1")
+        super(new JvmPluginDescriptionBuilder("org.qbot.plugin", "1.1.2")
                 .info("EG")
                 .build());
     }
@@ -74,7 +75,7 @@ public final class JavaPluginMain extends JavaPlugin {
                     groupMsg = groupMsg.replace(" ", "");
                     try {
                         messagedeal.msgDel(senderId, group, groupMsg);
-                    } catch (IOException | ScriptException | InterruptedException | NoSuchMethodException e) {
+                    } catch (IOException | ScriptException | InterruptedException | NoSuchMethodException | ParseException e) {
                         e.printStackTrace();
                     }
                 } else {

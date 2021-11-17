@@ -13,6 +13,10 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Plugin class
@@ -187,11 +191,11 @@ public class Plugin {
             heroInfo.put("data", heroPower);
             String filePath = utils.getPluginsDataPath() + "/cache/hero/" + heroName + ".jpg";
             File heroImgPath = new File(filePath);
-            if(heroImgPath.exists()){
+            if (heroImgPath.exists()) {
                 heroInfo.put("img", heroImgPath.toString());
                 return heroInfo;
-            }else{
-                if (utils.downloadImg(heroPhoto,filePath)){
+            } else {
+                if (utils.downloadImg(heroPhoto, filePath)) {
                     heroInfo.put("img", heroImgPath.toString());
                     return heroInfo;
                 }
@@ -222,6 +226,84 @@ public class Plugin {
         }
         int randomNum = utils.getRandomNum(0, maxFile - 1);
         return String.valueOf(fs[randomNum]);
+    }
+
+    /**
+     * 摸鱼办
+     */
+    public String moFish() throws ParseException {
+        DateFormat df = DateFormat.getDateInstance();
+        Date nowdate = df.parse(utils.getTime3());
+        String txt = "";
+
+        String sjd = "";
+        int hh = Integer.parseInt(utils.getNowTime1());
+        if (hh < 6) {
+            sjd = "凌晨";
+        }
+        if (hh >= 6 && hh < 8) {
+            sjd = "早上";
+        }
+        if (hh >= 9 && hh < 12) {
+            sjd = "上午";
+        }
+        if (hh >= 12 && hh < 14) {
+            sjd = "中午";
+        }
+        if (hh >= 14 && hh < 19) {
+            sjd = "下午";
+        }
+        if (hh >= 19) {
+            sjd = "晚上";
+        }
+
+
+        String title = "【摸鱼办】提醒您：" + utils.getTime2() + sjd + "好，摸鱼人！工作再累，一定不要忘记摸鱼哦！有事没事起身去茶水间，去厕所，去廊道走走别老在工位上坐着，钱是老板的,但命是自己的";
+        txt = txt + title;
+
+        Calendar calendar = Calendar.getInstance();
+        int week = calendar.get(Calendar.DAY_OF_WEEK);
+        if (week > 1 && week < 7) {
+            int jg = 7 - week;
+            txt = txt + "\n距离周末还有:" + jg + "天";
+        }
+        Date ydjdate = df.parse("2022-01-01");
+        int ydj = utils.daysBetween(nowdate, ydjdate);
+        if (ydj > 0) {
+            txt = txt + "\n距离元旦还有:" + ydj + "天";
+        }
+        Date cjdate = df.parse("2022-01-31");
+        int cj = utils.daysBetween(nowdate, cjdate);
+        if (cj > 0) {
+            txt = txt + "\n距离春节还有:" + cj + "天";
+        }
+        Date qmjdate = df.parse("2022-04-03");
+        int qmj = utils.daysBetween(nowdate, qmjdate);
+        if (qmj > 0) {
+            txt = txt + "\n距离清明节还有:" + qmj + "天";
+        }
+        Date ndjdate = df.parse("2022-04-30");
+        int ndj = utils.daysBetween(nowdate, ndjdate);
+        if (ndj > 0) {
+            txt = txt + "\n距离劳动节还有:" + ndj + "天";
+        }
+        Date dwjdate = df.parse("2022-06-03");
+        int dwj = utils.daysBetween(nowdate, dwjdate);
+        if (dwj > 0) {
+            txt = txt + "\n距离端午节还有:" + dwj + "天";
+        }
+        Date zqjdate = df.parse("2022-09-10");
+        int zqj = utils.daysBetween(nowdate, zqjdate);
+        if (zqj > 0) {
+            txt = txt + "\n距离中秋节还有:" + zqj + "天";
+        }
+        Date gqjdate = df.parse("2022-10-01");
+        int gqj = utils.daysBetween(nowdate, gqjdate);
+        if (gqj > 0) {
+            txt = txt + "\n距离国庆节还有:" + gqj + "天";
+        }
+        txt = txt + "\n上班是帮老板赚钱，摸鱼是赚老板的钱！最后，祝愿天下所有摸鱼人，都能愉快的渡过每一天";
+        return txt;
     }
 
 }

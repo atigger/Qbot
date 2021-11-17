@@ -12,6 +12,7 @@ import org.example.mirai.plugin.toolkit.Utils;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.text.ParseException;
 
 /**
  * AutoThread class
@@ -62,16 +63,14 @@ public class AutoThread extends Thread {
                         assert group != null;
                         Image image = group.uploadImage(img);
                         MessageChain chain = new MessageChainBuilder()
-                                .append(new PlainText("喂！3点几嚟！饮茶时间到！"))
-                                .append(new Face(229))
-                                .append(image)
+                                .append(new PlainText(plugin.moFish()))
                                 .build();
                         group.sendMessage(chain);
                     }
                     sleep(60000);
                 }
                 sleep(30000);
-            } catch (InterruptedException | IOException e) {
+            } catch (InterruptedException | IOException | ParseException e) {
                 e.printStackTrace();
             }
 

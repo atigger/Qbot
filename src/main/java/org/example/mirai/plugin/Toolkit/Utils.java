@@ -240,6 +240,20 @@ public class Utils {
         return sdf.format(date);
     }
 
+    /**
+     * 获取当前小时分钟1
+     */
+    public String getNowTime1() {
+        // 格式化时间
+        SimpleDateFormat sdf = new SimpleDateFormat();
+        // a为am/pm的标记
+        sdf.applyPattern("HH");
+        // 获取当前时间
+        Date date = new Date();
+        // 输出已经格式化的现在时间（24小时制）
+        return sdf.format(date);
+    }
+
 
     /**
      * 获取时间
@@ -254,6 +268,34 @@ public class Utils {
         return sdf.format(date);
 
     }
+
+    /**
+     * 获取时间2
+     */
+    public String getTime2() {
+        // 格式化时间
+        SimpleDateFormat sdf = new SimpleDateFormat();
+        // a为am/pm的标记
+        sdf.applyPattern("MM月dd日");
+        // 获取当前时间
+        Date date = new Date();
+        return sdf.format(date);
+
+    }
+
+    /**
+     * 获取时间3
+     */
+    public String getTime3() {
+        // 格式化时间
+        SimpleDateFormat sdf = new SimpleDateFormat();
+        // a为am/pm的标记
+        sdf.applyPattern("yyyy-MM-dd");
+        // 获取当前时间
+        Date date = new Date();
+        return sdf.format(date);
+    }
+
 
     /**
      * 重写星期文件
@@ -307,7 +349,7 @@ public class Utils {
         return "0";
     }
 
-    public boolean downloadImg(String url,String filePath) {
+    public boolean downloadImg(String url, String filePath) {
         OkHttpClient okHttpClient = new OkHttpClient();
         Request getRequest = new Request.Builder()
                 .url(url)
@@ -334,6 +376,30 @@ public class Utils {
             e.printStackTrace();
             return false;
         }
+    }
+
+
+    /**
+     * 取得两个日期之间的相差多少天
+     **/
+    public int daysBetween(Date early, Date late) {
+
+        java.util.Calendar calst = java.util.Calendar.getInstance();
+        java.util.Calendar caled = java.util.Calendar.getInstance();
+        calst.setTime(early);
+        caled.setTime(late);
+        //设置时间为0时
+        calst.set(java.util.Calendar.HOUR_OF_DAY, 0);
+        calst.set(java.util.Calendar.MINUTE, 0);
+        calst.set(java.util.Calendar.SECOND, 0);
+        caled.set(java.util.Calendar.HOUR_OF_DAY, 0);
+        caled.set(java.util.Calendar.MINUTE, 0);
+        caled.set(java.util.Calendar.SECOND, 0);
+        //得到两个日期相差的天数
+        int days = ((int) (caled.getTime().getTime() / 1000) - (int) (calst
+                .getTime().getTime() / 1000)) / 3600 / 24;
+
+        return days;
     }
 
 }

@@ -14,6 +14,7 @@ import org.example.mirai.plugin.toolkit.Utils;
 import javax.script.ScriptException;
 import java.io.*;
 import java.nio.file.Path;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -68,11 +69,20 @@ public class MessageDeal {
     int numEleven = 11;
 
 
-    public void msgDel(Long senderId, Group group, String msg) throws IOException, InterruptedException, ScriptException, NoSuchMethodException {
+    public void msgDel(Long senderId, Group group, String msg) throws IOException, InterruptedException, ScriptException, NoSuchMethodException, ParseException {
         MessageChain chain;
         ArrayList<String> twelveHoroscop = getTwelveHoroscopeList();
         this.group = group;
         System.out.println("收到的消息:" + msg + " 消息长度:" + msg.length());
+
+        if ("my".equals(msg)) {
+            chain = new MessageChainBuilder()
+                    .append(new PlainText(plugin.moFish()))
+                    .build();
+            group.sendMessage(chain);
+            return;
+        }
+
 
         if ("".equals(msg)) {
             chain = new MessageChainBuilder()
@@ -335,7 +345,6 @@ public class MessageDeal {
                 return;
             }
         }
-
 
         if (stringFortune.equals(msg) || stringTodayFortune.equals(msg)) {
             String replaceMsg = plugin.getFortune();
