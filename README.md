@@ -1,6 +1,6 @@
 # QQBOT
 
-本项目基于 [mirai](https://github.com/mamoe/mirai) [![Version](https://img.shields.io/badge/version-2.8.0-red)](https://github.com/mamoe/mirai/releases/tag/v2.8.0)开发
+本项目基于 [mirai](https://github.com/mamoe/mirai) [![Version](https://img.shields.io/badge/version-2.9.0--M1-red)](https://github.com/mamoe/mirai/releases/tag/v2.9.0-M1)开发
 
 [如何使用](https://github.com/mamoe/mirai-core#%E5%AE%89%E8%A3%85-jar-%E6%8F%92%E4%BB%B6)？
 
@@ -24,6 +24,13 @@
 
 更新日志：
 
+2021年11月23日v1.1.2-1更新
+
+1.mirai-core更新到2.9.0-M1
+
+2.修复一些BUG
+
+---
 2021年11月17日v1.1.2更新
 
 1.mirai-core更新到2.8.0
@@ -31,8 +38,6 @@
 2.新增【摸鱼办】提醒放假时间
 
 3.修改15点的饮茶小助手为摸鱼办
-
----
 
 2021年11月1日v1.1.1更新
 
