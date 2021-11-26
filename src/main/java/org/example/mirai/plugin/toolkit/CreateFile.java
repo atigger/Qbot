@@ -74,10 +74,10 @@ public class CreateFile {
         }
 
 
-        File codeFile = new File(dataFolderPath + "/rane/code.js");
+        File codeFile = new File(dataFolderPath + "/rane/codes.js");
         if (!codeFile.exists()) {
             try {
-                createDataFile(codeFile,"code.js");
+                createDataFile(codeFile,"codes.js");
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -86,15 +86,17 @@ public class CreateFile {
 
     public void createDataFile(File cq, String fileName) throws IOException {
         int bytesum = 0;
-        int byteread = 0;
+        int byteread;
         InputStream in = this.getClass().getResourceAsStream("../../../../../" + fileName);
         FileOutputStream fs = new FileOutputStream(cq);
         byte[] buffer = new byte[1444];
-        while ((byteread = in.read(buffer)) != -1) {
-            bytesum += byteread;
-            fs.write(buffer, 0, byteread);
+        if (in != null) {
+            while ((byteread = in.read(buffer)) != -1) {
+                bytesum += byteread;
+                fs.write(buffer, 0, byteread);
+            }
+            in.close();
         }
-        in.close();
         fs.close();
     }
 
