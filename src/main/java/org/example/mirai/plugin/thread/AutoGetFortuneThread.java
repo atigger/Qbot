@@ -3,7 +3,10 @@ package org.example.mirai.plugin.thread;
 import com.alibaba.fastjson.JSONArray;
 import net.mamoe.mirai.Bot;
 import net.mamoe.mirai.contact.Group;
-import net.mamoe.mirai.message.data.*;
+import net.mamoe.mirai.message.data.Face;
+import net.mamoe.mirai.message.data.MessageChain;
+import net.mamoe.mirai.message.data.MessageChainBuilder;
+import net.mamoe.mirai.message.data.PlainText;
 import org.example.mirai.plugin.toolkit.Plugin;
 import org.example.mirai.plugin.toolkit.Setting;
 import org.example.mirai.plugin.toolkit.Utils;
@@ -30,7 +33,6 @@ public class AutoGetFortuneThread extends Thread {
         Plugin plugin = new Plugin();
         System.out.println("开启自动获取运势线程成功！");
         while (true) {
-            System.out.println("正在获取运势...");
             try {
                 Setting setting = new Setting();
                 Calendar calendar = Calendar.getInstance();
@@ -45,6 +47,7 @@ public class AutoGetFortuneThread extends Thread {
                 if (week != week1) {
                     String txt = plugin.getFortune();
                     if (!txt.contains("失败")) {
+                        System.out.println("正在发送运势");
                         for (int i = 0; i < groupList.size(); i++) {
                             Group group = bot.getGroup(groupList.getLong(i));
                             MessageChain chain = new MessageChainBuilder()

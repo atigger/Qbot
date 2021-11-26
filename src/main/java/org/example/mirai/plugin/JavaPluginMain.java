@@ -12,12 +12,15 @@ import net.mamoe.mirai.message.data.MessageChainBuilder;
 import net.mamoe.mirai.message.data.PlainText;
 import org.example.mirai.plugin.command.CloseMaintainCommand;
 import org.example.mirai.plugin.command.OnMaintainCommand;
-
 import org.example.mirai.plugin.thread.StartThread;
-import org.example.mirai.plugin.toolkit.*;
+import org.example.mirai.plugin.toolkit.BulletinBoard;
+import org.example.mirai.plugin.toolkit.CreateFile;
+import org.example.mirai.plugin.toolkit.Plugin;
+import org.example.mirai.plugin.toolkit.Setting;
 
 import javax.script.ScriptException;
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 import java.nio.file.Path;
 import java.text.ParseException;
 
@@ -44,7 +47,7 @@ public final class JavaPluginMain extends JavaPlugin {
     public static final JavaPluginMain INSTANCE = new JavaPluginMain();
 
     public JavaPluginMain() {
-        super(new JvmPluginDescriptionBuilder("org.qbot.plugin", "1.1.2-1")
+        super(new JvmPluginDescriptionBuilder("org.qbot.plugin", "1.1.3")
                 .info("EG")
                 .build());
     }
@@ -54,6 +57,9 @@ public final class JavaPluginMain extends JavaPlugin {
         CommandManager.INSTANCE.registerCommand(OnMaintainCommand.INSTANCE, true);
         CommandManager.INSTANCE.registerCommand(CloseMaintainCommand.INSTANCE, true);
         getLogger().info("启动中。。。");
+
+        BulletinBoard bulletinBoard = new BulletinBoard();
+
         Path configFolderPath = getConfigFolderPath();
 
         CreateFile createFile = new CreateFile();

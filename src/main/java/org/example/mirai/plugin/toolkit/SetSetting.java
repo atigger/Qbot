@@ -34,7 +34,7 @@ public class SetSetting {
             "  AutoFortune: false\n" +
             "  #自动每日新闻信息\n" +
             "  AutoNews: false\n" +
-            "  #自动发送饮茶小提示\n" +
+            "  #自动发送摸鱼小提示\n" +
             "  AutoTips: false\n" +
             "  #需要自动发送的群列表 用,隔开\n" +
             "  Group: []";
