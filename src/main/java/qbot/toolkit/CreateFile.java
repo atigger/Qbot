@@ -1,4 +1,7 @@
-package org.example.mirai.plugin.toolkit;
+package org.qbot.toolkit;
+
+import com.alibaba.fastjson.JSONArray;
+import kotlinx.serialization.json.JsonArray;
 
 import java.io.*;
 import java.nio.file.Path;
@@ -16,6 +19,9 @@ public class CreateFile {
     public void createFile() {
         Path dataFolderPath = utils.getPluginsDataPath();
         Path configFolderPath = utils.getPluginsPath();
+
+        File dataFolderDirectory = new File(String.valueOf(dataFolderPath));
+        dataFolderDirectory.mkdir();
 
         File heroHeadDirectory = new File(dataFolderPath + "/cache/hero");
         heroHeadDirectory.mkdir();
@@ -41,16 +47,23 @@ public class CreateFile {
         File cacheDirectory = new File(dataFolderPath + "/cache");
         cacheDirectory.mkdir();
 
+        File groupManagementDirectory = new File(dataFolderPath + "/groupManagement");
+        groupManagementDirectory.mkdir();
+
         File file = new File(configFolderPath + "/setting.yml");
+
         if (!file.exists()) {
             System.out.println("检测到配置文件不存在，生成中");
             SetSetting setting = new SetSetting();
-            setting.setFile();
+            setting.setFile("2.0", 0, "", "", "", false, false, false, false, false, false, false, new JSONArray(), false, 0);
         } else {
             System.out.println("配置文件存在");
+            Setting setting1 = new Setting();
+            setting1.getVersion();
         }
         File newsFile = new File(dataFolderPath + "/cache/news.cache");
         File weekcacheFile = new File(dataFolderPath + "/cache/week.cache");
+        System.out.println(newsFile);
         try {
             if (!newsFile.exists()) {
                 newsFile.createNewFile();
@@ -67,7 +80,7 @@ public class CreateFile {
         File cqFile = new File(dataFolderPath + "/cq.txt");
         if (!cqFile.exists()) {
             try {
-                createDataFile(cqFile,"cq.txt");
+                createDataFile(cqFile, "cq.txt");
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -77,7 +90,7 @@ public class CreateFile {
         File codeFile = new File(dataFolderPath + "/rane/codes.js");
         if (!codeFile.exists()) {
             try {
-                createDataFile(codeFile,"codes.js");
+                createDataFile(codeFile, "codes.js");
             } catch (IOException e) {
                 e.printStackTrace();
             }

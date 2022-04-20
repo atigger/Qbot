@@ -1,8 +1,8 @@
-package org.example.mirai.plugin.rane;
+package org.qbot.rane;
 
 import com.alibaba.fastjson.JSONObject;
 import okhttp3.*;
-import org.example.mirai.plugin.toolkit.Utils;
+import org.qbot.toolkit.Utils;
 
 import javax.script.*;
 import java.io.*;

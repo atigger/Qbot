@@ -1,4 +1,4 @@
-package org.example.mirai.plugin.thread;
+package org.qbot.thread;
 
 import com.alibaba.fastjson.JSONArray;
 import net.mamoe.mirai.Bot;
@@ -7,9 +7,9 @@ import net.mamoe.mirai.message.data.Face;
 import net.mamoe.mirai.message.data.MessageChain;
 import net.mamoe.mirai.message.data.MessageChainBuilder;
 import net.mamoe.mirai.message.data.PlainText;
-import org.example.mirai.plugin.toolkit.Plugin;
-import org.example.mirai.plugin.toolkit.Setting;
-import org.example.mirai.plugin.toolkit.Utils;
+import org.qbot.toolkit.PluginUtil;
+import org.qbot.toolkit.Setting;
+import org.qbot.toolkit.Utils;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -30,7 +30,7 @@ public class AutoGetFortuneThread extends Thread {
         super.run();
         Utils utils = new Utils();
         String filePath = utils.getPluginsDataPath() + "/cache/week.cache";
-        Plugin plugin = new Plugin();
+        PluginUtil pluginUtil = new PluginUtil();
         System.out.println("开启自动获取运势线程成功！");
         while (true) {
             try {
@@ -45,7 +45,7 @@ public class AutoGetFortuneThread extends Thread {
                 JSONArray groupList = setting.getGroup();
                 Bot bot = Bot.getInstance(botqq);
                 if (week != week1) {
-                    String txt = plugin.getFortune();
+                    String txt = pluginUtil.getFortune();
                     if (!txt.contains("失败")) {
                         System.out.println("正在发送运势");
                         for (int i = 0; i < groupList.size(); i++) {

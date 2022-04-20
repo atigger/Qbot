@@ -1,25 +1,28 @@
-package org.example.mirai.plugin
+package org.qbot
 
+import java.io.File
 import net.mamoe.mirai.alsoLogin
 import net.mamoe.mirai.console.MiraiConsole
 import net.mamoe.mirai.console.plugin.PluginManager.INSTANCE.enable
 import net.mamoe.mirai.console.plugin.PluginManager.INSTANCE.load
 import net.mamoe.mirai.console.terminal.MiraiConsoleTerminalLoader
 
+fun setupWorkingDir() {
+    // see: net.mamoe.mirai.console.terminal.MiraiConsoleImplementationTerminal
+    System.setProperty("user.dir", File("debug-sandbox").absolutePath)
+}
+
 suspend fun main() {
+    setupWorkingDir()
+
     MiraiConsoleTerminalLoader.startAsDaemon()
 
-//    //如果是kotlin
-//    PluginMain.load()
-//    PluginMain.enable()
-    //如果是java
-    JavaPluginMain.INSTANCE.load()
-    JavaPluginMain.INSTANCE.enable()
+    val pluginInstance = Plugin.INSTANCE
 
-    //下面填机器人信息
-    val bot = MiraiConsole.addBot(, "") {
-        fileBasedDeviceInfo()
-    }.alsoLogin()
+    pluginInstance.load() // 主动加载插件, Console 会调用 Plugin.onLoad
+    pluginInstance.enable() // 主动启用插件, Console 会调用 Plugin.onEnable
+
+    val bot = MiraiConsole.addBot(, "").alsoLogin() // 登录一个测试环境的 Bot
 
     MiraiConsole.job.join()
 }

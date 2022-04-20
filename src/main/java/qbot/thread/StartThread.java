@@ -1,6 +1,6 @@
-package org.example.mirai.plugin.thread;
+package org.qbot.thread;
 
-import org.example.mirai.plugin.toolkit.Setting;
+import org.qbot.toolkit.Setting;
 
 /**
  * GetThreadState class

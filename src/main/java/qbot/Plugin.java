@@ -1,0 +1,197 @@
+package org.qbot;
+
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import net.mamoe.mirai.console.plugin.jvm.JavaPlugin;
+import net.mamoe.mirai.console.plugin.jvm.JvmPluginDescriptionBuilder;
+import net.mamoe.mirai.contact.Group;
+import net.mamoe.mirai.event.GlobalEventChannel;
+import net.mamoe.mirai.event.events.*;
+import net.mamoe.mirai.message.data.MessageChain;
+import net.mamoe.mirai.message.data.MessageChainBuilder;
+import net.mamoe.mirai.message.data.MessageSource;
+import net.mamoe.mirai.message.data.PlainText;
+import org.qbot.group.GroupManagement;
+import org.qbot.group.GroupManagementSetting;
+import org.qbot.group.GroupManagementUtil;
+import org.qbot.thread.StartThread;
+import org.qbot.toolkit.*;
+
+import javax.script.ScriptException;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.text.ParseException;
+
+public final class Plugin extends JavaPlugin {
+    public static final Plugin INSTANCE = new Plugin();
+
+    public Plugin() {
+        super(new JvmPluginDescriptionBuilder("org.qbot.plugin", "2.0.1").build());
+    }
+
+    @Override
+    public void onEnable() {
+        getLogger().info("启动中。。。");
+
+        Path configFolderPath = getConfigFolderPath();
+
+        CreateFile createFile = new CreateFile();
+        createFile.createFile();
+
+        Setting setting = new Setting();
+        Utils utils = new Utils();
+        GroupManagementSetting groupManagementSetting = new GroupManagementSetting();
+        GroupManagementUtil groupManagementUtil = new GroupManagementUtil();
+        MessageDeal messagedeal = new MessageDeal();
+        GroupManagement groupManagement = new GroupManagement();
+        Long botQq = setting.getQq();
+        boolean booleanGroupManagement = setting.getGroupManagement();
+        long superAdmin = setting.getAdminQQ();
+        Path dataFolderPath = utils.getPluginsDataPath();
+        File groupManagementDirectory = new File(dataFolderPath + "/groupManagement");
+
+        GlobalEventChannel.INSTANCE.subscribeAlways(GroupMessageEvent.class, g -> {
+            //监听群消息
+            String groupMsg = g.getMessage().contentToString();//获取消息
+            long senderId = g.getSender().getId(); //获取发送者QQ
+            Group group = g.getGroup(); //获取群对象
+            MessageChain groupMessageChain = g.getMessage(); //获取消息来源
+
+            boolean botTag = false;
+            if (groupMsg.contains(String.valueOf(botQq))) {
+                botTag = true;
+                groupMsg = groupMsg.replace("@" + botQq, "");
+                groupMsg = groupMsg.replace("[图片]", "");
+                groupMsg = groupMsg.replace(" ", "");
+            }
+            try {
+                //检测是否开启群管理
+                if (booleanGroupManagement) {
+                    File file = new File(groupManagementDirectory + "/" + group.getId() + ".txt");
+                    if (!file.exists()) {
+                        groupManagementSetting.creatEmptyTemplate(file);
+                    }
+                    //判断是否为超级管理员
+                    if (senderId == superAdmin) {
+                        if (groupManagement.msgDel(group, groupMsg, true)) return;
+                        if (groupManagementUtil.msgDel(group, groupMsg)) return;
+                    }
+                    JSONObject jsonObject = utils.readFile(file);
+                    JSONArray adminQqArray = jsonObject.getJSONArray("AdminQQ");
+                    //判断是否设置了普通管理员
+                    if (adminQqArray.size() > 0) {
+                        //遍历管理员
+                        for (int i = 0; i < adminQqArray.size(); i++) {
+                            long adminQq = adminQqArray.getLong(i);
+                            if (senderId == adminQq) {
+                                if (groupManagement.msgDel(group, groupMsg, false)) return;
+                                if (groupManagementUtil.msgDel(group, groupMsg)) return;
+                            }
+                        }
+                    }
+                    //获取禁言词汇列表
+                    JSONArray muteKeyWordsArray = jsonObject.getJSONArray("MuteKeywords");
+                    int muteTime = jsonObject.getIntValue("MuteTime");
+                    if (muteTime == 0) {
+                        muteTime = 10;
+                    }
+                    if (muteKeyWordsArray.size() > 0) {
+                        //遍历禁言词汇
+                        for (int i = 0; i < muteKeyWordsArray.size(); i++) {
+                            String muteKeyWords = muteKeyWordsArray.getString(i);
+                            if (groupMsg.contains(muteKeyWords)) {
+                                groupManagementUtil.muteGroup(group, senderId, muteTime, groupMessageChain);
+                                return;
+                            }
+                        }
+                    }
+                    //获取撤回词汇列表
+                    JSONArray recallKeyWordsArray = jsonObject.getJSONArray("RecallKeywords");
+                    if (recallKeyWordsArray.size() > 0) {
+                        //遍历撤回词汇
+                        for (int i = 0; i < recallKeyWordsArray.size(); i++) {
+                            String recallKeyWords = recallKeyWordsArray.getString(i);
+                            if (groupMsg.contains(recallKeyWords)) {
+                                try {
+                                    MessageSource.recall(groupMessageChain);
+                                } catch (Exception e) {
+                                    MessageChain chain = new MessageChainBuilder()
+                                            .append(new PlainText("撤回失败,请检查是否有管理员权限"))
+                                            .build();
+                                    group.sendMessage(chain);
+                                }
+                                return;
+                            }
+                        }
+                    }
+                }
+                if (botTag) messagedeal.msgDel(senderId, group, groupMsg);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+
+        GlobalEventChannel.INSTANCE.subscribeAlways(FriendMessageEvent.class, f -> {
+            //监听好友消息
+        });
+
+        GlobalEventChannel.INSTANCE.subscribeAlways(GroupTempMessageEvent.class, f -> {
+            //监听临时消息
+        });
+
+        GlobalEventChannel.INSTANCE.subscribeAlways(NewFriendRequestEvent.class, a -> {
+            //监听添加好友申请
+            boolean accept1 = setting.getAgreeFriend();
+            if (accept1) {
+                getLogger().info("昵称:" + a.getFromNick() + " QQ:" + a.getFromId() + " 请求添加好友，已同意");
+                a.accept();
+            }
+        });
+
+        //监听入群消息
+        GlobalEventChannel.INSTANCE.subscribeAlways(MemberJoinRequestEvent.class, a -> {
+            try {
+                File file = new File(groupManagementDirectory + "/" + a.getGroupId() + ".txt");
+                String msg = a.getMessage();
+                JSONObject jsonObject = utils.readFile(file);
+                boolean accept1 = jsonObject.getBoolean("AutoAgreeApplication");
+                JSONArray acceptArray = jsonObject.getJSONArray("AgreeKeywords");
+                JSONArray refuseArray = jsonObject.getJSONArray("RejectKeywords");
+                if (accept1) {
+                    if (acceptArray.size() > 0) {
+                        for (int i = 0; i < acceptArray.size(); i++) {
+                            String acceptKeyWords = acceptArray.getString(i);
+                            if (msg.contains(acceptKeyWords)) {
+                                a.accept();
+                            }
+                        }
+                    }
+                    if (refuseArray.size() > 0) {
+                        for (int i = 0; i < refuseArray.size(); i++) {
+                            String refuseKeyWords = refuseArray.getString(i);
+                            if (msg.contains(refuseKeyWords)) {
+                                a.reject();
+                            }
+                        }
+                    }
+                }
+
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+
+        GlobalEventChannel.INSTANCE.subscribeAlways(BotInvitedJoinGroupRequestEvent.class, a -> {
+            //监听被邀请入群消息
+            boolean finalAutoInvited = setting.getAgreeGroup();
+            if (finalAutoInvited) {
+                a.accept();
+            }
+        });
+
+        StartThread startThread = new StartThread();
+        startThread.start();
+    }
+
+}

@@ -1,18 +1,20 @@
-package org.example.mirai.plugin;
+package org.qbot;
 
 import com.alibaba.fastjson.JSONObject;
 import net.mamoe.mirai.contact.Group;
 import net.mamoe.mirai.message.data.*;
-import net.mamoe.mirai.message.data.Image;
 import net.mamoe.mirai.utils.ExternalResource;
-import org.example.mirai.plugin.rane.RaneBase;
-import org.example.mirai.plugin.rane.RaneUtil;
-import org.example.mirai.plugin.toolkit.Plugin;
-import org.example.mirai.plugin.toolkit.Setting;
-import org.example.mirai.plugin.toolkit.Utils;
+import org.qbot.rane.RaneBase;
+import org.qbot.rane.RaneUtil;
+import org.qbot.toolkit.PluginUtil;
+import org.qbot.toolkit.Setting;
+import org.qbot.toolkit.Utils;
 
 import javax.script.ScriptException;
-import java.io.*;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.nio.file.Path;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -28,7 +30,7 @@ import java.util.Date;
  */
 
 public class MessageDeal {
-    Plugin plugin = new Plugin();
+    PluginUtil pluginUtil = new PluginUtil();
     Utils utils = new Utils();
     Group group = null;
     RaneUtil raneUtil = new RaneUtil();
@@ -64,6 +66,7 @@ public class MessageDeal {
     String stringGuanyinGetSign = "观音求签";
     String stringMenu = "菜单";
     String stringWeather = "天气";
+    String stringHelp = "帮助";
 
     String numOne = "1";
     int numEleven = 11;
@@ -75,9 +78,9 @@ public class MessageDeal {
         this.group = group;
         System.out.println("收到的消息:" + msg + " 消息长度:" + msg.length());
 
-        if ("my".equals(msg)) {
+        if ("摸鱼办".equals(msg)) {
             chain = new MessageChainBuilder()
-                    .append(new PlainText(plugin.moFish()))
+                    .append(new PlainText(pluginUtil.moFish()))
                     .build();
             group.sendMessage(chain);
             return;
@@ -101,8 +104,8 @@ public class MessageDeal {
                 group.sendMessage(chain);
                 return;
             }
-            Plugin plugin = new Plugin();
-            MusicShare musicShare = plugin.getMusic(msg);
+            PluginUtil pluginUtil = new PluginUtil();
+            MusicShare musicShare = pluginUtil.getMusic(msg);
             group.sendMessage(musicShare);
             return;
         }
@@ -114,8 +117,8 @@ public class MessageDeal {
                 group.sendMessage(chain);
                 return;
             }
-            Plugin plugin = new Plugin();
-            ExternalResource audio = plugin.getVoice(msg);
+            PluginUtil pluginUtil = new PluginUtil();
+            ExternalResource audio = pluginUtil.getVoice(msg);
             if (audio == null) {
                 group.sendMessage("语音系统未配置，请联系管理员");
                 return;
@@ -129,8 +132,8 @@ public class MessageDeal {
         if (msg.contains(stringQq)) {
             msg = msg.replace(stringQq, "");
             msg = msg.replace(" ", "");
-            JSONObject jsonObject = plugin.getPower(msg, "qq");
-            if(jsonObject==null){
+            JSONObject jsonObject = pluginUtil.getPower(msg, "qq");
+            if (jsonObject == null) {
                 group.sendMessage("获取失败");
                 return;
             }
@@ -149,8 +152,8 @@ public class MessageDeal {
         if (msg.contains(stringWeChat)) {
             msg = msg.replace(stringWeChat, "");
             msg = msg.replace(" ", "");
-            JSONObject jsonObject = plugin.getPower(msg, "wx");
-            if(jsonObject==null){
+            JSONObject jsonObject = pluginUtil.getPower(msg, "wx");
+            if (jsonObject == null) {
                 group.sendMessage("获取失败");
                 return;
             }
@@ -347,7 +350,7 @@ public class MessageDeal {
         }
 
         if (stringFortune.equals(msg) || stringTodayFortune.equals(msg)) {
-            String replaceMsg = plugin.getFortune();
+            String replaceMsg = pluginUtil.getFortune();
             if (!replaceMsg.contains(stringGetFailed)) {
                 chain = new At(senderId).plus(new PlainText("\n" + replaceMsg));
             } else {
@@ -358,7 +361,7 @@ public class MessageDeal {
         }
 
         if (stringNews.equals(msg) || stringTodayNews.equals(msg)) {
-            String newsImgUrl = plugin.getNews();
+            String newsImgUrl = pluginUtil.getNews();
             if (!newsImgUrl.contains(stringFail)) {
                 Image image = getImageAdd(newsImgUrl);
                 chain = new MessageChainBuilder()
@@ -372,7 +375,7 @@ public class MessageDeal {
         }
 
         if (stringBeauty.equals(msg) || stringBeautyPictures.equals(msg)) {
-            String filepath = plugin.getImage();
+            String filepath = pluginUtil.getImage();
             if (filepath.contains(stringFail)) {
                 group.sendMessage(filepath);
                 return;
@@ -388,11 +391,20 @@ public class MessageDeal {
             if (msg.equals(s) || msg.equals(s + "座")) {
                 chain = new MessageChainBuilder()
                         .append(new At(senderId))
-                        .append(new PlainText("\n" + s + "座运势\n" + plugin.getHoroscope(s)))
+                        .append(new PlainText("\n" + s + "座运势\n" + pluginUtil.getHoroscope(s)))
                         .build();
                 group.sendMessage(chain);
                 return;
             }
+        }
+
+        if (stringHelp.equals(msg)) {
+            chain = new MessageChainBuilder()
+                    .append(new At(senderId))
+                    .append(new PlainText("\n帮助文档:\nhttps://qbot.7733princess.top/"))
+                    .build();
+            group.sendMessage(chain);
+            return;
         }
 
         if (stringGetSign.equals(msg) || stringGuanyinGetSign.equals(msg)) {
@@ -401,11 +413,11 @@ public class MessageDeal {
             if (qqFile.exists()) {
                 qian = utils.readData(qqFile);
                 if (numOne.equals(qian)) {
-                    qian = plugin.getCq();
+                    qian = pluginUtil.getCq();
                     utils.rewriteData(qqFile, qian);
                 }
             } else {
-                qian = plugin.getCq();
+                qian = pluginUtil.getCq();
                 utils.rewriteData(qqFile, qian);
             }
             chain = new MessageChainBuilder()
@@ -461,8 +473,6 @@ public class MessageDeal {
         } catch (IOException e) {
             return "修改失败";
         }
-
-
     }
 
     /**
@@ -491,7 +501,7 @@ public class MessageDeal {
                 .append(new Face(190))
                 .append(new PlainText("\n"))
                 .append(new Face(190))
-                .append(new PlainText("燃鹅菜单  敬请期待"))
+                .append(new PlainText("燃鹅菜单  【摸鱼办】"))
                 .append(new Face(190))
                 .append(new PlainText("\n◇━━━━━━━━◇\nPS:@我并发相应文字查看指令"))
                 .build();

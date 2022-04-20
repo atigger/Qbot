@@ -1,4 +1,4 @@
-package org.example.mirai.plugin.toolkit;
+package org.qbot.toolkit;
 
 import com.alibaba.fastjson.JSONObject;
 import com.baidu.aip.speech.AipSpeech;
@@ -7,10 +7,10 @@ import com.baidu.aip.util.Util;
 import net.mamoe.mirai.console.plugin.PluginManager;
 import net.mamoe.mirai.console.plugin.jvm.JvmPlugin;
 import okhttp3.*;
-import org.example.mirai.plugin.JavaPluginMain;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
+import org.qbot.Plugin;
 
 import java.io.*;
 import java.nio.file.Path;
@@ -51,7 +51,7 @@ public class Utils {
      * 获取插件配置文件目录
      */
     public Path getPluginsPath() {
-        JvmPlugin jvmPlugin = new JavaPluginMain();
+        JvmPlugin jvmPlugin = new Plugin();
         return PluginManager.INSTANCE.getPluginsConfigPath().resolve(jvmPlugin.getDescription().getName());
     }
 
@@ -59,7 +59,7 @@ public class Utils {
      * 获取插件数据文件目录
      */
     public Path getPluginsDataPath() {
-        JvmPlugin jvmPlugin = new JavaPluginMain();
+        JvmPlugin jvmPlugin = new Plugin();
         return PluginManager.INSTANCE.getPluginsDataPath().resolve(jvmPlugin.getDescription().getName());
     }
 
@@ -384,17 +384,17 @@ public class Utils {
      **/
     public int daysBetween(Date early, Date late) {
 
-        java.util.Calendar calst = java.util.Calendar.getInstance();
-        java.util.Calendar caled = java.util.Calendar.getInstance();
+        Calendar calst = Calendar.getInstance();
+        Calendar caled = Calendar.getInstance();
         calst.setTime(early);
         caled.setTime(late);
         //设置时间为0时
-        calst.set(java.util.Calendar.HOUR_OF_DAY, 0);
-        calst.set(java.util.Calendar.MINUTE, 0);
-        calst.set(java.util.Calendar.SECOND, 0);
-        caled.set(java.util.Calendar.HOUR_OF_DAY, 0);
-        caled.set(java.util.Calendar.MINUTE, 0);
-        caled.set(java.util.Calendar.SECOND, 0);
+        calst.set(Calendar.HOUR_OF_DAY, 0);
+        calst.set(Calendar.MINUTE, 0);
+        calst.set(Calendar.SECOND, 0);
+        caled.set(Calendar.HOUR_OF_DAY, 0);
+        caled.set(Calendar.MINUTE, 0);
+        caled.set(Calendar.SECOND, 0);
         //得到两个日期相差的天数
         int days = ((int) (caled.getTime().getTime() / 1000) - (int) (calst
                 .getTime().getTime() / 1000)) / 3600 / 24;
@@ -402,5 +402,24 @@ public class Utils {
         return days;
     }
 
+    public JSONObject readFile(File file) throws IOException {
+        BufferedReader in = new BufferedReader(new FileReader(file));
+        String data = in.readLine();
+        JSONObject jsonObject = JSONObject.parseObject(data);
+        in.close();
+        return jsonObject;
+    }
+
+    public boolean writeFile(File file, String data)  {
+        try {
+            BufferedWriter out = new BufferedWriter(new FileWriter(file));
+            out.write(data);
+            out.close();
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }
 

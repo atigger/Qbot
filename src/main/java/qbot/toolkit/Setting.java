@@ -1,4 +1,4 @@
-package org.example.mirai.plugin.toolkit;
+package org.qbot.toolkit;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -37,10 +37,6 @@ public class Setting {
         return main().getBoolean("Rane");
     }
 
-    public boolean getAgreeIngroup() {
-        return main().getBoolean("AgreeIngroup");
-    }
-
     public boolean getAgreeFriend() {
         return main().getBoolean("AgreeFriend");
     }
@@ -67,6 +63,32 @@ public class Setting {
 
     public JSONArray getGroup() {
         return main().getJSONObject("Auto").getJSONArray("Group");
+    }
+
+    public boolean getGroupManagement() {
+        return main().getJSONObject("GroupManagement").getBoolean("Open");
+    }
+
+    public long getAdminQQ() {
+        return main().getJSONObject("GroupManagement").getLong("AdminQQ");
+    }
+
+    public void getVersion() {
+        SetSetting setSetting = new SetSetting();
+        boolean isUpdate = false;
+        try {
+            if (!main().getString("Version").equals("2.0")) {
+                isUpdate = true;
+            }
+        } catch (Exception e) {
+            isUpdate = true;
+        } finally {
+            if (isUpdate) {
+                System.out.println("正在更新配置文件");
+                setSetting.setFile("2.0", getQq(), getAppId(), getApiKey(), getSecretKey(), getRane(), getAgreeFriend(), getAgreeGroup(), getAi(), getAutoFortune(), getAutoNews(), getAutoTips(), getGroup(), false, 0);
+            }
+        }
+
     }
 
     public JSONObject main() {

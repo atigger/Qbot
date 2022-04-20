@@ -1,4 +1,4 @@
-package org.example.mirai.plugin.toolkit;
+package org.qbot.toolkit;
 
 import com.alibaba.fastjson.JSONObject;
 import net.mamoe.mirai.console.plugin.PluginManager;
@@ -6,15 +6,15 @@ import net.mamoe.mirai.console.plugin.jvm.JvmPlugin;
 import net.mamoe.mirai.message.data.MusicKind;
 import net.mamoe.mirai.message.data.MusicShare;
 import net.mamoe.mirai.utils.ExternalResource;
-import org.example.mirai.plugin.JavaPluginMain;
+import org.qbot.Plugin;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.text.DateFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -25,7 +25,7 @@ import java.util.Date;
  * @date 2021/09/22
  */
 
-public class Plugin {
+public class PluginUtil {
     Utils utils = new Utils();
     String broadcast = "播报";
     String one = "1";
@@ -210,7 +210,7 @@ public class Plugin {
      * 获取随机图片
      */
     public String getImage() {
-        JvmPlugin jvmPlugin = new JavaPluginMain();
+        JvmPlugin jvmPlugin = new Plugin();
         Path newsFilePath = PluginManager.INSTANCE.getPluginsDataPath().resolve(jvmPlugin.getDescription().getName());
         String path = newsFilePath + "/image";
         //获取其file对象
@@ -232,8 +232,8 @@ public class Plugin {
      * 摸鱼办
      */
     public String moFish() throws ParseException {
-        DateFormat df = DateFormat.getDateInstance();
-        Date nowdate = df.parse(utils.getTime3());
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date nowdate = sdf.parse(utils.getTime3());
         String txt = "";
 
         String sjd = "";
@@ -244,10 +244,10 @@ public class Plugin {
         if (hh >= 6 && hh < 9) {
             sjd = "早上";
         }
-        if (hh >= 9 && hh < 12) {
+        if (hh >= 9 && hh < 11) {
             sjd = "上午";
         }
-        if (hh >= 12 && hh < 14) {
+        if (hh >= 11 && hh < 14) {
             sjd = "中午";
         }
         if (hh >= 14 && hh < 19) {
@@ -256,53 +256,88 @@ public class Plugin {
         if (hh >= 19) {
             sjd = "晚上";
         }
+        String statementAtTheBeginning = "\n工作再累，一定不要忘记摸鱼哦！有事没事起身去茶水间，去厕所，去廊道走走别老在工位上坐着，钱是老板的,但命是自己的！";
+        String statementAtTheEnd = "\n上班是帮老板赚钱，摸鱼是赚老板的钱！最后，祝愿天下所有摸鱼人，都能愉快的渡过每一天！";
+        String superThursday = "\n今天星期四，明天星期五，再坚持一天，然后星期天！";
+        String theWeekendToRemind = "\n不是吧不是吧，不会有人还在996、997吧？";
 
+        Date cjdate = sdf.parse("2023-01-22");
+        int cj = utils.daysBetween(nowdate, cjdate);
+        Date qmjdate = sdf.parse("2022-04-03");
+        int qmj = utils.daysBetween(nowdate, qmjdate);
+        Date ndjdate = sdf.parse("2022-04-30");
+        int ndj = utils.daysBetween(nowdate, ndjdate);
+        Date dwjdate = sdf.parse("2022-06-03");
+        int dwj = utils.daysBetween(nowdate, dwjdate);
+        Date zqjdate = sdf.parse("2022-09-10");
+        int zqj = utils.daysBetween(nowdate, zqjdate);
+        Date gqjdate = sdf.parse("2022-10-01");
+        int gqj = utils.daysBetween(nowdate, gqjdate);
+        Date ydjdate = sdf.parse("2023-01-01");
+        int ydj = utils.daysBetween(nowdate, ydjdate);
 
-        String title = "【摸鱼办】提醒您：" + utils.getTime2() + sjd + "好，摸鱼人！工作再累，一定不要忘记摸鱼哦！有事没事起身去茶水间，去厕所，去廊道走走别老在工位上坐着，钱是老板的,但命是自己的";
+        String title = "【摸鱼办】提醒您：\n" + utils.getTime2() + sjd + "好，摸鱼人！";
         txt = txt + title;
-
         Calendar calendar = Calendar.getInstance();
         int week = calendar.get(Calendar.DAY_OF_WEEK);
-        if (week > 1 && week < 7) {
-            int jg = 7 - week;
-            txt = txt + "\n距离周末还有:" + jg + "天";
+        if (cj == 0 || qmj == 0 || ndj == 0 || dwj == 0 || zqj == 0 || gqj == 0 || ydj == 0) {
+            if (cj == 0) {
+                txt = txt + "\n今天是春节哦，祝大家春节快乐！";
+            }
+            if (qmj == 0) {
+                txt = txt + "\n今天是清明节哦，祝大家....算了...";
+            }
+            if (ndj == 0) {
+                txt = txt + "\n今天是劳动节哦，祝大家劳动节快乐！";
+            }
+            if (dwj == 0) {
+                txt = txt + "\n今天是端午节哦，祝大家端午节快乐！";
+            }
+            if (zqj == 0) {
+                txt = txt + "\n今天是中秋节哦，祝大家中秋节快乐！";
+            }
+            if (gqj == 0) {
+                txt = txt + "\n今天是国庆节哦，祝大家国庆节快乐！";
+            }
+            if (ydj == 0) {
+                txt = txt + "\n今天是元旦节哦，祝大家元旦节快乐！";
+            }
+        } else {
+            if (week == 5) {
+                txt = txt + superThursday;
+            } else if (week == 7 || week == 1) {
+                txt = txt + theWeekendToRemind;
+            } else {
+                txt = txt + statementAtTheBeginning;
+            }
+            if (week > 1 && week < 7) {
+                int jg = 7 - week;
+                txt = txt + "\n距离【周末】还有:" + jg + "天";
+            }
         }
-        Date ydjdate = df.parse("2022-01-01");
-        int ydj = utils.daysBetween(nowdate, ydjdate);
-        if (ydj > 0) {
-            txt = txt + "\n距离元旦还有:" + ydj + "天";
-        }
-        Date cjdate = df.parse("2022-01-31");
-        int cj = utils.daysBetween(nowdate, cjdate);
-        if (cj > 0) {
-            txt = txt + "\n距离春节还有:" + cj + "天";
-        }
-        Date qmjdate = df.parse("2022-04-03");
-        int qmj = utils.daysBetween(nowdate, qmjdate);
+
         if (qmj > 0) {
-            txt = txt + "\n距离清明节还有:" + qmj + "天";
+            txt = txt + "\n距离【清明】还有:" + qmj + "天";
         }
-        Date ndjdate = df.parse("2022-04-30");
-        int ndj = utils.daysBetween(nowdate, ndjdate);
         if (ndj > 0) {
-            txt = txt + "\n距离劳动节还有:" + ndj + "天";
+            txt = txt + "\n距离【劳动】还有:" + ndj + "天";
         }
-        Date dwjdate = df.parse("2022-06-03");
-        int dwj = utils.daysBetween(nowdate, dwjdate);
         if (dwj > 0) {
-            txt = txt + "\n距离端午节还有:" + dwj + "天";
+            txt = txt + "\n距离【端午】还有:" + dwj + "天";
         }
-        Date zqjdate = df.parse("2022-09-10");
-        int zqj = utils.daysBetween(nowdate, zqjdate);
         if (zqj > 0) {
-            txt = txt + "\n距离中秋节还有:" + zqj + "天";
+            txt = txt + "\n距离【中秋】还有:" + zqj + "天";
         }
-        Date gqjdate = df.parse("2022-10-01");
-        int gqj = utils.daysBetween(nowdate, gqjdate);
         if (gqj > 0) {
-            txt = txt + "\n距离国庆节还有:" + gqj + "天";
+            txt = txt + "\n距离【国庆】还有:" + gqj + "天";
         }
-        txt = txt + "\n上班是帮老板赚钱，摸鱼是赚老板的钱！最后，祝愿天下所有摸鱼人，都能愉快的渡过每一天";
+        if (ydj > 0) {
+            txt = txt + "\n距离【元旦】还有:" + ydj + "天";
+        }
+        if (cj > 0) {
+            txt = txt + "\n距离【春节】还有:" + cj + "天";
+        }
+        txt = txt + statementAtTheEnd;
         return txt;
     }
 

@@ -1,9 +1,9 @@
-package org.example.mirai.plugin.rane;
+package org.qbot.rane;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import org.example.mirai.plugin.toolkit.Utils;
+import org.qbot.toolkit.Utils;
 
 import javax.script.ScriptException;
 import java.io.File;
