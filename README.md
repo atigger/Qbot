@@ -1,10 +1,13 @@
-# QQBOT
+QQBOT
 
-本项目基于 [mirai](https://github.com/mamoe/mirai) [![Version](https://img.shields.io/badge/version-2.9.0--M1-red)](https://github.com/mamoe/mirai/releases/tag/v2.9.0-M1)开发
+本项目基于 [mirai](https://github.com/mamoe/mirai) [![Version](https://img.shields.io/badge/version-2.11.0--M2.2-red)](https://github.com/mamoe/mirai/releases/tag/v2.11.0-M2.2)
+开发
 
-[如何使用](https://github.com/mamoe/mirai-core#%E5%AE%89%E8%A3%85-jar-%E6%8F%92%E4%BB%B6)？
+[如何使用](https://github.com/mamoe/mirai/blob/dev/mirai-console/docs/ConfiguringProjects.md) ？
 
-[如何配置](https://github.com/duan649953543/Qbot/blob/main/CONFIG.md)？
+[如何配置](https://github.com/duan649953543/Qbot/blob/main/CONFIG.md) ？
+
+[在群中使用](https://qbot.7733princess.top) ？
 
 ---
 
@@ -26,13 +29,27 @@
 
 - [x] 随机发送~~美女~~图片 需要手动将图片放到（/data/org.qbot.plugin/image）内
 
-- [ ] 群管理插件（关键字撤回、自动审核入群申请）
+- [x] 群管理插件（关键字撤回、自动审核入群申请）[帮助文档](https://qbot.7733princess.top/#/?id=%e7%be%a4%e7%ae%a1%e7%90%86%e5%8a%9f%e8%83%bd)
 
 Tips:有想要的新功能可以提交issue
 
 ---
 
 更新日志：
+
+2022年4月20日v2.0.1更新
+
+1.mirai-core更新到[2.11.0-M2.2](https://github.com/mamoe/mirai/releases/tag/v2.11.0-M2.2)
+
+2.群管理插件开放([帮助文档](https://qbot.7733princess.top/#/?id=%e7%be%a4%e7%ae%a1%e7%90%86%e5%8a%9f%e8%83%bd))
+
+3.[配置文件更新](https://github.com/duan649953543/Qbot/blob/main/CONFIG.md)
+
+4.删除公告栏组件
+
+群管理可能还有bug，请自行测试
+
+---
 
 2021年11月26日v1.1.3更新
 
@@ -42,7 +59,6 @@ Tips:有想要的新功能可以提交issue
 
 下个版本将是大版本更新，将开放群管理插件，请耐心等待
 
----
 2021年11月23日v1.1.2-1更新
 
 1.mirai-core更新到2.9.0-M1
