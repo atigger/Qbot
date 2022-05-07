@@ -1,8 +1,6 @@
 package org.qbot.toolkit;
 
-import com.alibaba.fastjson.JSONArray;
-import kotlinx.serialization.json.JsonArray;
-
+import com.alibaba.fastjson2.JSONArray;
 import java.io.*;
 import java.nio.file.Path;
 
@@ -63,7 +61,6 @@ public class CreateFile {
         }
         File newsFile = new File(dataFolderPath + "/cache/news.cache");
         File weekcacheFile = new File(dataFolderPath + "/cache/week.cache");
-        System.out.println(newsFile);
         try {
             if (!newsFile.exists()) {
                 newsFile.createNewFile();

@@ -1,6 +1,6 @@
 package org.qbot.thread;
 
-import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson2.JSONArray;
 import net.mamoe.mirai.Bot;
 import net.mamoe.mirai.contact.Group;
 import net.mamoe.mirai.message.data.Face;
@@ -49,7 +49,7 @@ public class AutoGetFortuneThread extends Thread {
                     if (!txt.contains("失败")) {
                         System.out.println("正在发送运势");
                         for (int i = 0; i < groupList.size(); i++) {
-                            Group group = bot.getGroup(groupList.getLong(i));
+                            Group group = bot.getGroup((long) groupList.get(i));
                             MessageChain chain = new MessageChainBuilder()
                                     .append(new PlainText("滴滴滴"))
                                     .append(new Face(307))

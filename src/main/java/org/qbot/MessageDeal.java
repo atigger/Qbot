@@ -1,6 +1,6 @@
 package org.qbot;
 
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson2.JSONObject;
 import net.mamoe.mirai.contact.Group;
 import net.mamoe.mirai.message.data.*;
 import net.mamoe.mirai.utils.ExternalResource;
@@ -68,6 +68,7 @@ public class MessageDeal {
     String stringWeather = "天气";
     String stringHelp = "帮助";
 
+    String stringFish = "摸鱼办";
     String numOne = "1";
     int numEleven = 11;
 
@@ -78,7 +79,7 @@ public class MessageDeal {
         this.group = group;
         System.out.println("收到的消息:" + msg + " 消息长度:" + msg.length());
 
-        if ("摸鱼办".equals(msg)) {
+        if (stringFish.equals(msg)) {
             chain = new MessageChainBuilder()
                     .append(new PlainText(pluginUtil.moFish()))
                     .build();
@@ -401,7 +402,7 @@ public class MessageDeal {
         if (stringHelp.equals(msg)) {
             chain = new MessageChainBuilder()
                     .append(new At(senderId))
-                    .append(new PlainText("\n帮助文档:\nhttps://qbot.7733princess.top/"))
+                    .append(new PlainText("\n帮助文档:\nhttps://www.miraiqbot.xyz/"))
                     .build();
             group.sendMessage(chain);
             return;
@@ -433,7 +434,7 @@ public class MessageDeal {
         } else if (setting.getAi()) {
             String url = "http://api.qingyunke.com/api.php?key=free&appid=0&msg=" + msg;
             String data = utils.okHttpClientGet(url);
-            JSONObject jsonObject = JSONObject.parseObject(data);
+            JSONObject jsonObject = JSONObject.parseObject(data, JSONObject.class);
             String txt = jsonObject.getString("content");
             txt = txt.replace("{br}", "\n");
             if (!msg.contains(stringWeather)) {

@@ -1,8 +1,8 @@
 package org.qbot.rane;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONArray;
+import com.alibaba.fastjson2.JSONObject;
 import org.qbot.toolkit.Utils;
 
 import javax.script.ScriptException;
@@ -31,7 +31,7 @@ public class RaneUtil {
      * 获取授权链接
      */
     public String getLoginLink() {
-        JSONObject jsonData = JSONObject.parseObject(raneBase.okHttpClientGet(urlGetCode));
+        JSONObject jsonData = JSONObject.parseObject(raneBase.okHttpClientGet(urlGetCode), JSONObject.class);
         int code = jsonData.getInteger("code");
         String codes = jsonData.getJSONObject("data").getString("code");
         if (code == 0) {
@@ -53,7 +53,7 @@ public class RaneUtil {
             for (int i = 0; i < num; i++) {
                 String data = raneBase.okHttpClientGet(getLoginStateUrl);
                 if (data.contains("ok")) {
-                    JSONObject jsonData = JSONObject.parseObject(data);
+                    JSONObject jsonData = JSONObject.parseObject(data, JSONObject.class);
                     String ticket = jsonData.getJSONObject("data").getString("ticket");
                     String uin = jsonData.getJSONObject("data").getString("uin");
 
@@ -93,7 +93,7 @@ public class RaneUtil {
             dataJson.put("appid", "1110797565");
 
             String url = "https://q.qq.com/ide/login";
-            JSONObject jsonDataReplace = JSONObject.parseObject(raneBase.okHttpClientLoginPost(url, String.valueOf(dataJson)));
+            JSONObject jsonDataReplace = JSONObject.parseObject(raneBase.okHttpClientLoginPost(url, String.valueOf(dataJson)), JSONObject.class);
             String codes = jsonDataReplace.getString("code");
             if (!codes.contains(errorCode_1)) {
                 return codes;
@@ -129,11 +129,11 @@ public class RaneUtil {
             String url = "https://rane.jwetech.com:8080/login/login";
             String getData = raneBase.okHttpClientPost(url, rant, ranv);
             if (!getData.contains(codeIs_1)) {
-                JSONObject jsonDataReplace = JSONObject.parseObject(getData);
+                JSONObject jsonDataReplace = JSONObject.parseObject(getData, JSONObject.class);
                 int t = jsonDataReplace.getInteger("t");
                 String v = jsonDataReplace.getString("v");
                 String data1 = raneBase.decode(t, v);
-                JSONObject jsonData = JSONObject.parseObject(data1);
+                JSONObject jsonData = JSONObject.parseObject(data1, JSONObject.class);
                 if (!jsonData.toString().contains(fail)) {
                     String uid = jsonData.getString("uid");
                     int money = jsonData.getJSONObject("data").getInteger("money");
@@ -177,7 +177,7 @@ public class RaneUtil {
             jsonSign.put("t", 0);
 
             String data1 = sendRequest(qq, uid, token, ts, url, jsonSign);
-            JSONObject data2 = JSONObject.parseObject(data1);
+            JSONObject data2 = JSONObject.parseObject(data1, JSONObject.class);
             if (!data1.contains(errCode)) {
                 return "签到成功";
             } else {
@@ -206,7 +206,7 @@ public class RaneUtil {
             jsonSign.put("video", true);
             jsonSign.put("t", 2);
             String data1 = sendRequest(qq, uid, token, ts, url, jsonSign);
-            JSONObject data2 = JSONObject.parseObject(data1);
+            JSONObject data2 = JSONObject.parseObject(data1, JSONObject.class);
             if (!data1.contains(errCode)) {
                 return "超级签到成功";
             } else {
@@ -247,7 +247,7 @@ public class RaneUtil {
                 jsonSign.put("video", false);
                 jsonSign.put("t", 1);
                 String data1 = sendRequest(qq, uid, token, ts, url, jsonSign);
-                JSONObject data2 = JSONObject.parseObject(data1);
+                JSONObject data2 = JSONObject.parseObject(data1, JSONObject.class);
                 if (!data1.contains(errCode)) {
                     list[ii] = "补签成功";
                 } else {
@@ -283,12 +283,12 @@ public class RaneUtil {
             String jsonSign1 = "{}";
             JSONObject jsonSign = JSON.parseObject(jsonSign1);
             String data1 = sendRequest(qq, uid, token, ts, url, jsonSign);
-            JSONObject data2 = JSONObject.parseObject(data1);
+            JSONObject data2 = JSONObject.parseObject(data1, JSONObject.class);
             if (!data1.contains(errCode)) {
                 String[] list = new String[6];
                 JSONArray jsonArry = data2.getJSONArray("l");
                 for (int i = 0; i < jsonArry.size(); i++) {
-                    list[i] = JSONObject.parseObject(String.valueOf(jsonArry.get(i))).getString("n");
+                    list[i] = JSONObject.parseObject(String.valueOf(jsonArry.get(i)), JSONObject.class).getString("n");
                     if (i == 5) {
                         break;
                     }
@@ -321,7 +321,7 @@ public class RaneUtil {
             jsonSign.put("ios", false);
             jsonSign.put("video", false);
             String data1 = sendRequest(qq, uid, token, ts, urlStart, jsonSign);
-            JSONObject data2 = JSONObject.parseObject(data1);
+            JSONObject data2 = JSONObject.parseObject(data1, JSONObject.class);
             System.out.println(data1);
             if (!data1.contains(errCode)) {
                 String jp = getGift(data2.getString("id"));
@@ -359,7 +359,7 @@ public class RaneUtil {
             jsonSign.put("ios", false);
             jsonSign.put("video", false);
             String data1 = sendRequest(qq, uid, token, ts, urlStart, jsonSign);
-            JSONObject data2 = JSONObject.parseObject(data1);
+            JSONObject data2 = JSONObject.parseObject(data1, JSONObject.class);
             if (!data1.contains(errCode)) {
                 String jp = getGift(data2.getString("id"));
                 System.out.println(jp);
@@ -513,7 +513,7 @@ public class RaneUtil {
 
         raneBase.rewriteTs(qq, ts);
         String getData = raneBase.okHttpClientPost(url, rant, ranv);
-        JSONObject jsonDataReplace = JSONObject.parseObject(getData);
+        JSONObject jsonDataReplace = JSONObject.parseObject(getData, JSONObject.class);
         int t = jsonDataReplace.getInteger("t");
         String v = jsonDataReplace.getString("v");
         String data1 = raneBase.decode(t, v);

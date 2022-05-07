@@ -1,7 +1,7 @@
 package org.qbot.toolkit;
 
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson2.JSONArray;
+import com.alibaba.fastjson2.JSONObject;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.FileInputStream;
@@ -18,7 +18,7 @@ import java.util.Map;
 public class Setting {
 
     public long getQq() {
-        return main().getLong("QQ");
+        return main().getLongValue("QQ");
     }
 
     public String getAppId() {
@@ -34,31 +34,31 @@ public class Setting {
     }
 
     public boolean getRane() {
-        return main().getBoolean("Rane");
+        return main().getBooleanValue("Rane");
     }
 
     public boolean getAgreeFriend() {
-        return main().getBoolean("AgreeFriend");
+        return main().getBooleanValue("AgreeFriend");
     }
 
     public boolean getAgreeGroup() {
-        return main().getBoolean("AgreeGroup");
+        return main().getBooleanValue("AgreeGroup");
     }
 
     public boolean getAi() {
-        return main().getBoolean("AI");
+        return main().getBooleanValue("AI");
     }
 
     public boolean getAutoFortune() {
-        return main().getJSONObject("Auto").getBoolean("AutoFortune");
+        return main().getJSONObject("Auto").getBooleanValue("AutoFortune");
     }
 
     public boolean getAutoNews() {
-        return main().getJSONObject("Auto").getBoolean("AutoNews");
+        return main().getJSONObject("Auto").getBooleanValue("AutoNews");
     }
 
     public boolean getAutoTips() {
-        return main().getJSONObject("Auto").getBoolean("AutoTips");
+        return main().getJSONObject("Auto").getBooleanValue("AutoTips");
     }
 
     public JSONArray getGroup() {
@@ -66,7 +66,7 @@ public class Setting {
     }
 
     public boolean getGroupManagement() {
-        return main().getJSONObject("GroupManagement").getBoolean("Open");
+        return main().getJSONObject("GroupManagement").getBooleanValue("Open");
     }
 
     public long getAdminQQ() {

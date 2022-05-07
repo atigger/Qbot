@@ -1,7 +1,7 @@
 package org.qbot;
 
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson2.JSONArray;
+import com.alibaba.fastjson2.JSONObject;
 import net.mamoe.mirai.console.plugin.jvm.JavaPlugin;
 import net.mamoe.mirai.console.plugin.jvm.JvmPluginDescriptionBuilder;
 import net.mamoe.mirai.contact.Group;
@@ -17,17 +17,15 @@ import org.qbot.group.GroupManagementUtil;
 import org.qbot.thread.StartThread;
 import org.qbot.toolkit.*;
 
-import javax.script.ScriptException;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.text.ParseException;
 
 public final class Plugin extends JavaPlugin {
     public static final Plugin INSTANCE = new Plugin();
 
     public Plugin() {
-        super(new JvmPluginDescriptionBuilder("org.qbot.plugin", "2.0.1").build());
+        super(new JvmPluginDescriptionBuilder("org.qbot.plugin", "2.0.2").build());
     }
 
     @Override
@@ -83,7 +81,7 @@ public final class Plugin extends JavaPlugin {
                     if (adminQqArray.size() > 0) {
                         //遍历管理员
                         for (int i = 0; i < adminQqArray.size(); i++) {
-                            long adminQq = adminQqArray.getLong(i);
+                            long adminQq = (long)adminQqArray.get(i);
                             if (senderId == adminQq) {
                                 if (groupManagement.msgDel(group, groupMsg, false)) return;
                                 if (groupManagementUtil.msgDel(group, groupMsg)) return;
@@ -155,7 +153,7 @@ public final class Plugin extends JavaPlugin {
                 File file = new File(groupManagementDirectory + "/" + a.getGroupId() + ".txt");
                 String msg = a.getMessage();
                 JSONObject jsonObject = utils.readFile(file);
-                boolean accept1 = jsonObject.getBoolean("AutoAgreeApplication");
+                boolean accept1 = jsonObject.getBooleanValue("AutoAgreeApplication");
                 JSONArray acceptArray = jsonObject.getJSONArray("AgreeKeywords");
                 JSONArray refuseArray = jsonObject.getJSONArray("RejectKeywords");
                 if (accept1) {

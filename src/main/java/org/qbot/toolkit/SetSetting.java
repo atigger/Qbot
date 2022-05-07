@@ -1,6 +1,6 @@
 package org.qbot.toolkit;
 
-import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson2.JSONArray;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;

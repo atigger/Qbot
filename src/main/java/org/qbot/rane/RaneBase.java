@@ -1,6 +1,6 @@
 package org.qbot.rane;
 
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson2.JSONObject;
 import okhttp3.*;
 import org.qbot.toolkit.Utils;
 
@@ -190,7 +190,7 @@ public class RaneBase {
         while ((str = in.readLine()) != null) {
             toJsonStr = str;
         }
-        return JSONObject.parseObject(toJsonStr);
+        return JSONObject.parseObject(toJsonStr, JSONObject.class);
     }
 
     /**

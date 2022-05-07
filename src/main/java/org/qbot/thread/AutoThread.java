@@ -1,6 +1,6 @@
 package org.qbot.thread;
 
-import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson2.JSONArray;
 import net.mamoe.mirai.Bot;
 import net.mamoe.mirai.contact.Group;
 import net.mamoe.mirai.message.data.Image;
@@ -44,7 +44,7 @@ public class AutoThread extends Thread {
                 boolean autoNews = setting.getAutoNews();
                 if ("08:00".equals(utils.getNowTime()) && autoNews) {
                     for (int i = 0; i < groupList.size(); i++) {
-                        Group group = bot.getGroup(groupList.getLong(i));
+                        Group group = bot.getGroup((long) groupList.get(i));
                         String newsImgUrl = pluginUtil.getNews();
                         if (!newsImgUrl.contains("失败")) {
                             ExternalResource img = ExternalResource.create(new File(newsImgUrl));
@@ -61,7 +61,7 @@ public class AutoThread extends Thread {
                     sleep(60000);
                 } else if ("15:00".equals(utils.getNowTime()) && autoTips) {
                     for (int i = 0; i < groupList.size(); i++) {
-                        Group group = bot.getGroup(groupList.getLong(i));
+                        Group group = bot.getGroup((long) groupList.get(i));
                         ExternalResource img = ExternalResource.create(new File(String.valueOf(file1)));
                         assert group != null;
                         Image image = group.uploadImage(img);

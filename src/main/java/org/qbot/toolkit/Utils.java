@@ -1,6 +1,6 @@
 package org.qbot.toolkit;
 
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson2.JSONObject;
 import com.baidu.aip.speech.AipSpeech;
 import com.baidu.aip.speech.TtsResponse;
 import com.baidu.aip.util.Util;
@@ -153,7 +153,7 @@ public class Utils {
     public JSONObject getMusicInfo(String musicName) {
         String url = "http://music.163.com/api/search/get/web?s=" + musicName + "&type=1&limit=1";
         String html = okHttpClientGet(url);
-        JSONObject json = JSONObject.parseObject(html);
+        JSONObject json = JSONObject.parseObject(html, JSONObject.class);
         Object musicDataJson = json.getJSONObject("result").getJSONArray("songs").get(0);
         JSONObject musicInfoJson = (JSONObject) musicDataJson;
         JSONObject artists = (JSONObject) musicInfoJson.getJSONArray("artists").get(0);
@@ -335,7 +335,7 @@ public class Utils {
         try {
             in = new BufferedReader(new FileReader(file));
             String data = in.readLine();
-            JSONObject jsonObject = JSONObject.parseObject(data);
+            JSONObject jsonObject = JSONObject.parseObject(data, JSONObject.class);
             String time = jsonObject.getString("date");
             String qian = jsonObject.getString("qian");
             if (time.equals(getTime1())) {
@@ -405,12 +405,12 @@ public class Utils {
     public JSONObject readFile(File file) throws IOException {
         BufferedReader in = new BufferedReader(new FileReader(file));
         String data = in.readLine();
-        JSONObject jsonObject = JSONObject.parseObject(data);
+        JSONObject jsonObject = JSONObject.parseObject(data, JSONObject.class);
         in.close();
         return jsonObject;
     }
 
-    public boolean writeFile(File file, String data)  {
+    public boolean writeFile(File file, String data) {
         try {
             BufferedWriter out = new BufferedWriter(new FileWriter(file));
             out.write(data);

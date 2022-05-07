@@ -1,7 +1,7 @@
 package org.qbot.group;
 
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson2.JSONArray;
+import com.alibaba.fastjson2.JSONObject;
 import net.mamoe.mirai.contact.Group;
 import net.mamoe.mirai.message.data.MessageChain;
 import net.mamoe.mirai.message.data.MessageChainBuilder;
@@ -58,7 +58,7 @@ public class GroupManagementSetting {
             adminQQ = new JSONArray();
         }
         for (int i = 0; i < adminQQ.size(); i++) {
-            if (adminQQ.getLong(i) == qq) {
+            if ((long) adminQQ.get(i) == qq) {
                 return -1;
             }
         }
@@ -92,7 +92,7 @@ public class GroupManagementSetting {
             adminQQ = new JSONArray();
         }
         for (int i = 0; i < adminQQ.size(); i++) {
-            if (adminQQ.getLong(i) == qq) {
+            if ((long) adminQQ.get(i) == qq) {
                 adminQQ.remove(i);
                 jsonObject.put("AdminQQ", adminQQ);
                 if (utils.writeFile(file, jsonObject.toJSONString())) {

@@ -1,6 +1,6 @@
 package org.qbot.toolkit;
 
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson2.JSONObject;
 import net.mamoe.mirai.console.plugin.PluginManager;
 import net.mamoe.mirai.console.plugin.jvm.JvmPlugin;
 import net.mamoe.mirai.message.data.MusicKind;
@@ -17,6 +17,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Plugin class
@@ -42,8 +43,8 @@ public class PluginUtil {
             return "获取失败";
         }
         JSONObject json;
-        json = JSONObject.parseObject(html);
-        json = JSONObject.parseObject(String.valueOf(json.getJSONObject("data").getJSONArray("cards").get(0)));
+        json = JSONObject.parseObject(html, JSONObject.class);
+        json = JSONObject.parseObject(String.valueOf(json.getJSONObject("data").getJSONArray("cards").get(0)), JSONObject.class);
         String txt = String.valueOf(json.getJSONObject("mblog").getString("text"));
         String wbTime = String.valueOf(json.getJSONObject("mblog").getString("created_at"));
         String nowWeek = utils.getWeek();
@@ -175,7 +176,7 @@ public class PluginUtil {
     public JSONObject getPower(String hero, String qu) {
         String heroUrl = "https://www.sapi.run/hero/select.php?hero=" + hero + "&type=" + qu;
         String data = utils.okHttpClientGet(heroUrl);
-        JSONObject jsonData = JSONObject.parseObject(data);
+        JSONObject jsonData = JSONObject.parseObject(data, JSONObject.class);
         int code = jsonData.getInteger("code");
         if (code == statuscode) {
             String heroName = jsonData.getJSONObject("data").getString("name");
@@ -263,9 +264,9 @@ public class PluginUtil {
 
         Date cjdate = sdf.parse("2023-01-22");
         int cj = utils.daysBetween(nowdate, cjdate);
-        Date qmjdate = sdf.parse("2022-04-03");
+        Date qmjdate = sdf.parse("2023-04-05");
         int qmj = utils.daysBetween(nowdate, qmjdate);
-        Date ndjdate = sdf.parse("2022-04-30");
+        Date ndjdate = sdf.parse("2023-05-01");
         int ndj = utils.daysBetween(nowdate, ndjdate);
         Date dwjdate = sdf.parse("2022-06-03");
         int dwj = utils.daysBetween(nowdate, dwjdate);
@@ -303,6 +304,7 @@ public class PluginUtil {
                 txt = txt + "\n今天是元旦节哦，祝大家元旦节快乐！";
             }
         } else {
+            String[] stringWeek = {"周日","周一","周二","周三","周四","周五","周六"};
             if (week == 5) {
                 txt = txt + superThursday;
             } else if (week == 7 || week == 1) {
@@ -310,18 +312,14 @@ public class PluginUtil {
             } else {
                 txt = txt + statementAtTheBeginning;
             }
+            int day = week - 1;
+            txt = txt + "\n今天【"+stringWeek[day]+"】";
             if (week > 1 && week < 7) {
                 int jg = 7 - week;
                 txt = txt + "\n距离【周末】还有:" + jg + "天";
             }
         }
 
-        if (qmj > 0) {
-            txt = txt + "\n距离【清明】还有:" + qmj + "天";
-        }
-        if (ndj > 0) {
-            txt = txt + "\n距离【劳动】还有:" + ndj + "天";
-        }
         if (dwj > 0) {
             txt = txt + "\n距离【端午】还有:" + dwj + "天";
         }
@@ -336,6 +334,12 @@ public class PluginUtil {
         }
         if (cj > 0) {
             txt = txt + "\n距离【春节】还有:" + cj + "天";
+        }
+        if (qmj > 0) {
+            txt = txt + "\n距离【清明】还有:" + qmj + "天";
+        }
+        if (ndj > 0) {
+            txt = txt + "\n距离【劳动】还有:" + ndj + "天";
         }
         txt = txt + statementAtTheEnd;
         return txt;
