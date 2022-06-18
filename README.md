@@ -37,6 +37,8 @@ Tips:有想要的新功能可以提交issue
 
 更新日志：
 
+2022年6月18日v2.0.2更新
+
 1.mirai-core更新到[2.11.1](https://github.com/mamoe/mirai/releases/tag/v2.11.1)
 
 2.修复摸鱼办的一些bug
