@@ -18,52 +18,52 @@ import java.nio.file.Path;
  * @author 649953543@qq.com
  * @date 2022/4/6
  */
+@SuppressWarnings("unchecked")
 public class GroupManagementSetting {
-    Utils utils = new Utils();
-    Path dataFolderPath = utils.getPluginsDataPath();
-    File groupManagementDirectory = new File(dataFolderPath + "/groupManagement");
+    final Utils utils = new Utils();
+    final Path dataFolderPath = utils.getPluginsDataPath();
+    final File groupManagementDirectory = new File(dataFolderPath + "/groupManagement");
 
     /**
      * 判断是否是管理员
      *
-     * @param group
-     * @return
+     * @param group 群对象
+     * @return 管理员返回true，非管理员返回false
      */
-    public boolean Authority(Group group) {
+    public boolean authority(Group group) {
         if (group.getBotPermission().getLevel() == 0) {
             MessageChain chain = new MessageChainBuilder().append(new PlainText("当前不是管理员，无法使用此功能")).build();
             group.sendMessage(chain);
-            return false;
+            return true;
         }
-        return true;
+        return false;
     }
 
     /**
      * 设置管理员
      *
-     * @param group
-     * @return
+     * @param group 群对象
+     * @return 设置成功返回1，失败返回0、-1
      */
-    @SuppressWarnings({"unchecked", "rawtypes"})
     public int setAdmin(long group, long qq) throws IOException {
         File file = new File(groupManagementDirectory + "/" + group + ".txt");
         if (!file.exists()) {
             creatEmptyTemplate(file);
         }
         JSONObject jsonObject = utils.readFile(file);
-        JSONArray adminQQ;
+        JSONArray adminQq;
         try {
-            adminQQ = jsonObject.getJSONArray("AdminQQ");
+            adminQq = jsonObject.getJSONArray("AdminQQ");
         } catch (Exception ignored) {
-            adminQQ = new JSONArray();
+            adminQq = new JSONArray();
         }
-        for (int i = 0; i < adminQQ.size(); i++) {
-            if ((long) adminQQ.get(i) == qq) {
+        for (int i = 0; i < adminQq.size(); i++) {
+            if (adminQq.getLongValue(i) == qq) {
                 return -1;
             }
         }
-        adminQQ.add(qq);
-        jsonObject.put("AdminQQ", adminQQ);
+        adminQq.add(qq);
+        jsonObject.put("AdminQQ", adminQq);
         if (utils.writeFile(file, jsonObject.toJSONString())) {
             return 1;
         }
@@ -74,10 +74,10 @@ public class GroupManagementSetting {
     /**
      * 删除管理员
      *
-     * @param group
-     * @param qq
-     * @return
-     * @throws IOException
+     * @param group 群对象
+     * @param qq    QQ号
+     * @return 设置成功返回1，失败返回0、-1
+     * @throws IOException IOException
      */
     public int delAdmin(long group, long qq) throws IOException {
         File file = new File(groupManagementDirectory + "/" + group + ".txt");
@@ -85,16 +85,16 @@ public class GroupManagementSetting {
             creatEmptyTemplate(file);
         }
         JSONObject jsonObject = utils.readFile(file);
-        JSONArray adminQQ;
+        JSONArray adminQq;
         try {
-            adminQQ = jsonObject.getJSONArray("AdminQQ");
+            adminQq = jsonObject.getJSONArray("AdminQQ");
         } catch (Exception ignored) {
-            adminQQ = new JSONArray();
+            adminQq = new JSONArray();
         }
-        for (int i = 0; i < adminQQ.size(); i++) {
-            if ((long) adminQQ.get(i) == qq) {
-                adminQQ.remove(i);
-                jsonObject.put("AdminQQ", adminQQ);
+        for (int i = 0; i < adminQq.size(); i++) {
+            if (adminQq.getLongValue(i) == qq) {
+                adminQq.remove(i);
+                jsonObject.put("AdminQQ", adminQq);
                 if (utils.writeFile(file, jsonObject.toJSONString())) {
                     return 1;
                 }
@@ -107,9 +107,9 @@ public class GroupManagementSetting {
     /**
      * 设置禁言关键字
      *
-     * @param group
-     * @param keywords
-     * @return
+     * @param group    群对象
+     * @param keywords 关键字
+     * @return 设置成功返回1，失败返回0、-1
      */
     public int setMuteKeywords(long group, String keywords) throws IOException {
         File file = new File(groupManagementDirectory + "/" + group + ".txt");
@@ -139,9 +139,9 @@ public class GroupManagementSetting {
     /**
      * 删除禁言关键字
      *
-     * @param group
-     * @param keywords
-     * @return
+     * @param group    群对象
+     * @param keywords 关键字
+     * @return 设置成功返回1，失败返回0、-1
      */
     public int delMuteKeywords(long group, String keywords) throws IOException {
         File file = new File(groupManagementDirectory + "/" + group + ".txt");
@@ -171,8 +171,8 @@ public class GroupManagementSetting {
     /**
      * 清空禁言关键字
      *
-     * @param group
-     * @return
+     * @param group 群对象
+     * @return 设置成功返回1，失败返回0、-1
      */
     public int delAllMuteKeywords(long group) throws IOException {
         File file = new File(groupManagementDirectory + "/" + group + ".txt");
@@ -187,19 +187,21 @@ public class GroupManagementSetting {
         return 0;
     }
 
+    private static final int MUTE_TIME = 43200;
+
     /**
      * 设置禁言时间
      *
-     * @param group
-     * @param min
-     * @return
+     * @param group 群对象
+     * @param min   分钟
+     * @return 设置成功返回1，失败返回0、-1
      */
     public int setMuteTime(long group, int min) throws IOException {
         File file = new File(groupManagementDirectory + "/" + group + ".txt");
         if (!file.exists()) {
             creatEmptyTemplate(file);
         }
-        if (min > 43200) {
+        if (min > MUTE_TIME) {
             return -1;
         }
         JSONObject jsonObject = utils.readFile(file);
@@ -213,9 +215,9 @@ public class GroupManagementSetting {
     /**
      * 设置撤回关键字
      *
-     * @param group
-     * @param keywords
-     * @return
+     * @param group    群对象
+     * @param keywords 关键字
+     * @return 设置成功返回1，失败返回0、-1
      */
     public int setRecallWords(long group, String keywords) throws IOException {
         File file = new File(groupManagementDirectory + "/" + group + ".txt");
@@ -223,19 +225,19 @@ public class GroupManagementSetting {
             creatEmptyTemplate(file);
         }
         JSONObject jsonObject = utils.readFile(file);
-        JSONArray RecallWords;
+        JSONArray recallWords;
         try {
-            RecallWords = jsonObject.getJSONArray("RecallKeywords");
+            recallWords = jsonObject.getJSONArray("RecallKeywords");
         } catch (Exception ignored) {
-            RecallWords = new JSONArray();
+            recallWords = new JSONArray();
         }
-        for (int i = 0; i < RecallWords.size(); i++) {
-            if (RecallWords.getString(i).equals(keywords)) {
+        for (int i = 0; i < recallWords.size(); i++) {
+            if (recallWords.getString(i).equals(keywords)) {
                 return -1;
             }
         }
-        RecallWords.add(keywords);
-        jsonObject.put("RecallKeywords", RecallWords);
+        recallWords.add(keywords);
+        jsonObject.put("RecallKeywords", recallWords);
         if (utils.writeFile(file, jsonObject.toJSONString())) {
             return 1;
         }
@@ -245,9 +247,9 @@ public class GroupManagementSetting {
     /**
      * 删除撤回关键字
      *
-     * @param group
-     * @param keywords
-     * @return
+     * @param group    群对象
+     * @param keywords 关键字
+     * @return 设置成功返回1，失败返回0、-1
      */
     public int delRecallWords(long group, String keywords) throws IOException {
         File file = new File(groupManagementDirectory + "/" + group + ".txt");
@@ -255,16 +257,16 @@ public class GroupManagementSetting {
             creatEmptyTemplate(file);
         }
         JSONObject jsonObject = utils.readFile(file);
-        JSONArray RecallWords;
+        JSONArray recallWords;
         try {
-            RecallWords = jsonObject.getJSONArray("RecallKeywords");
+            recallWords = jsonObject.getJSONArray("RecallKeywords");
         } catch (Exception ignored) {
-            RecallWords = new JSONArray();
+            recallWords = new JSONArray();
         }
-        for (int i = 0; i < RecallWords.size(); i++) {
-            if (RecallWords.getString(i).equals(keywords)) {
-                RecallWords.remove(i);
-                jsonObject.put("RecallKeywords", RecallWords);
+        for (int i = 0; i < recallWords.size(); i++) {
+            if (recallWords.getString(i).equals(keywords)) {
+                recallWords.remove(i);
+                jsonObject.put("RecallKeywords", recallWords);
                 if (utils.writeFile(file, jsonObject.toJSONString())) {
                     return 1;
                 }
@@ -277,8 +279,8 @@ public class GroupManagementSetting {
     /**
      * 清空撤回关键字
      *
-     * @param group
-     * @return
+     * @param group 群对象
+     * @return 设置成功返回1，失败返回0、-1
      */
     public int delAllRecallWords(long group) throws IOException {
         File file = new File(groupManagementDirectory + "/" + group + ".txt");
@@ -296,8 +298,8 @@ public class GroupManagementSetting {
     /**
      * 设置自动同意群申请
      *
-     * @param group
-     * @return
+     * @param group 群对象
+     * @return 设置成功返回1，失败返回0、-1
      */
     public int setAutoAgreeApplication(long group) throws IOException {
         File file = new File(groupManagementDirectory + "/" + group + ".txt");
@@ -315,8 +317,8 @@ public class GroupManagementSetting {
     /**
      * 关闭自动同意群申请
      *
-     * @param group
-     * @return
+     * @param group 群对象
+     * @return 设置成功返回1，失败返回0、-1
      */
     public int delAutoAgreeApplication(long group) throws IOException {
         File file = new File(groupManagementDirectory + "/" + group + ".txt");
@@ -334,9 +336,9 @@ public class GroupManagementSetting {
     /**
      * 设置自动同意关键字
      *
-     * @param group
-     * @param keywords
-     * @return
+     * @param group    群对象
+     * @param keywords 关键字
+     * @return 设置成功返回1，失败返回0、-1
      */
     public int setAutoAgreeKeyWords(long group, String keywords) throws IOException {
         File file = new File(groupManagementDirectory + "/" + group + ".txt");
@@ -344,19 +346,19 @@ public class GroupManagementSetting {
             creatEmptyTemplate(file);
         }
         JSONObject jsonObject = utils.readFile(file);
-        JSONArray AutoAgreeKeyWords;
+        JSONArray autoAgreeKeyWords;
         try {
-            AutoAgreeKeyWords = jsonObject.getJSONArray("AgreeKeywords");
+            autoAgreeKeyWords = jsonObject.getJSONArray("AgreeKeywords");
         } catch (Exception ignored) {
-            AutoAgreeKeyWords = new JSONArray();
+            autoAgreeKeyWords = new JSONArray();
         }
-        for (int i = 0; i < AutoAgreeKeyWords.size(); i++) {
-            if (AutoAgreeKeyWords.getString(i).equals(keywords)) {
+        for (int i = 0; i < autoAgreeKeyWords.size(); i++) {
+            if (autoAgreeKeyWords.getString(i).equals(keywords)) {
                 return -1;
             }
         }
-        AutoAgreeKeyWords.add(keywords);
-        jsonObject.put("AgreeKeywords", AutoAgreeKeyWords);
+        autoAgreeKeyWords.add(keywords);
+        jsonObject.put("AgreeKeywords", autoAgreeKeyWords);
         if (utils.writeFile(file, jsonObject.toJSONString())) {
             return 1;
         }
@@ -366,9 +368,9 @@ public class GroupManagementSetting {
     /**
      * 删除自动同意关键字
      *
-     * @param group
-     * @param keywords
-     * @return
+     * @param group    群对象
+     * @param keywords 关键字
+     * @return 设置成功返回1，失败返回0、-1
      */
     public int delAutoAgreeKeyWords(long group, String keywords) throws IOException {
         File file = new File(groupManagementDirectory + "/" + group + ".txt");
@@ -376,16 +378,16 @@ public class GroupManagementSetting {
             creatEmptyTemplate(file);
         }
         JSONObject jsonObject = utils.readFile(file);
-        JSONArray AutoAgreeKeyWords;
+        JSONArray autoAgreeKeyWords;
         try {
-            AutoAgreeKeyWords = jsonObject.getJSONArray("AgreeKeywords");
+            autoAgreeKeyWords = jsonObject.getJSONArray("AgreeKeywords");
         } catch (Exception ignored) {
-            AutoAgreeKeyWords = new JSONArray();
+            autoAgreeKeyWords = new JSONArray();
         }
-        for (int i = 0; i < AutoAgreeKeyWords.size(); i++) {
-            if (AutoAgreeKeyWords.getString(i).equals(keywords)) {
-                AutoAgreeKeyWords.remove(i);
-                jsonObject.put("AgreeKeywords", AutoAgreeKeyWords);
+        for (int i = 0; i < autoAgreeKeyWords.size(); i++) {
+            if (autoAgreeKeyWords.getString(i).equals(keywords)) {
+                autoAgreeKeyWords.remove(i);
+                jsonObject.put("AgreeKeywords", autoAgreeKeyWords);
                 if (utils.writeFile(file, jsonObject.toJSONString())) {
                     return 1;
                 }
@@ -412,10 +414,9 @@ public class GroupManagementSetting {
     /**
      * 创建空白模板
      *
-     * @param file
-     * @return
+     * @param file 文件对象
      */
-    public boolean creatEmptyTemplate(File file) {
+    public void creatEmptyTemplate(File file) {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("AdminQQ", new JSONArray());
         jsonObject.put("MuteKeywords", new JSONArray());
@@ -425,7 +426,7 @@ public class GroupManagementSetting {
         jsonObject.put("AgreeKeywords", new JSONArray());
         jsonObject.put("RejectKeywords", new JSONArray());
         jsonObject.put("WarnKeywords", new JSONArray());
-        return utils.writeFile(file, jsonObject.toJSONString());
+        utils.writeFile(file, jsonObject.toJSONString());
     }
 
 

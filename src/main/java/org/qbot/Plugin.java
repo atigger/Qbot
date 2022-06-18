@@ -21,19 +21,21 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 
+/**
+ * @author 64995
+ */
+@SuppressWarnings({"AlibabaMethodTooLong"})
 public final class Plugin extends JavaPlugin {
     public static final Plugin INSTANCE = new Plugin();
 
     public Plugin() {
-        super(new JvmPluginDescriptionBuilder("org.qbot.plugin", "2.0.2").build());
+        super(new JvmPluginDescriptionBuilder("org.qbot.plugin", "2.0.3").build());
     }
 
+    @SuppressWarnings("AlibabaMethodTooLong")
     @Override
     public void onEnable() {
         getLogger().info("启动中。。。");
-
-        Path configFolderPath = getConfigFolderPath();
-
         CreateFile createFile = new CreateFile();
         createFile.createFile();
 
@@ -72,8 +74,12 @@ public final class Plugin extends JavaPlugin {
                     }
                     //判断是否为超级管理员
                     if (senderId == superAdmin) {
-                        if (groupManagement.msgDel(group, groupMsg, true)) return;
-                        if (groupManagementUtil.msgDel(group, groupMsg)) return;
+                        if (groupManagement.msgDel(group, groupMsg, true)) {
+                            return;
+                        }
+                        if (groupManagementUtil.msgDel(group, groupMsg)) {
+                            return;
+                        }
                     }
                     JSONObject jsonObject = utils.readFile(file);
                     JSONArray adminQqArray = jsonObject.getJSONArray("AdminQQ");
@@ -81,10 +87,14 @@ public final class Plugin extends JavaPlugin {
                     if (adminQqArray.size() > 0) {
                         //遍历管理员
                         for (int i = 0; i < adminQqArray.size(); i++) {
-                            long adminQq = (long)adminQqArray.get(i);
+                            long adminQq = adminQqArray.getLongValue(i);
                             if (senderId == adminQq) {
-                                if (groupManagement.msgDel(group, groupMsg, false)) return;
-                                if (groupManagementUtil.msgDel(group, groupMsg)) return;
+                                if (groupManagement.msgDel(group, groupMsg, false)) {
+                                    return;
+                                }
+                                if (groupManagementUtil.msgDel(group, groupMsg)) {
+                                    return;
+                                }
                             }
                         }
                     }
@@ -124,7 +134,9 @@ public final class Plugin extends JavaPlugin {
                         }
                     }
                 }
-                if (botTag) messagedeal.msgDel(senderId, group, groupMsg);
+                if (botTag) {
+                    messagedeal.msgDel(senderId, group, groupMsg);
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }

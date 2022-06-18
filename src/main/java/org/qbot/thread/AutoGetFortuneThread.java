@@ -49,7 +49,7 @@ public class AutoGetFortuneThread extends Thread {
                     if (!txt.contains("失败")) {
                         System.out.println("正在发送运势");
                         for (int i = 0; i < groupList.size(); i++) {
-                            Group group = bot.getGroup((long) groupList.get(i));
+                            Group group = bot.getGroup(groupList.getLongValue(i));
                             MessageChain chain = new MessageChainBuilder()
                                     .append(new PlainText("滴滴滴"))
                                     .append(new Face(307))

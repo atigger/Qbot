@@ -14,7 +14,6 @@ import org.qbot.toolkit.Utils;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Path;
 import java.text.ParseException;
 
 /**
@@ -31,9 +30,7 @@ public class AutoThread extends Thread {
         Utils utils = new Utils();
         Setting setting = new Setting();
         System.out.println("开启自动发送小提醒线程成功！");
-        Path dataFolderPath = utils.getPluginsDataPath();
         PluginUtil pluginUtil = new PluginUtil();
-        File file1 = new File(dataFolderPath + "/yc.jpg");
         long botQq = setting.getQq();
         JSONArray groupList = setting.getGroup();
 
@@ -44,7 +41,7 @@ public class AutoThread extends Thread {
                 boolean autoNews = setting.getAutoNews();
                 if ("08:00".equals(utils.getNowTime()) && autoNews) {
                     for (int i = 0; i < groupList.size(); i++) {
-                        Group group = bot.getGroup((long) groupList.get(i));
+                        Group group = bot.getGroup(groupList.getLongValue(i));
                         String newsImgUrl = pluginUtil.getNews();
                         if (!newsImgUrl.contains("失败")) {
                             ExternalResource img = ExternalResource.create(new File(newsImgUrl));
@@ -61,10 +58,8 @@ public class AutoThread extends Thread {
                     sleep(60000);
                 } else if ("15:00".equals(utils.getNowTime()) && autoTips) {
                     for (int i = 0; i < groupList.size(); i++) {
-                        Group group = bot.getGroup((long) groupList.get(i));
-                        ExternalResource img = ExternalResource.create(new File(String.valueOf(file1)));
+                        Group group = bot.getGroup(groupList.getLongValue(i));
                         assert group != null;
-                        Image image = group.uploadImage(img);
                         MessageChain chain = new MessageChainBuilder()
                                 .append(new PlainText(pluginUtil.moFish()))
                                 .build();

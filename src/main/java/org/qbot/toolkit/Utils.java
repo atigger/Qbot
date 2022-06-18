@@ -1,5 +1,6 @@
 package org.qbot.toolkit;
 
+import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
 import com.baidu.aip.speech.AipSpeech;
 import com.baidu.aip.speech.TtsResponse;
@@ -153,7 +154,7 @@ public class Utils {
     public JSONObject getMusicInfo(String musicName) {
         String url = "http://music.163.com/api/search/get/web?s=" + musicName + "&type=1&limit=1";
         String html = okHttpClientGet(url);
-        JSONObject json = JSONObject.parseObject(html, JSONObject.class);
+        JSONObject json = JSON.parseObject(html);
         Object musicDataJson = json.getJSONObject("result").getJSONArray("songs").get(0);
         JSONObject musicInfoJson = (JSONObject) musicDataJson;
         JSONObject artists = (JSONObject) musicInfoJson.getJSONArray("artists").get(0);
@@ -335,7 +336,7 @@ public class Utils {
         try {
             in = new BufferedReader(new FileReader(file));
             String data = in.readLine();
-            JSONObject jsonObject = JSONObject.parseObject(data, JSONObject.class);
+            JSONObject jsonObject = JSON.parseObject(data);
             String time = jsonObject.getString("date");
             String qian = jsonObject.getString("qian");
             if (time.equals(getTime1())) {
@@ -405,7 +406,7 @@ public class Utils {
     public JSONObject readFile(File file) throws IOException {
         BufferedReader in = new BufferedReader(new FileReader(file));
         String data = in.readLine();
-        JSONObject jsonObject = JSONObject.parseObject(data, JSONObject.class);
+        JSONObject jsonObject = JSON.parseObject(data);
         in.close();
         return jsonObject;
     }

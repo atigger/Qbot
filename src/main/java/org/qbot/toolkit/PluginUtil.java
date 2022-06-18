@@ -1,5 +1,6 @@
 package org.qbot.toolkit;
 
+import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
 import net.mamoe.mirai.console.plugin.PluginManager;
 import net.mamoe.mirai.console.plugin.jvm.JvmPlugin;
@@ -26,6 +27,7 @@ import java.util.List;
  * @date 2021/09/22
  */
 
+@SuppressWarnings({"ALL", "AlibabaMethodTooLong"})
 public class PluginUtil {
     Utils utils = new Utils();
     String broadcast = "播报";
@@ -42,22 +44,27 @@ public class PluginUtil {
         if (html == null) {
             return "获取失败";
         }
-        JSONObject json;
-        json = JSONObject.parseObject(html, JSONObject.class);
-        json = JSONObject.parseObject(String.valueOf(json.getJSONObject("data").getJSONArray("cards").get(0)), JSONObject.class);
-        String txt = String.valueOf(json.getJSONObject("mblog").getString("text"));
-        String wbTime = String.valueOf(json.getJSONObject("mblog").getString("created_at"));
-        String nowWeek = utils.getWeek();
-        if (wbTime.contains(nowWeek)) {
-            if (txt.contains(broadcast)) {
-                txt = txt.replace("<br />", "\n");
+        try {
+            JSONObject json;
+            json = JSON.parseObject(html);
+            json = JSON.parseObject(String.valueOf(json.getJSONObject("data").getJSONArray("cards").get(0)));
+            String txt = String.valueOf(json.getJSONObject("mblog").getString("text"));
+            String wbTime = String.valueOf(json.getJSONObject("mblog").getString("created_at"));
+            String nowWeek = utils.getWeek();
+            if (wbTime.contains(nowWeek)) {
+                if (txt.contains(broadcast)) {
+                    txt = txt.replace("<br />", "\n");
+                } else {
+                    txt = "获取失败，获取到广告了";
+                }
             } else {
-                txt = "获取失败，获取到广告了";
+                txt = "获取失败，今日还未发运势";
             }
-        } else {
-            txt = "获取失败，今日还未发运势";
+            return txt;
+        } catch (Exception e) {
+            return "获取失败";
         }
-        return txt;
+
     }
 
     /**
@@ -176,7 +183,7 @@ public class PluginUtil {
     public JSONObject getPower(String hero, String qu) {
         String heroUrl = "https://www.sapi.run/hero/select.php?hero=" + hero + "&type=" + qu;
         String data = utils.okHttpClientGet(heroUrl);
-        JSONObject jsonData = JSONObject.parseObject(data, JSONObject.class);
+        JSONObject jsonData = JSON.parseObject(data);
         int code = jsonData.getInteger("code");
         if (code == statuscode) {
             String heroName = jsonData.getJSONObject("data").getString("name");
@@ -232,6 +239,7 @@ public class PluginUtil {
     /**
      * 摸鱼办
      */
+    @SuppressWarnings("AlibabaMethodTooLong")
     public String moFish() throws ParseException {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Date nowdate = sdf.parse(utils.getTime3());

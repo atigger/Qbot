@@ -14,16 +14,18 @@ import java.io.IOException;
  * @author 649953543@qq.com
  * @date 2021/11/26
  */
+@SuppressWarnings({"ALL", "AlibabaMethodTooLong"})
 public class GroupManagement {
 
     GroupManagementSetting GroupManagementSetting = new GroupManagementSetting();
 
+    @SuppressWarnings("AlibabaMethodTooLong")
     public boolean msgDel(Group group, String msg, boolean superAdmin) throws IOException {
         MessageChain chain;
         String setGroupManagement = "设置本群管理";
         long groupId = group.getId();
         if (msg.contains(setGroupManagement)) {
-            if (!GroupManagementSetting.Authority(group)) {
+            if (GroupManagementSetting.authority(group)) {
                 return true;
             }
             if (!superAdmin) {
@@ -50,7 +52,7 @@ public class GroupManagement {
 
         String delGroupManagement = "取消本群管理";
         if (msg.contains(delGroupManagement)) {
-            if (!GroupManagementSetting.Authority(group)) {
+            if (GroupManagementSetting.authority(group)) {
                 return true;
             }
             if (!superAdmin) {
@@ -78,7 +80,7 @@ public class GroupManagement {
 
         String setMuteKeywords = "设置禁言关键字";
         if (msg.contains(setMuteKeywords)) {
-            if (!GroupManagementSetting.Authority(group)) {
+            if (GroupManagementSetting.authority(group)) {
                 return true;
             }
             msg = msg.replace(setMuteKeywords, "");
@@ -103,7 +105,7 @@ public class GroupManagement {
 
         String delMuteKeywords = "删除禁言关键字";
         if (msg.contains(delMuteKeywords)) {
-            if (!GroupManagementSetting.Authority(group)) {
+            if (GroupManagementSetting.authority(group)) {
                 return true;
             }
             msg = msg.replace(delMuteKeywords, "");
@@ -128,7 +130,7 @@ public class GroupManagement {
 
         String delAllMuteKeywords = "清空禁言关键字";
         if (msg.contains(delAllMuteKeywords)) {
-            if (!GroupManagementSetting.Authority(group)) {
+            if (GroupManagementSetting.authority(group)) {
                 return true;
             }
             if (GroupManagementSetting.delAllMuteKeywords(groupId) == 1) {
@@ -146,7 +148,7 @@ public class GroupManagement {
 
         String setMuteTime = "设置禁言时间";
         if (msg.contains(setMuteTime)) {
-            if (!GroupManagementSetting.Authority(group)) {
+            if (GroupManagementSetting.authority(group)) {
                 return true;
             }
             msg = msg.replace(setMuteTime, "");
@@ -170,7 +172,7 @@ public class GroupManagement {
 
         String setRecallWords = "设置撤回关键字";
         if (msg.contains(setRecallWords)) {
-            if (!GroupManagementSetting.Authority(group)) {
+            if (GroupManagementSetting.authority(group)) {
                 return true;
             }
             msg = msg.replace(setRecallWords, "");
@@ -197,7 +199,7 @@ public class GroupManagement {
 
         String delRecallWords = "删除撤回关键字";
         if (msg.contains(delRecallWords)) {
-            if (!GroupManagementSetting.Authority(group)) {
+            if (GroupManagementSetting.authority(group)) {
                 return true;
             }
             msg = msg.replace(delRecallWords, "");
@@ -222,7 +224,7 @@ public class GroupManagement {
 
         String delAllRecallWords = "清空撤回关键字";
         if (msg.contains(delAllRecallWords)) {
-            if (!GroupManagementSetting.Authority(group)) {
+            if (GroupManagementSetting.authority(group)) {
                 return true;
             }
             if (GroupManagementSetting.delAllRecallWords(groupId) == 1) {
@@ -241,7 +243,7 @@ public class GroupManagement {
 
         String setAutoAgreeApplication = "设置自动同意群申请";
         if (msg.contains(setAutoAgreeApplication)) {
-            if (!GroupManagementSetting.Authority(group)) {
+            if (GroupManagementSetting.authority(group)) {
                 return true;
             }
             if (GroupManagementSetting.setAutoAgreeApplication(groupId) == 1) {
@@ -260,7 +262,7 @@ public class GroupManagement {
 
         String delAutoAgreeApplication = "关闭自动同意群申请";
         if (msg.contains(delAutoAgreeApplication)) {
-            if (!GroupManagementSetting.Authority(group)) {
+            if (GroupManagementSetting.authority(group)) {
                 return true;
             }
             if (GroupManagementSetting.delAutoAgreeApplication(groupId) == 1) {
@@ -278,7 +280,7 @@ public class GroupManagement {
 
         String setAutoAgreeKeyWords = "设置自动同意关键字";
         if (msg.contains(setAutoAgreeKeyWords)) {
-            if (!GroupManagementSetting.Authority(group)) {
+            if (GroupManagementSetting.authority(group)) {
                 return true;
             }
             msg = msg.replace(setAutoAgreeKeyWords, "");
@@ -304,7 +306,7 @@ public class GroupManagement {
 
         String delAutoAgreeKeyWords = "删除自动同意关键字";
         if (msg.contains(delAutoAgreeKeyWords)) {
-            if (!GroupManagementSetting.Authority(group)) {
+            if (GroupManagementSetting.authority(group)) {
                 return true;
             }
             msg = msg.replace(delAutoAgreeKeyWords, "");
@@ -328,7 +330,7 @@ public class GroupManagement {
 
         String delAllAutoAgreeKeyWords = "清空自动同意关键字";
         if (msg.contains(delAllAutoAgreeKeyWords)) {
-            if (!GroupManagementSetting.Authority(group)) {
+            if (GroupManagementSetting.authority(group)) {
                 return true;
             }
             if (GroupManagementSetting.delAllAutoAgreeKeyWords(groupId) == 1) {

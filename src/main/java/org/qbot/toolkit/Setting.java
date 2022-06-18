@@ -33,10 +33,6 @@ public class Setting {
         return main().getJSONObject("BaiDuAPI").getString("SECRET_KEY");
     }
 
-    public boolean getRane() {
-        return main().getBooleanValue("Rane");
-    }
-
     public boolean getAgreeFriend() {
         return main().getBooleanValue("AgreeFriend");
     }
@@ -70,14 +66,17 @@ public class Setting {
     }
 
     public long getAdminQQ() {
-        return main().getJSONObject("GroupManagement").getLong("AdminQQ");
+        return main().getJSONObject("GroupManagement").getLongValue("AdminQQ");
     }
+
+    private static final String VERSION = "Version";
+    private static final String VERSION_NUM = "2.1";
 
     public void getVersion() {
         SetSetting setSetting = new SetSetting();
         boolean isUpdate = false;
         try {
-            if (!main().getString("Version").equals("2.0")) {
+            if (!main().getString(VERSION).equals(VERSION_NUM)) {
                 isUpdate = true;
             }
         } catch (Exception e) {
@@ -85,7 +84,7 @@ public class Setting {
         } finally {
             if (isUpdate) {
                 System.out.println("正在更新配置文件");
-                setSetting.setFile("2.0", getQq(), getAppId(), getApiKey(), getSecretKey(), getRane(), getAgreeFriend(), getAgreeGroup(), getAi(), getAutoFortune(), getAutoNews(), getAutoTips(), getGroup(), false, 0);
+                setSetting.setFile(VERSION_NUM, getQq(), getAppId(), getApiKey(), getSecretKey(), getAgreeFriend(), getAgreeGroup(), getAi(), getAutoFortune(), getAutoNews(), getAutoTips(), getGroup(), false, 0);
             }
         }
 
