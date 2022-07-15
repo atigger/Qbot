@@ -18,7 +18,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 /**
  * Plugin class
@@ -155,7 +154,6 @@ public class PluginUtil {
      */
     public MusicShare getMusic(String musicName) {
         JSONObject musicInfo = utils.getMusicInfo(musicName);
-
         return new MusicShare(MusicKind.NeteaseCloudMusic, musicInfo.getString("song_name"),
                 musicInfo.getString("songer_name"),
                 "http://music.163.com/song/" + musicInfo.getString("song_id") + "/?userid=380034310",

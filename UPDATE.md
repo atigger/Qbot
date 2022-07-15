@@ -1,16 +1,20 @@
+2022年6月18日v2.0.3更新
+
+1.mirai-core支持到[2.11.1](https://github.com/mamoe/mirai/releases/tag/v2.11.1)
+
+2.修复摸鱼办的一些bug
+
 2022年5月7日v2.0.2更新
 
-1.mirai-core更新到[2.11.0-RC](https://github.com/mamoe/mirai/releases/tag/v2.11.0-RC)
+1.mirai-core支持到[2.11.0-RC](https://github.com/mamoe/mirai/releases/tag/v2.11.0-RC)
 
 2.更新摸鱼办
 
-3.依赖更新到fastjson2
-
-群管理可能还有bug，请自行测试
+3.依赖支持到fastjson2
 
 2022年4月20日v2.0.1更新
 
-1.mirai-core更新到[2.11.0-M2.2](https://github.com/mamoe/mirai/releases/tag/v2.11.0-M2.2)
+1.mirai-core支持到[2.11.0-M2.2](https://github.com/mamoe/mirai/releases/tag/v2.11.0-M2.2)
 
 2.群管理插件开放([帮助文档](https://www.miraiqbot.xyz/#/?id=%e7%be%a4%e7%ae%a1%e7%90%86%e5%8a%9f%e8%83%bd))
 
@@ -28,13 +32,13 @@
 
 2021年11月23日v1.1.2-1更新
 
-1.mirai-core更新到2.9.0-M1
+1.mirai-core支持到[2.9.0-M1](https://github.com/mamoe/mirai/releases/tag/v2.9.0-M1)
 
 2.修复一些BUG
 
 2021年11月17日v1.1.2更新
 
-1.mirai-core更新到2.8.0
+1.mirai-core支持到[2.8.0](https://github.com/mamoe/mirai/releases/tag/v2.8.0)
 
 2.新增【摸鱼办】提醒放假时间
 
@@ -46,7 +50,7 @@
 
 2021年9月23日v1.1.0更新
 
-1.mirai-core更新到2.8.0-M1
+1.mirai-core支持到[2.8.0-M1](https://github.com/mamoe/mirai/releases/tag/v2.8.0-M1)
 
 2.修复获取英雄战力时英雄名为null的问题
 
@@ -54,7 +58,7 @@
 
 2021年9月22日v1.0.9更新
 
-1.mirai-core更新到2.7.1
+1.mirai-core支持到[2.7.1](https://github.com/mamoe/mirai/releases/tag/v2.7.1)
 
 2.修复当image文件夹中只有一张图片时无法正常发送的问题
 
@@ -66,7 +70,7 @@
 
 2021年9月17日v1.0.8更新
 
-1.mirai-core更新到2.7.0
+1.mirai-core支持到[2.7.0](https://github.com/mamoe/mirai/releases/tag/v2.7.0)
 
 2.依赖更新
 
@@ -74,7 +78,7 @@
 
 2021年8月20日v1.0.7更新
 
-1.mirai-core更新到2.7-RC
+1.mirai-core支持到[2.7-RC](https://github.com/mamoe/mirai/releases/tag/v2.7-RC)
 
 2.kotlin版本更新到1.5.0
 
@@ -92,7 +96,7 @@
 
 1.新增奥运查询功能
 
-2.mirai-core更新到2.7-M2
+2.mirai-core支持到[2.7-M2](https://github.com/mamoe/mirai/releases/tag/v2.7-M2)
 
 3.删除一些无用代码
 
@@ -110,7 +114,7 @@
 
 2021年6月21日v1.0.2更新
 
-1.mirai-core更新到2.7-M1
+1.mirai-core支持到[2.7-M1](https://github.com/mamoe/mirai/releases/tag/v2.7-M1)
 
 2.优化语言和歌曲分享逻辑
 

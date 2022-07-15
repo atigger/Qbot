@@ -15,7 +15,9 @@ import org.qbot.group.GroupManagement;
 import org.qbot.group.GroupManagementSetting;
 import org.qbot.group.GroupManagementUtil;
 import org.qbot.thread.StartThread;
-import org.qbot.toolkit.*;
+import org.qbot.toolkit.CreateFile;
+import org.qbot.toolkit.Setting;
+import org.qbot.toolkit.Utils;
 
 import java.io.File;
 import java.io.IOException;
@@ -29,7 +31,7 @@ public final class Plugin extends JavaPlugin {
     public static final Plugin INSTANCE = new Plugin();
 
     public Plugin() {
-        super(new JvmPluginDescriptionBuilder("org.qbot.plugin", "2.0.3").build());
+        super(new JvmPluginDescriptionBuilder("org.qbot.plugin", "2.0.4").build());
     }
 
     @SuppressWarnings("AlibabaMethodTooLong")

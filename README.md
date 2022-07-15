@@ -1,6 +1,6 @@
 QQBOT
 
-本项目基于 [mirai](https://github.com/mamoe/mirai) [![Version](https://img.shields.io/badge/version-2.11.1-red)](https://github.com/mamoe/mirai/releases/tag/v2.11.1)
+本项目基于 [mirai](https://github.com/mamoe/mirai) [![Version](https://img.shields.io/badge/version-2.12.0-red)](https://github.com/mamoe/mirai/releases/tag/v2.12.0)
 开发
 
 [如何使用](https://github.com/mamoe/mirai/blob/dev/mirai-console/docs/ConfiguringProjects.md) ？
@@ -37,13 +37,19 @@ Tips:有想要的新功能可以提交issue
 
 更新日志：
 
-2022年6月18日v2.0.3更新
+2022年7月15日v2.0.4更新
 
-1.mirai-core更新到[2.11.1](https://github.com/mamoe/mirai/releases/tag/v2.11.1)
+1.mirai-core支持到[2.12.0](https://github.com/mamoe/mirai/releases/tag/v2.12.0)
 
-2.修复摸鱼办的一些bug
+2.修复了国外服务器可能获取不到歌曲目录的bug
+
+3.发送图片由闪图改为普通图片发送
+
+已知问题：在Linux下可能会存在配置文件生成失败的问题
+
+请等待后续修复
 
 群管理可能还有bug，请自行测试
 
 ---
-[历史日志](https://github.com/duan649953543/Qbot/blob/main/UPDATE.md)
+[更新历史](https://github.com/duan649953543/Qbot/blob/main/UPDATE.md)

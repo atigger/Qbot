@@ -49,6 +49,28 @@ public class Utils {
     }
 
     /**
+     * okhttp get请求,X-Real-Ip
+     */
+    public String okHttpClientGet(String url, String ip) {
+        OkHttpClient httpClient = new OkHttpClient();
+        Request getRequest = new Request.Builder()
+                .url(url)
+                .addHeader("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.77 Safari/537.36")
+                .addHeader("X-Real-Ip", ip)
+                .get()
+                .build();
+        Call call = httpClient.newCall(getRequest);
+        try {
+            Response response = call.execute();
+            return Objects.requireNonNull(response.body()).string();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+    }
+
+    /**
      * 获取插件配置文件目录
      */
     public Path getPluginsPath() {
@@ -153,12 +175,11 @@ public class Utils {
      */
     public JSONObject getMusicInfo(String musicName) {
         String url = "http://music.163.com/api/search/get/web?s=" + musicName + "&type=1&limit=1";
-        String html = okHttpClientGet(url);
-        JSONObject json = JSON.parseObject(html);
-        Object musicDataJson = json.getJSONObject("result").getJSONArray("songs").get(0);
-        JSONObject musicInfoJson = (JSONObject) musicDataJson;
-        JSONObject artists = (JSONObject) musicInfoJson.getJSONArray("artists").get(0);
-
+        String html = okHttpClientGet(url,"220.181.108.104");
+        JSONObject json = JSONObject.parseObject(html);
+        System.out.println(json);
+        JSONObject musicInfoJson = json.getJSONObject("result").getJSONArray("songs").getJSONObject(0);
+        JSONObject artists = musicInfoJson.getJSONArray("artists").getJSONObject(0);
         String songName = musicInfoJson.getString("name");
         String songerName = artists.getString("name");
         String coverUrl = musicInfoJson.getJSONObject("album").getJSONObject("artist").getString("img1v1Url");

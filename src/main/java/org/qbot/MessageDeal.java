@@ -218,8 +218,8 @@ public class MessageDeal {
                 return;
             }
             Image image = getImageAdd(filepath);
-            FlashImage flashImage = FlashImage.from(image);
-            group.sendMessage(flashImage);
+//            FlashImage flashImage = FlashImage.from(image);
+            group.sendMessage(image);
             return;
         }
 
