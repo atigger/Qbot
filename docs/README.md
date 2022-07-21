@@ -336,5 +336,3 @@
 
 QQ:649953543
 
-[一键对话](http://wpa.qq.com/msgrd?v=3&uin=649953543&site=qq&menu=yes)
-
