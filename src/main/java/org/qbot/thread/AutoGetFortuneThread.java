@@ -34,15 +34,14 @@ public class AutoGetFortuneThread extends Thread {
         System.out.println("开启自动获取运势线程成功！");
         while (true) {
             try {
-                Setting setting = new Setting();
                 Calendar calendar = Calendar.getInstance();
                 int week1 = calendar.get(Calendar.DAY_OF_WEEK);
 
                 BufferedReader in = new BufferedReader(new FileReader(filePath));
                 int week = Integer.parseInt(in.readLine());
 
-                long botqq = setting.getQq();
-                JSONArray groupList = setting.getGroup();
+                long botqq = Setting.getQq();
+                JSONArray groupList = Setting.getGroup();
                 Bot bot = Bot.getInstance(botqq);
                 if (week != week1) {
                     String txt = pluginUtil.getFortune();

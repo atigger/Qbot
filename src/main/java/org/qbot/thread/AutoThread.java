@@ -28,20 +28,16 @@ public class AutoThread extends Thread {
     @SuppressWarnings("InfiniteLoopStatement")
     public void run() {
         Utils utils = new Utils();
-        Setting setting = new Setting();
         System.out.println("开启自动发送小提醒线程成功！");
         PluginUtil pluginUtil = new PluginUtil();
-        long botQq = setting.getQq();
-        JSONArray groupList = setting.getGroup();
-
-        Bot bot = Bot.getInstance(botQq);
+        Bot bot = Bot.getInstance(Setting.getQq());
         while (true) {
             try {
-                boolean autoTips = setting.getAutoTips();
-                boolean autoNews = setting.getAutoNews();
+                boolean autoTips = Setting.getAutoTips();
+                boolean autoNews = Setting.getAutoNews();
                 if ("08:00".equals(utils.getNowTime()) && autoNews) {
-                    for (int i = 0; i < groupList.size(); i++) {
-                        Group group = bot.getGroup(groupList.getLongValue(i));
+                    for (int i = 0; i < Setting.getGroup().size(); i++) {
+                        Group group = bot.getGroup(Setting.getGroup().getLongValue(i));
                         String newsImgUrl = pluginUtil.getNews();
                         if (!newsImgUrl.contains("失败")) {
                             ExternalResource img = ExternalResource.create(new File(newsImgUrl));
@@ -57,8 +53,8 @@ public class AutoThread extends Thread {
                     }
                     sleep(60000);
                 } else if ("15:00".equals(utils.getNowTime()) && autoTips) {
-                    for (int i = 0; i < groupList.size(); i++) {
-                        Group group = bot.getGroup(groupList.getLongValue(i));
+                    for (int i = 0; i < Setting.getGroup().size(); i++) {
+                        Group group = bot.getGroup(Setting.getGroup().getLongValue(i));
                         assert group != null;
                         MessageChain chain = new MessageChainBuilder()
                                 .append(new PlainText(pluginUtil.moFish()))

@@ -1,4 +1,4 @@
-package org.qbot;
+package org.qbot.msgdeal;
 
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
@@ -26,7 +26,6 @@ public class MessageDeal {
     PluginUtil pluginUtil = new PluginUtil();
     Utils utils = new Utils();
     Group group = null;
-    Setting setting = new Setting();
 
     private static final String STRING_LISTENTOMUSIC = "听歌";
     private static final String STRING_QQ = "qq";
@@ -267,7 +266,7 @@ public class MessageDeal {
 
         if (STRING_MENU.equals(msg)) {
             group.sendMessage(getMenuTxt());
-        } else if (setting.getAi()) {
+        } else if (Setting.getAi()) {
             String url = "http://api.qingyunke.com/api.php?key=free&appid=0&msg=" + msg;
             String data = utils.okHttpClientGet(url);
             JSONObject jsonObject = JSON.parseObject(data);

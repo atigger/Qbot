@@ -73,7 +73,7 @@ public class Utils {
     /**
      * 获取插件配置文件目录
      */
-    public Path getPluginsPath() {
+    public static Path getPluginsPath() {
         JvmPlugin jvmPlugin = new Plugin();
         return PluginManager.INSTANCE.getPluginsConfigPath().resolve(jvmPlugin.getDescription().getName());
     }
@@ -208,11 +208,9 @@ public class Utils {
      * 生成语音文件并返回目录
      */
     public String makeVoice(String txt) {
-        Setting setting = new Setting();
-
-        String appId = setting.getAppId();
-        String apiKey = setting.getApiKey();
-        String secretKey = setting.getSecretKey();
+        String appId = Setting.getAppId();
+        String apiKey = Setting.getApiKey();
+        String secretKey = Setting.getSecretKey();
 
         if ("".equals(appId)) {
             return "1";

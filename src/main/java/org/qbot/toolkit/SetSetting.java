@@ -13,7 +13,7 @@ import java.nio.charset.StandardCharsets;
  */
 
 public class SetSetting {
-    public void setFile(String version, long qq, String appid, String appKey, String secretKey, boolean agreeFriend,
+    public static void setFile(String version, long qq, String appid, String appKey, String secretKey, boolean agreeFriend,
                         boolean agreeGroup, boolean AI, boolean autoFortune, boolean autoNews, boolean autoTips, JSONArray groupList,
                         boolean groupManagement, long AdminQQ) {
         String config = "#配置文件版本\n" +

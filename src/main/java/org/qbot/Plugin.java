@@ -14,10 +14,10 @@ import net.mamoe.mirai.message.data.PlainText;
 import org.qbot.group.GroupManagement;
 import org.qbot.group.GroupManagementSetting;
 import org.qbot.group.GroupManagementUtil;
+import org.qbot.msgdeal.AdminMessageDeal;
+import org.qbot.msgdeal.MessageDeal;
 import org.qbot.thread.StartThread;
-import org.qbot.toolkit.CreateFile;
-import org.qbot.toolkit.Setting;
-import org.qbot.toolkit.Utils;
+import org.qbot.toolkit.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -31,7 +31,7 @@ public final class Plugin extends JavaPlugin {
     public static final Plugin INSTANCE = new Plugin();
 
     public Plugin() {
-        super(new JvmPluginDescriptionBuilder("org.qbot.plugin", "2.0.4").build());
+        super(new JvmPluginDescriptionBuilder("org.qbot.plugin", "2.0.5").build());
     }
 
     @SuppressWarnings("AlibabaMethodTooLong")
@@ -40,16 +40,14 @@ public final class Plugin extends JavaPlugin {
         getLogger().info("启动中。。。");
         CreateFile createFile = new CreateFile();
         createFile.createFile();
-
-        Setting setting = new Setting();
         Utils utils = new Utils();
+
         GroupManagementSetting groupManagementSetting = new GroupManagementSetting();
         GroupManagementUtil groupManagementUtil = new GroupManagementUtil();
         MessageDeal messagedeal = new MessageDeal();
         GroupManagement groupManagement = new GroupManagement();
-        Long botQq = setting.getQq();
-        boolean booleanGroupManagement = setting.getGroupManagement();
-        long superAdmin = setting.getAdminQQ();
+        Long botQq = Setting.getQq();
+        long superAdmin = Setting.getAdminQQ();
         Path dataFolderPath = utils.getPluginsDataPath();
         File groupManagementDirectory = new File(dataFolderPath + "/groupManagement");
 
@@ -69,7 +67,7 @@ public final class Plugin extends JavaPlugin {
             }
             try {
                 //检测是否开启群管理
-                if (booleanGroupManagement) {
+                if (Setting.getGroupManagement()) {
                     File file = new File(groupManagementDirectory + "/" + group.getId() + ".txt");
                     if (!file.exists()) {
                         groupManagementSetting.creatEmptyTemplate(file);
@@ -144,8 +142,15 @@ public final class Plugin extends JavaPlugin {
             }
         });
 
+        //监听好友消息
         GlobalEventChannel.INSTANCE.subscribeAlways(FriendMessageEvent.class, f -> {
-            //监听好友消息
+            long senderQq = f.getSender().getId();
+            String msg = f.getMessage().contentToString();
+            if (senderQq == superAdmin) {
+                System.out.println("收到管理员消息:" + msg);
+                AdminMessageDeal.msgDel(msg,f.getSender());
+            }
+
         });
 
         GlobalEventChannel.INSTANCE.subscribeAlways(GroupTempMessageEvent.class, f -> {
@@ -154,7 +159,7 @@ public final class Plugin extends JavaPlugin {
 
         GlobalEventChannel.INSTANCE.subscribeAlways(NewFriendRequestEvent.class, a -> {
             //监听添加好友申请
-            boolean accept1 = setting.getAgreeFriend();
+            boolean accept1 = Setting.getAgreeFriend();
             if (accept1) {
                 getLogger().info("昵称:" + a.getFromNick() + " QQ:" + a.getFromId() + " 请求添加好友，已同意");
                 a.accept();
@@ -196,7 +201,7 @@ public final class Plugin extends JavaPlugin {
 
         GlobalEventChannel.INSTANCE.subscribeAlways(BotInvitedJoinGroupRequestEvent.class, a -> {
             //监听被邀请入群消息
-            boolean finalAutoInvited = setting.getAgreeGroup();
+            boolean finalAutoInvited = Setting.getAgreeGroup();
             if (finalAutoInvited) {
                 a.accept();
             }
