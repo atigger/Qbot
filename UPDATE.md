@@ -1,3 +1,11 @@
+2022年7月15日v2.0.4更新
+
+1.mirai-core支持到[2.12.0](https://github.com/mamoe/mirai/releases/tag/v2.12.0)
+
+2.修复了国外服务器可能获取不到歌曲目录的bug
+
+3.发送图片由闪图改为普通图片发送
+
 2022年6月18日v2.0.3更新
 
 1.mirai-core支持到[2.11.1](https://github.com/mamoe/mirai/releases/tag/v2.11.1)
