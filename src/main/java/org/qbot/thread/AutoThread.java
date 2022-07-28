@@ -33,41 +33,49 @@ public class AutoThread extends Thread {
         Bot bot = Bot.getInstance(Setting.getQq());
         while (true) {
             try {
+                Thread.sleep(1000);
                 boolean autoTips = Setting.getAutoTips();
                 boolean autoNews = Setting.getAutoNews();
                 if ("08:00".equals(utils.getNowTime()) && autoNews) {
                     for (int i = 0; i < Setting.getGroup().size(); i++) {
-                        Group group = bot.getGroup(Setting.getGroup().getLongValue(i));
-                        String newsImgUrl = pluginUtil.getNews();
-                        if (!newsImgUrl.contains("失败")) {
-                            ExternalResource img = ExternalResource.create(new File(newsImgUrl));
-                            assert group != null;
-                            Image image = group.uploadImage(img);
-                            img.close();
-                            MessageChain chain = new MessageChainBuilder()
-                                    .append(new PlainText("今日新闻"))
-                                    .append(image)
-                                    .build();
-                            group.sendMessage(chain);
+                        try {
+                            Group group = bot.getGroup(Setting.getGroup().getLongValue(i));
+                            String newsImgUrl = pluginUtil.getNews();
+                            if (!newsImgUrl.contains("失败")) {
+                                ExternalResource img = ExternalResource.create(new File(newsImgUrl));
+                                assert group != null;
+                                Image image = group.uploadImage(img);
+                                img.close();
+                                MessageChain chain = new MessageChainBuilder()
+                                        .append(new PlainText("今日新闻"))
+                                        .append(image)
+                                        .build();
+                                group.sendMessage(chain);
+                            }
+                        } catch (Exception e) {
+                            System.out.println("发送小提醒失败");
                         }
                     }
                     sleep(60000);
                 } else if ("15:00".equals(utils.getNowTime()) && autoTips) {
                     for (int i = 0; i < Setting.getGroup().size(); i++) {
-                        Group group = bot.getGroup(Setting.getGroup().getLongValue(i));
-                        assert group != null;
-                        MessageChain chain = new MessageChainBuilder()
-                                .append(new PlainText(pluginUtil.moFish()))
-                                .build();
-                        group.sendMessage(chain);
+                        try {
+                            Group group = bot.getGroup(Setting.getGroup().getLongValue(i));
+                            assert group != null;
+                            MessageChain chain = new MessageChainBuilder()
+                                    .append(new PlainText(pluginUtil.moFish()))
+                                    .build();
+                            group.sendMessage(chain);
+                        } catch (Exception e) {
+                            System.out.println("发送小提醒失败");
+                        }
                     }
                     sleep(60000);
                 }
                 sleep(30000);
-            } catch (InterruptedException | IOException | ParseException e) {
+            } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-
         }
     }
 }
