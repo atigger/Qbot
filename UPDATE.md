@@ -1,3 +1,7 @@
+2022年7月27日v2.0.5更新
+
+1.新增[超级管理员功能](https://www.miraiqbot.xyz/#/?id=超级管理员功能)
+
 2022年7月15日v2.0.4更新
 
 1.mirai-core支持到[2.12.0](https://github.com/mamoe/mirai/releases/tag/v2.12.0)
