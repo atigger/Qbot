@@ -18,59 +18,119 @@ import java.util.Map;
 public class Setting {
 
     public static long getQq() {
-        return main().getLongValue("QQ");
+        try {
+            return main().getLongValue("QQ");
+        } catch (Exception e) {
+            return 0;
+        }
     }
 
     public static String getAppId() {
-        return main().getJSONObject("BaiDuAPI").getString("APP_ID");
+        try {
+            return main().getJSONObject("BaiDuAPI").getString("APP_ID");
+        } catch (Exception e) {
+            return "";
+        }
     }
 
     public static String getApiKey() {
-        return main().getJSONObject("BaiDuAPI").getString("API_KEY");
+        try {
+            return main().getJSONObject("BaiDuAPI").getString("API_KEY");
+        } catch (Exception e) {
+            return "";
+        }
     }
 
     public static String getSecretKey() {
-        return main().getJSONObject("BaiDuAPI").getString("SECRET_KEY");
+        try {
+            return main().getJSONObject("BaiDuAPI").getString("SECRET_KEY");
+        } catch (Exception e) {
+            return "";
+        }
+    }
+
+    public static int getImageRecall() {
+        try {
+            return main().getIntValue("ImageRecall");
+        } catch (Exception e) {
+            return 0;
+        }
     }
 
     public static boolean getAgreeFriend() {
-        return main().getBooleanValue("AgreeFriend");
+        try {
+            return main().getBooleanValue("AgreeFriend");
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     public static boolean getAgreeGroup() {
-        return main().getBooleanValue("AgreeGroup");
+        try {
+            return main().getBooleanValue("AgreeGroup");
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     public static boolean getAi() {
-        return main().getBooleanValue("AI");
+        try {
+            return main().getBooleanValue("AI");
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     public static boolean getAutoFortune() {
-        return main().getJSONObject("Auto").getBooleanValue("AutoFortune");
+        try {
+            return main().getJSONObject("Auto").getBooleanValue("AutoFortune");
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     public static boolean getAutoNews() {
-        return main().getJSONObject("Auto").getBooleanValue("AutoNews");
+        try {
+            return main().getJSONObject("Auto").getBooleanValue("AutoNews");
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     public static boolean getAutoTips() {
-        return main().getJSONObject("Auto").getBooleanValue("AutoTips");
+        try {
+            return main().getJSONObject("Auto").getBooleanValue("AutoTips");
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     public static JSONArray getGroup() {
-        return main().getJSONObject("Auto").getJSONArray("Group");
+        try {
+            return main().getJSONArray("Group");
+        } catch (Exception e) {
+            return new JSONArray();
+        }
     }
 
     public static boolean getGroupManagement() {
-        return main().getJSONObject("GroupManagement").getBooleanValue("Open");
+        try {
+            return main().getJSONObject("GroupManagement").getBooleanValue("GroupManagement");
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     public static long getAdminQQ() {
-        return main().getJSONObject("GroupManagement").getLongValue("AdminQQ");
+        try {
+            return main().getJSONObject("GroupManagement").getLongValue("AdminQQ");
+        } catch (Exception e) {
+            return 0;
+        }
     }
 
     private static final String VERSION = "Version";
-    private static final String VERSION_NUM = "2.1";
+    public static final String VERSION_NUM = "2.2";
 
     public void getVersion() {
         boolean isUpdate = false;
@@ -83,7 +143,8 @@ public class Setting {
         } finally {
             if (isUpdate) {
                 System.out.println("正在更新配置文件");
-                SetSetting.setFile(VERSION_NUM, getQq(), getAppId(), getApiKey(), getSecretKey(), getAgreeFriend(), getAgreeGroup(), getAi(), getAutoFortune(), getAutoNews(), getAutoTips(), getGroup(), false, 0);
+                SetSetting.setFile(VERSION_NUM, getQq(), getAppId(), getApiKey(), getSecretKey(), 0, getAgreeFriend(), getAgreeGroup(), getAi(), getAutoFortune(), getAutoNews(), getAutoTips(), getGroup(), getGroupManagement(), getAdminQQ());
+                System.out.println("更新配置文件成功");
             }
         }
 
@@ -94,7 +155,7 @@ public class Setting {
      * 动态更新配置文件
      */
 
-    public static boolean updateVersion(boolean options, long value) {
+    public static boolean updateConfig(boolean options, long value) {
         System.out.println("正在更新配置文件");
         JSONArray jsonArray = getGroup();
         if (options) {
@@ -113,37 +174,46 @@ public class Setting {
                 }
             }
         }
-        SetSetting.setFile(VERSION_NUM, getQq(), getAppId(), getApiKey(), getSecretKey(), getAgreeFriend(), getAgreeGroup(), getAi(), getAutoFortune(), getAutoNews(), getAutoTips(), jsonArray, getGroupManagement(), getAdminQQ());
+        SetSetting.setFile(VERSION_NUM, getQq(), getAppId(), getApiKey(), getSecretKey(), getImageRecall(), getAgreeFriend(), getAgreeGroup(), getAi(), getAutoFortune(), getAutoNews(), getAutoTips(), jsonArray, getGroupManagement(), getAdminQQ());
         return true;
     }
 
-    public static boolean updateVersion(String options, boolean value) {
+    public static boolean updateConfig(String options, boolean value) {
         System.out.println("正在更新配置文件");
         switch (options) {
             case "Friend":
-                SetSetting.setFile(VERSION_NUM, getQq(), getAppId(), getApiKey(), getSecretKey(), value, getAgreeGroup(), getAi(), getAutoFortune(), getAutoNews(), getAutoTips(), getGroup(), getGroupManagement(), getAdminQQ());
+                SetSetting.setFile(VERSION_NUM, getQq(), getAppId(), getApiKey(), getSecretKey(), getImageRecall(), value, getAgreeGroup(), getAi(), getAutoFortune(), getAutoNews(), getAutoTips(), getGroup(), getGroupManagement(), getAdminQQ());
                 return true;
             case "Group":
-                SetSetting.setFile(VERSION_NUM, getQq(), getAppId(), getApiKey(), getSecretKey(), getAgreeFriend(), value, getAi(), getAutoFortune(), getAutoNews(), getAutoTips(), getGroup(), getGroupManagement(), getAdminQQ());
+                SetSetting.setFile(VERSION_NUM, getQq(), getAppId(), getApiKey(), getSecretKey(), getImageRecall(), getAgreeFriend(), value, getAi(), getAutoFortune(), getAutoNews(), getAutoTips(), getGroup(), getGroupManagement(), getAdminQQ());
                 return true;
             case "AI":
-                SetSetting.setFile(VERSION_NUM, getQq(), getAppId(), getApiKey(), getSecretKey(), getAgreeFriend(), getAgreeGroup(), value, getAutoFortune(), getAutoNews(), getAutoTips(), getGroup(), getGroupManagement(), getAdminQQ());
+                SetSetting.setFile(VERSION_NUM, getQq(), getAppId(), getApiKey(), getSecretKey(), getImageRecall(), getAgreeFriend(), getAgreeGroup(), value, getAutoFortune(), getAutoNews(), getAutoTips(), getGroup(), getGroupManagement(), getAdminQQ());
                 return true;
             case "Fortune":
-                SetSetting.setFile(VERSION_NUM, getQq(), getAppId(), getApiKey(), getSecretKey(), getAgreeFriend(), getAgreeGroup(), getAi(), value, getAutoNews(), getAutoTips(), getGroup(), getGroupManagement(), getAdminQQ());
+                SetSetting.setFile(VERSION_NUM, getQq(), getAppId(), getApiKey(), getSecretKey(), getImageRecall(), getAgreeFriend(), getAgreeGroup(), getAi(), value, getAutoNews(), getAutoTips(), getGroup(), getGroupManagement(), getAdminQQ());
                 return true;
             case "News":
-                SetSetting.setFile(VERSION_NUM, getQq(), getAppId(), getApiKey(), getSecretKey(), getAgreeFriend(), getAgreeGroup(), getAi(), getAutoFortune(), value, getAutoTips(), getGroup(), getGroupManagement(), getAdminQQ());
+                SetSetting.setFile(VERSION_NUM, getQq(), getAppId(), getApiKey(), getSecretKey(), getImageRecall(), getAgreeFriend(), getAgreeGroup(), getAi(), getAutoFortune(), value, getAutoTips(), getGroup(), getGroupManagement(), getAdminQQ());
                 return true;
             case "Tips":
-                SetSetting.setFile(VERSION_NUM, getQq(), getAppId(), getApiKey(), getSecretKey(), getAgreeFriend(), getAgreeGroup(), getAi(), getAutoFortune(), getAutoNews(), value, getGroup(), getGroupManagement(), getAdminQQ());
+                SetSetting.setFile(VERSION_NUM, getQq(), getAppId(), getApiKey(), getSecretKey(), getImageRecall(), getAgreeFriend(), getAgreeGroup(), getAi(), getAutoFortune(), getAutoNews(), value, getGroup(), getGroupManagement(), getAdminQQ());
                 return true;
             case "GroupManagement":
-                SetSetting.setFile(VERSION_NUM, getQq(), getAppId(), getApiKey(), getSecretKey(), getAgreeFriend(), getAgreeGroup(), getAi(), getAutoFortune(), getAutoNews(), getAutoTips(), getGroup(), value, getAdminQQ());
+                SetSetting.setFile(VERSION_NUM, getQq(), getAppId(), getApiKey(), getSecretKey(), getImageRecall(), getAgreeFriend(), getAgreeGroup(), getAi(), getAutoFortune(), getAutoNews(), getAutoTips(), getGroup(), value, getAdminQQ());
                 return true;
             default:
                 System.out.println("更新失败");
                 return false;
+        }
+    }
+
+    public static boolean updateConfig(int value) {
+        try {
+            SetSetting.setFile(VERSION_NUM, getQq(), getAppId(), getApiKey(), getSecretKey(), value, getAgreeFriend(), getAgreeGroup(), getAi(), getAutoFortune(), getAutoNews(), getAutoTips(), getGroup(), getGroupManagement(), getAdminQQ());
+            return true;
+        } catch (Exception e) {
+            return false;
         }
     }
 

@@ -13,6 +13,9 @@ import org.qbot.toolkit.Setting;
  * @date 2022/7/27
  */
 public class AdminMessageDeal {
+
+    private static final String SET_RECALL_TIME = "设置撤回时间";
+
     private static final String AGREE_TO_FRIEND_REQUEST = "开启同意好友请求";
 
     private static final String DIS_AGREE_TO_FRIEND_REQUEST = "关闭同意好友请求";
@@ -47,8 +50,23 @@ public class AdminMessageDeal {
 
 
     public static void msgDel(String msg, Friend frind) {
+        if (msg.contains(SET_RECALL_TIME)) {
+            msg = msg.replace(SET_RECALL_TIME, "");
+            msg = msg.replace(" ", "");
+            if (Setting.updateConfig(Integer.parseInt(msg))) {
+                frind.sendMessage(new MessageChainBuilder()
+                        .append(new PlainText("设置成功"))
+                        .build());
+            } else {
+                frind.sendMessage(new MessageChainBuilder()
+                        .append(new PlainText("设置失败"))
+                        .build());
+            }
+
+        }
+
         if (msg.contains(AGREE_TO_FRIEND_REQUEST)) {
-            if (Setting.updateVersion("Friend", true)) {
+            if (Setting.updateConfig("Friend", true)) {
                 frind.sendMessage(new MessageChainBuilder()
                         .append(new PlainText("同意好友请求已开启"))
                         .build());
@@ -59,7 +77,7 @@ public class AdminMessageDeal {
             }
         }
         if (msg.contains(DIS_AGREE_TO_FRIEND_REQUEST)) {
-            if (Setting.updateVersion("Friend", false)) {
+            if (Setting.updateConfig("Friend", false)) {
                 frind.sendMessage(new MessageChainBuilder()
                         .append(new PlainText("同意好友请求已关闭"))
                         .build());
@@ -70,7 +88,7 @@ public class AdminMessageDeal {
             }
         }
         if (msg.contains(AGREE_TO_THE_GROUP_REQUEST)) {
-            if (Setting.updateVersion("Group", true)) {
+            if (Setting.updateConfig("Group", true)) {
                 frind.sendMessage(new MessageChainBuilder()
                         .append(new PlainText("同意入群请求已开启"))
                         .build());
@@ -81,7 +99,7 @@ public class AdminMessageDeal {
             }
         }
         if (msg.contains(DIS_AGREE_TO_THE_GROUP_REQUEST)) {
-            if (Setting.updateVersion("Group", false)) {
+            if (Setting.updateConfig("Group", false)) {
                 frind.sendMessage(new MessageChainBuilder()
                         .append(new PlainText("同意入群请求已关闭"))
                         .build());
@@ -93,7 +111,7 @@ public class AdminMessageDeal {
 
         }
         if (msg.contains(OPEN_AI)) {
-            if (Setting.updateVersion("AI", true)) {
+            if (Setting.updateConfig("AI", true)) {
                 frind.sendMessage(new MessageChainBuilder()
                         .append(new PlainText("聊天已开启"))
                         .build());
@@ -105,7 +123,7 @@ public class AdminMessageDeal {
 
         }
         if (msg.contains(CLOSE_AI)) {
-            if (Setting.updateVersion("AI", false)) {
+            if (Setting.updateConfig("AI", false)) {
                 frind.sendMessage(new MessageChainBuilder()
                         .append(new PlainText("聊天已关闭"))
                         .build());
@@ -117,7 +135,7 @@ public class AdminMessageDeal {
 
         }
         if (msg.contains(OPEN_SEND_FORTUNE)) {
-            if (Setting.updateVersion("Fortune", true)) {
+            if (Setting.updateConfig("Fortune", true)) {
                 frind.sendMessage(new MessageChainBuilder()
                         .append(new PlainText("发送运势已开启"))
                         .build());
@@ -130,7 +148,7 @@ public class AdminMessageDeal {
 
         }
         if (msg.contains(CLOSE_SEND_FORTUNE)) {
-            if (Setting.updateVersion("Fortune", false)) {
+            if (Setting.updateConfig("Fortune", false)) {
                 frind.sendMessage(new MessageChainBuilder()
                         .append(new PlainText("发送运势已关闭"))
                         .build());
@@ -143,7 +161,7 @@ public class AdminMessageDeal {
 
         }
         if (msg.contains(OPEN_SEND_NEWS)) {
-            if (Setting.updateVersion("News", true)) {
+            if (Setting.updateConfig("News", true)) {
                 frind.sendMessage(new MessageChainBuilder()
                         .append(new PlainText("发送新闻已开启"))
                         .build());
@@ -155,7 +173,7 @@ public class AdminMessageDeal {
 
         }
         if (msg.contains(CLOSE_SEND_NEWS)) {
-            if (Setting.updateVersion("News", false)) {
+            if (Setting.updateConfig("News", false)) {
                 frind.sendMessage(new MessageChainBuilder()
                         .append(new PlainText("发送新闻已关闭"))
                         .build());
@@ -168,7 +186,7 @@ public class AdminMessageDeal {
 
         }
         if (msg.contains(OPEN_SEND_FISH)) {
-            if (Setting.updateVersion("Fish", true)) {
+            if (Setting.updateConfig("Fish", true)) {
                 frind.sendMessage(new MessageChainBuilder()
                         .append(new PlainText("发送摸鱼办已开启"))
                         .build());
@@ -181,7 +199,7 @@ public class AdminMessageDeal {
 
         }
         if (msg.contains(CLOSE_SEND_FISH)) {
-            if (Setting.updateVersion("Fish", false)) {
+            if (Setting.updateConfig("Fish", false)) {
                 frind.sendMessage(new MessageChainBuilder()
                         .append(new PlainText("发送摸鱼办已关闭"))
                         .build());
@@ -195,7 +213,7 @@ public class AdminMessageDeal {
         if (msg.contains(SET_GROUP)) {
             msg = msg.replace(SET_GROUP, "");
             msg = msg.replace(" ", "");
-            if (Setting.updateVersion(true, Long.parseLong(msg))) {
+            if (Setting.updateConfig(true, Long.parseLong(msg))) {
                 frind.sendMessage(new MessageChainBuilder()
                         .append(new PlainText("设置群组成功"))
                         .build());
@@ -208,7 +226,7 @@ public class AdminMessageDeal {
         if (msg.contains(DELETE_GROUP)) {
             msg = msg.replace(DELETE_GROUP, "");
             msg = msg.replace(" ", "");
-            if (Setting.updateVersion(false, Long.parseLong(msg))) {
+            if (Setting.updateConfig(false, Long.parseLong(msg))) {
                 frind.sendMessage(new MessageChainBuilder()
                         .append(new PlainText("删除群组成功"))
                         .build());
@@ -219,7 +237,7 @@ public class AdminMessageDeal {
             }
         }
         if (msg.contains(OPEN_GROUP_MANAGEMENT)) {
-            if (Setting.updateVersion("GroupManagement", true)) {
+            if (Setting.updateConfig("GroupManagement", true)) {
                 frind.sendMessage(new MessageChainBuilder()
                         .append(new PlainText("群组管理已开启"))
                         .build());
@@ -232,7 +250,7 @@ public class AdminMessageDeal {
 
         }
         if (msg.contains(CLOSE_GROUP_MANAGEMENT)) {
-            if (Setting.updateVersion("GroupManagement", false)) {
+            if (Setting.updateConfig("GroupManagement", false)) {
                 frind.sendMessage(new MessageChainBuilder()
                         .append(new PlainText("群组管理已关闭"))
                         .build());

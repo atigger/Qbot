@@ -13,7 +13,7 @@ import java.nio.charset.StandardCharsets;
  */
 
 public class SetSetting {
-    public static void setFile(String version, long qq, String appid, String appKey, String secretKey, boolean agreeFriend,
+    public static void setFile(String version, long qq, String appid, String appKey, String secretKey,int ImageRecall, boolean agreeFriend,
                         boolean agreeGroup, boolean AI, boolean autoFortune, boolean autoNews, boolean autoTips, JSONArray groupList,
                         boolean groupManagement, long AdminQQ) {
         String config = "#配置文件版本\n" +
@@ -25,6 +25,8 @@ public class SetSetting {
                 "  APP_ID: \"" + appid + "\"\n" +
                 "  API_KEY: \"" + appKey + "\"\n" +
                 "  SECRET_KEY: \"" + secretKey + "\"\n" +
+                "#图片自动撤回时间（0为不撤回,单位秒）\n" +
+                "ImageRecall: " + ImageRecall + "\n" +
                 "#自动同意好友请求\n" +
                 "AgreeFriend: " + agreeFriend + "\n" +
                 "#自动同意邀请入群请求\n" +
@@ -47,8 +49,7 @@ public class SetSetting {
                 "  #群管系统管理员QQ\n" +
                 "  AdminQQ: " + AdminQQ;
 
-        Utils utils = new Utils();
-        File file = new File(utils.getPluginsPath() + "/setting.yml");
+        File file = new File(Utils.getPluginsPath() + "/setting.yml");
         try {
             FileOutputStream writerStream = new FileOutputStream(file);
             BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(writerStream, StandardCharsets.UTF_8));

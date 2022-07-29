@@ -53,8 +53,7 @@ public class CreateFile {
 
         if (!file.exists()) {
             System.out.println("检测到配置文件不存在，生成中");
-            SetSetting setting = new SetSetting();
-            setting.setFile("2.1", 0, "", "", "", false, false, false, false, false, false, new JSONArray(), false, 0);
+            SetSetting.setFile(Setting.VERSION_NUM, 0, "", "", "", 0, false, false, false, false, false, false, new JSONArray(), false, 0);
         } else {
             System.out.println("配置文件存在");
             Setting setting1 = new Setting();

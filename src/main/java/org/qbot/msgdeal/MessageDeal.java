@@ -3,6 +3,7 @@ package org.qbot.msgdeal;
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
 import net.mamoe.mirai.contact.Group;
+import net.mamoe.mirai.message.MessageReceipt;
 import net.mamoe.mirai.message.data.*;
 import net.mamoe.mirai.utils.ExternalResource;
 import org.qbot.toolkit.PluginUtil;
@@ -217,8 +218,13 @@ public class MessageDeal {
                 return;
             }
             Image image = getImageAdd(filepath);
-//            FlashImage flashImage = FlashImage.from(image);
-            group.sendMessage(image);
+            //FlashImage flashImage = FlashImage.from(image);
+            MessageReceipt<Group> messageReceipts = group.sendMessage(image);
+            int recallTimes = Setting.getImageRecall();
+            if (recallTimes != 0) {
+                Thread.sleep(recallTimes * 1000);
+                messageReceipts.recall();
+            }
             return;
         }
 
