@@ -1,6 +1,9 @@
 package org.qbot.msgdeal;
 
+import com.alibaba.fastjson2.JSONArray;
+import net.mamoe.mirai.Bot;
 import net.mamoe.mirai.contact.Friend;
+import net.mamoe.mirai.contact.Group;
 import net.mamoe.mirai.message.data.MessageChain;
 import net.mamoe.mirai.message.data.MessageChainBuilder;
 import net.mamoe.mirai.message.data.PlainText;
@@ -48,6 +51,7 @@ public class AdminMessageDeal {
 
     private static final String CLOSE_GROUP_MANAGEMENT = "关闭群管系统";
 
+    private static final String SEND_NOTIFICATION = "发送通知";
 
     public static void msgDel(String msg, Friend frind) {
         if (msg.contains(SET_RECALL_TIME)) {
@@ -259,6 +263,25 @@ public class AdminMessageDeal {
                         .append(new PlainText("群组管理关闭失败"))
                         .build());
             }
+        }
+
+        if (msg.contains(SEND_NOTIFICATION)) {
+            Bot bot = Bot.getInstance(Setting.getQq());
+            msg = msg.replace(SEND_NOTIFICATION, "");
+            msg = msg.replace(" ", "");
+            JSONArray groupLists = Setting.getGroup();
+            for (Object groupList : groupLists) {
+                Group group = bot.getGroup(Long.parseLong(groupList.toString()));
+                MessageChain chain = new MessageChainBuilder()
+                        .append(new PlainText("通知\n"))
+                        .append(new PlainText(msg))
+                        .build();
+                assert group != null;
+                group.sendMessage(chain);
+            }
+            frind.sendMessage(new MessageChainBuilder()
+                    .append(new PlainText("发送成功"))
+                    .build());
         }
     }
 }

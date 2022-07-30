@@ -107,7 +107,7 @@ public class Setting {
 
     public static JSONArray getGroup() {
         try {
-            return main().getJSONArray("Group");
+            return main().getJSONObject("Auto").getJSONArray("Group");
         } catch (Exception e) {
             return new JSONArray();
         }

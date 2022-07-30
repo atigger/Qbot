@@ -274,7 +274,7 @@ public class PluginUtil {
         int qmj = utils.daysBetween(nowdate, qmjdate);
         Date ndjdate = sdf.parse("2023-05-01");
         int ndj = utils.daysBetween(nowdate, ndjdate);
-        Date dwjdate = sdf.parse("2022-06-03");
+        Date dwjdate = sdf.parse("2023-06-22");
         int dwj = utils.daysBetween(nowdate, dwjdate);
         Date zqjdate = sdf.parse("2022-09-10");
         int zqj = utils.daysBetween(nowdate, zqjdate);
@@ -326,9 +326,6 @@ public class PluginUtil {
             }
         }
 
-        if (dwj > 0) {
-            txt = txt + "\n距离【端午】还有:" + dwj + "天";
-        }
         if (zqj > 0) {
             txt = txt + "\n距离【中秋】还有:" + zqj + "天";
         }
@@ -346,6 +343,9 @@ public class PluginUtil {
         }
         if (ndj > 0) {
             txt = txt + "\n距离【劳动】还有:" + ndj + "天";
+        }
+        if (dwj > 0) {
+            txt = txt + "\n距离【端午】还有:" + dwj + "天";
         }
         txt = txt + statementAtTheEnd;
         return txt;
