@@ -31,7 +31,7 @@ public final class Plugin extends JavaPlugin {
     public static final Plugin INSTANCE = new Plugin();
 
     public Plugin() {
-        super(new JvmPluginDescriptionBuilder("org.qbot.plugin", "2.0.7").build());
+        super(new JvmPluginDescriptionBuilder("org.qbot.plugin", "2.0.7-1").build());
     }
 
     @SuppressWarnings("AlibabaMethodTooLong")
@@ -148,7 +148,11 @@ public final class Plugin extends JavaPlugin {
             String msg = f.getMessage().contentToString();
             if (senderQq == superAdmin) {
                 System.out.println("收到管理员消息:" + msg);
-                AdminMessageDeal.msgDel(msg,f.getSender());
+                try {
+                    AdminMessageDeal.msgDel(msg,f.getSender());
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
             }
 
         });

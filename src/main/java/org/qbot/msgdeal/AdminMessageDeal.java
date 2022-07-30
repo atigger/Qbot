@@ -53,7 +53,7 @@ public class AdminMessageDeal {
 
     private static final String SEND_NOTIFICATION = "发送通知";
 
-    public static void msgDel(String msg, Friend frind) {
+    public static void msgDel(String msg, Friend frind) throws InterruptedException {
         if (msg.contains(SET_RECALL_TIME)) {
             msg = msg.replace(SET_RECALL_TIME, "");
             msg = msg.replace(" ", "");
@@ -278,6 +278,7 @@ public class AdminMessageDeal {
                         .build();
                 assert group != null;
                 group.sendMessage(chain);
+                Thread.sleep(5000);
             }
             frind.sendMessage(new MessageChainBuilder()
                     .append(new PlainText("发送成功"))
