@@ -20,10 +20,9 @@ public class StartThread extends Thread {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        Setting setting = new Setting();
-        boolean autoFortune = setting.getAutoFortune();
-        boolean autoTips = setting.getAutoTips();
-        boolean autoNews = setting.getAutoNews();
+        boolean autoFortune = Setting.getAutoFortune();
+        boolean autoTips = Setting.getAutoTips();
+        boolean autoNews = Setting.getAutoNews();
         AutoGetFortuneThread autoGetFortuneThread = new AutoGetFortuneThread();
         AutoThread autoThread = new AutoThread();
         if (autoFortune) {

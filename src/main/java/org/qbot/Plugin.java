@@ -31,7 +31,7 @@ public final class Plugin extends JavaPlugin {
     public static final Plugin INSTANCE = new Plugin();
 
     public Plugin() {
-        super(new JvmPluginDescriptionBuilder("org.qbot.plugin", "2.0.7-1").build());
+        super(new JvmPluginDescriptionBuilder("org.qbot.plugin", "2.0.8").build());
     }
 
     @SuppressWarnings("AlibabaMethodTooLong")
@@ -48,7 +48,7 @@ public final class Plugin extends JavaPlugin {
         GroupManagement groupManagement = new GroupManagement();
         Long botQq = Setting.getQq();
         long superAdmin = Setting.getAdminQQ();
-        Path dataFolderPath = utils.getPluginsDataPath();
+        Path dataFolderPath = Utils.getPluginsDataPath();
         File groupManagementDirectory = new File(dataFolderPath + "/groupManagement");
 
         GlobalEventChannel.INSTANCE.subscribeAlways(GroupMessageEvent.class, g -> {

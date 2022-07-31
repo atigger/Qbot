@@ -49,11 +49,19 @@ public class Setting {
         }
     }
 
+    public static int getImageNum() {
+        try {
+            return main().getIntValue("ImageNum");
+        } catch (Exception e) {
+            return 1;
+        }
+    }
+
     public static int getImageRecall() {
         try {
             return main().getIntValue("ImageRecall");
         } catch (Exception e) {
-            return 0;
+            return 119;
         }
     }
 
@@ -130,7 +138,7 @@ public class Setting {
     }
 
     private static final String VERSION = "Version";
-    public static final String VERSION_NUM = "2.2";
+    public static final String VERSION_NUM = "2.5";
 
     public void getVersion() {
         boolean isUpdate = false;
@@ -143,7 +151,7 @@ public class Setting {
         } finally {
             if (isUpdate) {
                 System.out.println("正在更新配置文件");
-                SetSetting.setFile(VERSION_NUM, getQq(), getAppId(), getApiKey(), getSecretKey(), 0, getAgreeFriend(), getAgreeGroup(), getAi(), getAutoFortune(), getAutoNews(), getAutoTips(), getGroup(), getGroupManagement(), getAdminQQ());
+                SetSetting.setFile(VERSION_NUM, getQq(), getAppId(), getApiKey(), getSecretKey(), getImageNum(), getImageRecall(), getAgreeFriend(), getAgreeGroup(), getAi(), getAutoFortune(), getAutoNews(), getAutoTips(), getGroup(), getGroupManagement(), getAdminQQ());
                 System.out.println("更新配置文件成功");
             }
         }
@@ -174,7 +182,7 @@ public class Setting {
                 }
             }
         }
-        SetSetting.setFile(VERSION_NUM, getQq(), getAppId(), getApiKey(), getSecretKey(), getImageRecall(), getAgreeFriend(), getAgreeGroup(), getAi(), getAutoFortune(), getAutoNews(), getAutoTips(), jsonArray, getGroupManagement(), getAdminQQ());
+        SetSetting.setFile(VERSION_NUM, getQq(), getAppId(), getApiKey(), getSecretKey(), getImageNum(), getImageRecall(), getAgreeFriend(), getAgreeGroup(), getAi(), getAutoFortune(), getAutoNews(), getAutoTips(), jsonArray, getGroupManagement(), getAdminQQ());
         return true;
     }
 
@@ -182,25 +190,25 @@ public class Setting {
         System.out.println("正在更新配置文件");
         switch (options) {
             case "Friend":
-                SetSetting.setFile(VERSION_NUM, getQq(), getAppId(), getApiKey(), getSecretKey(), getImageRecall(), value, getAgreeGroup(), getAi(), getAutoFortune(), getAutoNews(), getAutoTips(), getGroup(), getGroupManagement(), getAdminQQ());
+                SetSetting.setFile(VERSION_NUM, getQq(), getAppId(), getApiKey(), getSecretKey(), getImageNum(), getImageRecall(), value, getAgreeGroup(), getAi(), getAutoFortune(), getAutoNews(), getAutoTips(), getGroup(), getGroupManagement(), getAdminQQ());
                 return true;
             case "Group":
-                SetSetting.setFile(VERSION_NUM, getQq(), getAppId(), getApiKey(), getSecretKey(), getImageRecall(), getAgreeFriend(), value, getAi(), getAutoFortune(), getAutoNews(), getAutoTips(), getGroup(), getGroupManagement(), getAdminQQ());
+                SetSetting.setFile(VERSION_NUM, getQq(), getAppId(), getApiKey(), getSecretKey(), getImageNum(), getImageRecall(), getAgreeFriend(), value, getAi(), getAutoFortune(), getAutoNews(), getAutoTips(), getGroup(), getGroupManagement(), getAdminQQ());
                 return true;
             case "AI":
-                SetSetting.setFile(VERSION_NUM, getQq(), getAppId(), getApiKey(), getSecretKey(), getImageRecall(), getAgreeFriend(), getAgreeGroup(), value, getAutoFortune(), getAutoNews(), getAutoTips(), getGroup(), getGroupManagement(), getAdminQQ());
+                SetSetting.setFile(VERSION_NUM, getQq(), getAppId(), getApiKey(), getSecretKey(), getImageNum(), getImageRecall(), getAgreeFriend(), getAgreeGroup(), value, getAutoFortune(), getAutoNews(), getAutoTips(), getGroup(), getGroupManagement(), getAdminQQ());
                 return true;
             case "Fortune":
-                SetSetting.setFile(VERSION_NUM, getQq(), getAppId(), getApiKey(), getSecretKey(), getImageRecall(), getAgreeFriend(), getAgreeGroup(), getAi(), value, getAutoNews(), getAutoTips(), getGroup(), getGroupManagement(), getAdminQQ());
+                SetSetting.setFile(VERSION_NUM, getQq(), getAppId(), getApiKey(), getSecretKey(), getImageNum(), getImageRecall(), getAgreeFriend(), getAgreeGroup(), getAi(), value, getAutoNews(), getAutoTips(), getGroup(), getGroupManagement(), getAdminQQ());
                 return true;
             case "News":
-                SetSetting.setFile(VERSION_NUM, getQq(), getAppId(), getApiKey(), getSecretKey(), getImageRecall(), getAgreeFriend(), getAgreeGroup(), getAi(), getAutoFortune(), value, getAutoTips(), getGroup(), getGroupManagement(), getAdminQQ());
+                SetSetting.setFile(VERSION_NUM, getQq(), getAppId(), getApiKey(), getSecretKey(), getImageNum(), getImageRecall(), getAgreeFriend(), getAgreeGroup(), getAi(), getAutoFortune(), value, getAutoTips(), getGroup(), getGroupManagement(), getAdminQQ());
                 return true;
             case "Tips":
-                SetSetting.setFile(VERSION_NUM, getQq(), getAppId(), getApiKey(), getSecretKey(), getImageRecall(), getAgreeFriend(), getAgreeGroup(), getAi(), getAutoFortune(), getAutoNews(), value, getGroup(), getGroupManagement(), getAdminQQ());
+                SetSetting.setFile(VERSION_NUM, getQq(), getAppId(), getApiKey(), getSecretKey(), getImageNum(), getImageRecall(), getAgreeFriend(), getAgreeGroup(), getAi(), getAutoFortune(), getAutoNews(), value, getGroup(), getGroupManagement(), getAdminQQ());
                 return true;
             case "GroupManagement":
-                SetSetting.setFile(VERSION_NUM, getQq(), getAppId(), getApiKey(), getSecretKey(), getImageRecall(), getAgreeFriend(), getAgreeGroup(), getAi(), getAutoFortune(), getAutoNews(), getAutoTips(), getGroup(), value, getAdminQQ());
+                SetSetting.setFile(VERSION_NUM, getQq(), getAppId(), getApiKey(), getSecretKey(), getImageNum(), getImageRecall(), getAgreeFriend(), getAgreeGroup(), getAi(), getAutoFortune(), getAutoNews(), getAutoTips(), getGroup(), value, getAdminQQ());
                 return true;
             default:
                 System.out.println("更新失败");
@@ -208,9 +216,19 @@ public class Setting {
         }
     }
 
-    public static boolean updateConfig(int value) {
+    public static boolean updateConfig(int options, int value) {
         try {
-            SetSetting.setFile(VERSION_NUM, getQq(), getAppId(), getApiKey(), getSecretKey(), value, getAgreeFriend(), getAgreeGroup(), getAi(), getAutoFortune(), getAutoNews(), getAutoTips(), getGroup(), getGroupManagement(), getAdminQQ());
+            switch (options) {
+                case 1:
+                    SetSetting.setFile(VERSION_NUM, getQq(), getAppId(), getApiKey(), getSecretKey(), value, getImageRecall(), getAgreeFriend(), getAgreeGroup(), getAi(), getAutoFortune(), getAutoNews(), getAutoTips(), getGroup(), getGroupManagement(), getAdminQQ());
+                    break;
+                case 2:
+                    SetSetting.setFile(VERSION_NUM, getQq(), getAppId(), getApiKey(), getSecretKey(), getImageNum(), value, getAgreeFriend(), getAgreeGroup(), getAi(), getAutoFortune(), getAutoNews(), getAutoTips(), getGroup(), getGroupManagement(), getAdminQQ());
+                    break;
+                default:
+                    System.out.println("更新失败");
+                    return false;
+            }
             return true;
         } catch (Exception e) {
             return false;

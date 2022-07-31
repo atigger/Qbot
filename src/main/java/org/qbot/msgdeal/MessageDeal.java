@@ -212,18 +212,33 @@ public class MessageDeal {
         }
 
         if (STRING_BEAUTY.equals(msg) || STRING_BEAUTY_PICTURES.equals(msg)) {
-            String filepath = pluginUtil.getImage();
-            if (filepath.contains(STRING_FAIL)) {
-                group.sendMessage(filepath);
+            ForwardMessageBuilder builder = new ForwardMessageBuilder(group);
+            final double d = Math.random();
+            final long fakerQq = (long) (d * 10000000);
+            int imageNum = Setting.getImageNum();
+            if (imageNum <= 0) {
+                group.sendMessage("设置错误，请联系管理员重新设置");
                 return;
             }
-            Image image = getImageAdd(filepath);
-            //FlashImage flashImage = FlashImage.from(image);
-            MessageReceipt<Group> messageReceipts = group.sendMessage(image);
+            for (int i = 0; i < imageNum; i++) {
+                String filepath = pluginUtil.getImage();
+                if (filepath.contains(STRING_FAIL)) {
+                    group.sendMessage(filepath);
+                    return;
+                }
+                Image image = getImageAdd(filepath);
+                builder.add(fakerQq, "一位不愿透漏姓名的群友", image);
+            }
+            ForwardMessage forward = builder.build();
+            MessageReceipt<Group> messageReceipts = group.sendMessage(forward);
             int recallTimes = Setting.getImageRecall();
-            if (recallTimes != 0) {
-                Thread.sleep(recallTimes * 1000);
-                messageReceipts.recall();
+            try {
+                if (recallTimes != 0) {
+                    Thread.sleep(recallTimes * 1000);
+                    messageReceipts.recall();
+                }
+            } catch (Exception e) {
+                System.out.printf("撤回失败");
             }
             return;
         }

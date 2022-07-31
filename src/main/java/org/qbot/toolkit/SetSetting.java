@@ -13,7 +13,7 @@ import java.nio.charset.StandardCharsets;
  */
 
 public class SetSetting {
-    public static void setFile(String version, long qq, String appid, String appKey, String secretKey,int ImageRecall, boolean agreeFriend,
+    public static void setFile(String version, long qq, String appid, String appKey, String secretKey,int ImageNum,int ImageRecall, boolean agreeFriend,
                         boolean agreeGroup, boolean AI, boolean autoFortune, boolean autoNews, boolean autoTips, JSONArray groupList,
                         boolean groupManagement, long AdminQQ) {
         String config = "#配置文件版本\n" +
@@ -25,6 +25,8 @@ public class SetSetting {
                 "  APP_ID: \"" + appid + "\"\n" +
                 "  API_KEY: \"" + appKey + "\"\n" +
                 "  SECRET_KEY: \"" + secretKey + "\"\n" +
+                "#发送图片数量\n" +
+                "ImageNum: " + ImageNum + "\n" +
                 "#图片自动撤回时间（0为不撤回,单位秒）\n" +
                 "ImageRecall: " + ImageRecall + "\n" +
                 "#自动同意好友请求\n" +

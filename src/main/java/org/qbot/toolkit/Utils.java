@@ -81,7 +81,7 @@ public class Utils {
     /**
      * 获取插件数据文件目录
      */
-    public Path getPluginsDataPath() {
+    public static Path getPluginsDataPath() {
         JvmPlugin jvmPlugin = new Plugin();
         return PluginManager.INSTANCE.getPluginsDataPath().resolve(jvmPlugin.getDescription().getName());
     }
@@ -320,7 +320,7 @@ public class Utils {
     /**
      * 重写星期文件
      */
-    public void rewrite(int week) {
+    public static void rewrite(int week) {
         try {
             File weekcacheFile = new File(getPluginsDataPath() + "/cache/week.cache");
             BufferedWriter out = new BufferedWriter(new FileWriter(weekcacheFile));

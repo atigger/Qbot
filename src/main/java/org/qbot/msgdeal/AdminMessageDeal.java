@@ -17,6 +17,8 @@ import org.qbot.toolkit.Setting;
  */
 public class AdminMessageDeal {
 
+    private static final String SET_IMAGE_NUM = "设置图片数量";
+
     private static final String SET_RECALL_TIME = "设置撤回时间";
 
     private static final String AGREE_TO_FRIEND_REQUEST = "开启同意好友请求";
@@ -54,10 +56,25 @@ public class AdminMessageDeal {
     private static final String SEND_NOTIFICATION = "发送通知";
 
     public static void msgDel(String msg, Friend frind) throws InterruptedException {
+
+        if (msg.contains(SET_IMAGE_NUM)) {
+            msg = msg.replace(SET_IMAGE_NUM, "");
+            msg = msg.replace(" ", "");
+            if (Setting.updateConfig(1, Integer.parseInt(msg))) {
+                frind.sendMessage(new MessageChainBuilder()
+                        .append(new PlainText("设置成功"))
+                        .build());
+            } else {
+                frind.sendMessage(new MessageChainBuilder()
+                        .append(new PlainText("设置失败"))
+                        .build());
+            }
+        }
+
         if (msg.contains(SET_RECALL_TIME)) {
             msg = msg.replace(SET_RECALL_TIME, "");
             msg = msg.replace(" ", "");
-            if (Setting.updateConfig(Integer.parseInt(msg))) {
+            if (Setting.updateConfig(2, Integer.parseInt(msg))) {
                 frind.sendMessage(new MessageChainBuilder()
                         .append(new PlainText("设置成功"))
                         .build());
@@ -270,18 +287,26 @@ public class AdminMessageDeal {
             msg = msg.replace(SEND_NOTIFICATION, "");
             msg = msg.replace(" ", "");
             JSONArray groupLists = Setting.getGroup();
+            int groupNum = groupLists.size();
+            int sendSuccess = 0;
+            int sendFail = 0;
             for (Object groupList : groupLists) {
-                Group group = bot.getGroup(Long.parseLong(groupList.toString()));
-                MessageChain chain = new MessageChainBuilder()
-                        .append(new PlainText("通知\n"))
-                        .append(new PlainText(msg))
-                        .build();
-                assert group != null;
-                group.sendMessage(chain);
-                Thread.sleep(5000);
+                try {
+                    Group group = bot.getGroup(Long.parseLong(groupList.toString()));
+                    MessageChain chain = new MessageChainBuilder()
+                            .append(new PlainText("通知\n"))
+                            .append(new PlainText(msg))
+                            .build();
+                    assert group != null;
+                    group.sendMessage(chain);
+                    sendSuccess++;
+                    Thread.sleep(5000);
+                } catch (Exception e) {
+                    sendFail++;
+                }
             }
             frind.sendMessage(new MessageChainBuilder()
-                    .append(new PlainText("发送成功"))
+                    .append(new PlainText("发送完毕，共" + groupNum + "个群，发送成功：" + sendSuccess + "个，发送失败：" + sendFail + "个"))
                     .build());
         }
     }

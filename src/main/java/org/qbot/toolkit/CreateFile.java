@@ -13,11 +13,9 @@ import java.nio.file.Path;
  */
 
 public class CreateFile {
-    final Utils utils = new Utils();
-
     public void createFile() {
-        Path dataFolderPath = utils.getPluginsDataPath();
-        Path configFolderPath = utils.getPluginsPath();
+        Path dataFolderPath = Utils.getPluginsDataPath();
+        Path configFolderPath = Utils.getPluginsPath();
 
         File dataFolderDirectory = new File(String.valueOf(dataFolderPath));
         dataFolderDirectory.mkdir();
@@ -25,8 +23,8 @@ public class CreateFile {
         File heroHeadDirectory = new File(dataFolderPath + "/cache/hero");
         heroHeadDirectory.mkdir();
 
-        File NewsDirectory = new File(dataFolderPath + "/cache/news");
-        NewsDirectory.mkdir();
+        File newsDirectory = new File(dataFolderPath + "/cache/news");
+        newsDirectory.mkdir();
 
         File voiceDirectory = new File(dataFolderPath + "/cache/voice");
         voiceDirectory.mkdir();
@@ -53,7 +51,7 @@ public class CreateFile {
 
         if (!file.exists()) {
             System.out.println("检测到配置文件不存在，生成中");
-            SetSetting.setFile(Setting.VERSION_NUM, 0, "", "", "", 0, false, false, false, false, false, false, new JSONArray(), false, 0);
+            SetSetting.setFile(Setting.VERSION_NUM, 0, "", "", "", 1, 119, false, false, false, false, false, false, new JSONArray(), false, 0);
         } else {
             System.out.println("配置文件存在");
             Setting setting1 = new Setting();

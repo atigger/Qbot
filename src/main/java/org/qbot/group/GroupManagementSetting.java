@@ -21,7 +21,7 @@ import java.nio.file.Path;
 @SuppressWarnings("unchecked")
 public class GroupManagementSetting {
     final Utils utils = new Utils();
-    final Path dataFolderPath = utils.getPluginsDataPath();
+    final Path dataFolderPath = Utils.getPluginsDataPath();
     final File groupManagementDirectory = new File(dataFolderPath + "/groupManagement");
 
     /**
