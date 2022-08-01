@@ -9,6 +9,9 @@ import net.mamoe.mirai.message.data.MessageChainBuilder;
 import net.mamoe.mirai.message.data.PlainText;
 import org.qbot.toolkit.Setting;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * AdminMessageDeal class
  *
@@ -290,6 +293,7 @@ public class AdminMessageDeal {
             int groupNum = groupLists.size();
             int sendSuccess = 0;
             int sendFail = 0;
+            ArrayList<Long> groupFailList = new ArrayList<>();
             for (Object groupList : groupLists) {
                 try {
                     Group group = bot.getGroup(Long.parseLong(groupList.toString()));
@@ -300,14 +304,27 @@ public class AdminMessageDeal {
                     assert group != null;
                     group.sendMessage(chain);
                     sendSuccess++;
-                    Thread.sleep(5000);
+                    Thread.sleep(2500);
                 } catch (Exception e) {
+                    groupFailList.add(Long.parseLong(groupList.toString()));
                     sendFail++;
                 }
             }
-            frind.sendMessage(new MessageChainBuilder()
-                    .append(new PlainText("发送完毕，共" + groupNum + "个群，发送成功：" + sendSuccess + "个，发送失败：" + sendFail + "个"))
-                    .build());
+            StringBuilder groupFail = new StringBuilder("失败的群有：");
+            for (long groupId : groupFailList) {
+                groupFail.append(groupId).append("、");
+            }
+            if (sendFail == 0) {
+                frind.sendMessage(new MessageChainBuilder()
+                        .append(new PlainText("发送完毕，共" + groupNum + "个群，发送成功：" + sendSuccess + "个，发送失败：" + sendFail + "个"))
+                        .build());
+            } else {
+                frind.sendMessage(new MessageChainBuilder()
+                        .append(new PlainText("发送完毕，共" + groupNum + "个群，发送成功：" + sendSuccess + "个，发送失败：" + sendFail + "个\n"))
+                        .append(new PlainText(groupFail.toString()))
+                        .build());
+            }
+
         }
     }
 }

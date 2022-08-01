@@ -1,6 +1,6 @@
 QQBOT
 
-本项目基于 [mirai](https://github.com/mamoe/mirai) [![Version](https://img.shields.io/badge/version-2.12.0-red)](https://github.com/mamoe/mirai/releases/tag/v2.12.0)
+本项目基于 [mirai](https://github.com/mamoe/mirai) [![Version](https://img.shields.io/badge/version-2.12.1-red)](https://github.com/mamoe/mirai/releases/tag/v2.12.0)
 开发
 
 [如何使用](https://github.com/mamoe/mirai/blob/dev/mirai-console/docs/ConfiguringProjects.md) ？
@@ -37,11 +37,13 @@ Tips:有想要的新功能可以提交issue
 
 更新日志：
 
-2022年7月31日v2.0.8更新
+2022年8月1日v2.0.9更新
 
-1.发送图片修改为合并转发形式(管理员可自定义发送图片数量)
+1.mirai-core支持到[2.12.1](https://github.com/mamoe/mirai/releases/tag/v2.12.1)
 
-2.修复一些bug
+2.修复合并转发消息显示昵称错误的问题(mirai 2.12.1修复)
+
+3.优化了一些细节
 
 ---
 

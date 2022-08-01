@@ -31,7 +31,7 @@ public final class Plugin extends JavaPlugin {
     public static final Plugin INSTANCE = new Plugin();
 
     public Plugin() {
-        super(new JvmPluginDescriptionBuilder("org.qbot.plugin", "2.0.8").build());
+        super(new JvmPluginDescriptionBuilder("org.qbot.plugin", "2.0.9").build());
     }
 
     @SuppressWarnings("AlibabaMethodTooLong")

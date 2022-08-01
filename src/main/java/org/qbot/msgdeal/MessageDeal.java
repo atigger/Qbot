@@ -213,8 +213,6 @@ public class MessageDeal {
 
         if (STRING_BEAUTY.equals(msg) || STRING_BEAUTY_PICTURES.equals(msg)) {
             ForwardMessageBuilder builder = new ForwardMessageBuilder(group);
-            final double d = Math.random();
-            final long fakerQq = (long) (d * 10000000);
             int imageNum = Setting.getImageNum();
             if (imageNum <= 0) {
                 group.sendMessage("设置错误，请联系管理员重新设置");
@@ -227,7 +225,7 @@ public class MessageDeal {
                     return;
                 }
                 Image image = getImageAdd(filepath);
-                builder.add(fakerQq, "一位不愿透漏姓名的群友", image);
+                builder.add(2119517658L, "一位不愿透漏姓名的群友", image);
             }
             ForwardMessage forward = builder.build();
             MessageReceipt<Group> messageReceipts = group.sendMessage(forward);
