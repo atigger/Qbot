@@ -142,7 +142,7 @@ public class Utils {
     /**
      * 获取范围随机数
      */
-    public int getRandomNum(int min, int max) {
+    public static int getRandomNum(int min, int max) {
         Random random = new Random();
         return random.nextInt(max) % (max - min + 1) + min;
     }
@@ -175,7 +175,7 @@ public class Utils {
      */
     public JSONObject getMusicInfo(String musicName) {
         String url = "http://music.163.com/api/search/get/web?s=" + musicName + "&type=1&limit=1";
-        String html = okHttpClientGet(url,"220.181.108.104");
+        String html = okHttpClientGet(url, "220.181.108.104");
         JSONObject json = JSONObject.parseObject(html);
         System.out.println(json);
         JSONObject musicInfoJson = json.getJSONObject("result").getJSONArray("songs").getJSONObject(0);
@@ -395,6 +395,44 @@ public class Utils {
         } catch (IOException e) {
             e.printStackTrace();
             return false;
+        }
+    }
+
+
+    public static String getImage() {
+        int num = getRandomNum(1, 7735);
+        try {
+            File file = new File(getPluginsDataPath() + "/cache/image/" + num + ".jpg");
+            if (!file.exists()) {
+                String url = "https://image.miraiqbot.xyz/image/" + num + ".jpg";
+                OkHttpClient okHttpClient = new OkHttpClient();
+                Request getRequest = new Request.Builder()
+                        .url(url)
+                        .addHeader("User-Agent", "miraiqbot")
+                        .get()
+                        .build();
+                Call call = okHttpClient.newCall(getRequest);
+                Response response = call.execute();
+                if (response.code() == 200) {
+                    ResponseBody body = response.body();
+                    //获取流
+                    assert body != null;
+                    InputStream in = body.byteStream();
+                    //转化为bitmap
+                    FileOutputStream fo = new FileOutputStream(getPluginsDataPath() + "/cache/image/" + num + ".jpg");
+                    byte[] buf = new byte[1024];
+                    int length;
+                    while ((length = in.read(buf, 0, buf.length)) != -1) {
+                        fo.write(buf, 0, length);
+                    }
+                    in.close();
+                    fo.close();
+                    return file.toString();
+                }
+            }
+            return "获取失败";
+        } catch (Exception e) {
+            return "获取失败";
         }
     }
 

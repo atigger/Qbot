@@ -1,6 +1,6 @@
 QQBOT
 
-本项目基于 [mirai](https://github.com/mamoe/mirai) [![Version](https://img.shields.io/badge/version-2.12.1-red)](https://github.com/mamoe/mirai/releases/tag/v2.12.0)
+本项目基于 [mirai](https://github.com/mamoe/mirai) [![Version](https://img.shields.io/badge/version-2.12.1-red)](https://github.com/mamoe/mirai/releases/tag/v2.12.1)
 开发
 
 [如何使用](https://github.com/mamoe/mirai/blob/dev/mirai-console/docs/ConfiguringProjects.md) ？
@@ -27,7 +27,7 @@ QQBOT
 
 - [x] 王者战力查询
 
-- [x] 随机发送~~美女~~图片 需要手动将图片放到（/data/org.qbot.plugin/image）内
+- [x] 随机发送~~美女~~图片
 
 - [x] 群管理插件（关键字撤回、自动审核入群申请）[帮助文档](https://www.miraiqbot.xyz)
 
@@ -37,13 +37,9 @@ Tips:有想要的新功能可以提交issue
 
 更新日志：
 
-2022年8月1日v2.0.9更新
+2022年8月1日v2.1.0更新
 
-1.mirai-core支持到[2.12.1](https://github.com/mamoe/mirai/releases/tag/v2.12.1)
-
-2.修复合并转发消息显示昵称错误的问题(mirai 2.12.1修复)
-
-3.优化了一些细节
+1.发送美女图片将从图床拉取，无需手动放图
 
 ---
 

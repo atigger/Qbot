@@ -20,6 +20,12 @@ public class CreateFile {
         File dataFolderDirectory = new File(String.valueOf(dataFolderPath));
         dataFolderDirectory.mkdir();
 
+        File cacheDirectory = new File(dataFolderPath + "/cache");
+        cacheDirectory.mkdir();
+
+        File imageDirectory = new File(dataFolderPath + "/cache/image");
+        imageDirectory.mkdir();
+
         File heroHeadDirectory = new File(dataFolderPath + "/cache/hero");
         heroHeadDirectory.mkdir();
 
@@ -34,15 +40,6 @@ public class CreateFile {
 
         File qqDirectory = new File(dataFolderPath + "/cache/qq");
         qqDirectory.mkdir();
-
-        File imageDirectory = new File(dataFolderPath + "/image");
-        imageDirectory.mkdir();
-
-        File raneDirectory = new File(dataFolderPath + "/rane");
-        raneDirectory.mkdir();
-
-        File cacheDirectory = new File(dataFolderPath + "/cache");
-        cacheDirectory.mkdir();
 
         File groupManagementDirectory = new File(dataFolderPath + "/groupManagement");
         groupManagementDirectory.mkdir();

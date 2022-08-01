@@ -1,7 +1,7 @@
 配置文件模板
 ```yaml
 #配置文件版本
-Version: 2.3
+Version: 2.5
 #机器人QQ
 QQ: 0
 #百度语音API

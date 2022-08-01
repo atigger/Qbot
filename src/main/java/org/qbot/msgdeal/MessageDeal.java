@@ -69,20 +69,14 @@ public class MessageDeal {
         this.group = group;
         System.out.println("收到的消息:" + msg + " 消息长度:" + msg.length());
         if (STRING_FISH.equals(msg)) {
-            chain = new MessageChainBuilder()
-                    .append(new PlainText(pluginUtil.moFish()))
-                    .build();
+            chain = new MessageChainBuilder().append(new PlainText(pluginUtil.moFish())).build();
             group.sendMessage(chain);
             return;
         }
 
 
         if ("".equals(msg)) {
-            chain = new MessageChainBuilder()
-                    .append(new At(senderId))
-                    .append(new PlainText("\n你没得事情干唛？@我作甚么？"))
-                    .append(new Face(312))
-                    .build();
+            chain = new MessageChainBuilder().append(new At(senderId)).append(new PlainText("\n你没得事情干唛？@我作甚么？")).append(new Face(312)).build();
             group.sendMessage(chain);
             return;
         }
@@ -130,11 +124,7 @@ public class MessageDeal {
             String heroInfo = jsonObject.getString("data");
             String heroImg = jsonObject.getString("img");
             Image image = getImageAdd(heroImg);
-            chain = new MessageChainBuilder()
-                    .append(new At(senderId))
-                    .append(image)
-                    .append(new PlainText("\n" + heroInfo))
-                    .build();
+            chain = new MessageChainBuilder().append(new At(senderId)).append(image).append(new PlainText("\n" + heroInfo)).build();
             group.sendMessage(chain);
             return;
         }
@@ -150,38 +140,25 @@ public class MessageDeal {
             String heroInfo = jsonObject.getString("data");
             String heroImg = jsonObject.getString("img");
             Image image = getImageAdd(heroImg);
-            chain = new MessageChainBuilder()
-                    .append(new At(senderId))
-                    .append(image)
-                    .append(new PlainText("\n" + heroInfo))
-                    .build();
+            chain = new MessageChainBuilder().append(new At(senderId)).append(image).append(new PlainText("\n" + heroInfo)).build();
             group.sendMessage(chain);
             return;
         }
 
         if (STRING_HOROSCOPE.equals(msg)) {
-            chain = new MessageChainBuilder()
-                    .append(new At(senderId))
-                    .append(new PlainText("\n请@我并发送星座名\n例如@XXX 白羊"))
-                    .build();
+            chain = new MessageChainBuilder().append(new At(senderId)).append(new PlainText("\n请@我并发送星座名\n例如@XXX 白羊")).build();
             group.sendMessage(chain);
             return;
         }
 
         if (STRING_COMBAT_POWER_QUERY.equals(msg)) {
-            chain = new MessageChainBuilder()
-                    .append(new At(senderId))
-                    .append(new PlainText("\n请@我并发送qq/微信+英雄名\n例如@XXX qq 伽罗"))
-                    .build();
+            chain = new MessageChainBuilder().append(new At(senderId)).append(new PlainText("\n请@我并发送qq/微信+英雄名\n例如@XXX qq 伽罗")).build();
             group.sendMessage(chain);
             return;
         }
 
         if (STRING_MUSIC_SYSTEM.equals(msg)) {
-            chain = new MessageChainBuilder()
-                    .append(new At(senderId))
-                    .append(new PlainText("\n请@我并发送听歌+音乐名\n例如@XXX 听歌稻香"))
-                    .build();
+            chain = new MessageChainBuilder().append(new At(senderId)).append(new PlainText("\n请@我并发送听歌+音乐名\n例如@XXX 听歌稻香")).build();
             group.sendMessage(chain);
             return;
         }
@@ -201,9 +178,7 @@ public class MessageDeal {
             String newsImgUrl = pluginUtil.getNews();
             if (!newsImgUrl.contains(STRING_FAIL)) {
                 Image image = getImageAdd(newsImgUrl);
-                chain = new MessageChainBuilder()
-                        .append(image)
-                        .build();
+                chain = new MessageChainBuilder().append(image).build();
             } else {
                 chain = new At(senderId).plus(new PlainText("\n获取失败"));
             }
@@ -212,6 +187,8 @@ public class MessageDeal {
         }
 
         if (STRING_BEAUTY.equals(msg) || STRING_BEAUTY_PICTURES.equals(msg)) {
+            MessageReceipt<Group> messageReceipts1 = group.sendMessage("获取中，请稍后...");
+            ForwardMessageBuilder builder1 = new ForwardMessageBuilder(group);
             ForwardMessageBuilder builder = new ForwardMessageBuilder(group);
             int imageNum = Setting.getImageNum();
             if (imageNum <= 0) {
@@ -219,16 +196,20 @@ public class MessageDeal {
                 return;
             }
             for (int i = 0; i < imageNum; i++) {
-                String filepath = pluginUtil.getImage();
+                String filepath = Utils.getImage();
                 if (filepath.contains(STRING_FAIL)) {
-                    group.sendMessage(filepath);
-                    return;
+                    continue;
                 }
                 Image image = getImageAdd(filepath);
                 builder.add(2119517658L, "一位不愿透漏姓名的群友", image);
             }
+            if (builder.size() == 0) {
+                builder.add(2119517658L, "一位不愿透漏姓名的群友", new PlainText("获取失败,请重试"));
+            }
             ForwardMessage forward = builder.build();
-            MessageReceipt<Group> messageReceipts = group.sendMessage(forward);
+            ForwardMessage forward1 = builder1.add(2119517658L, "一位不愿透漏姓名的群友", forward).build();
+            MessageReceipt<Group> messageReceipts = group.sendMessage(forward1);
+            messageReceipts1.recall();
             int recallTimes = Setting.getImageRecall();
             try {
                 if (recallTimes != 0) {
@@ -244,20 +225,14 @@ public class MessageDeal {
         //获取星座运势
         for (String s : TWELVE_HOROSCOPE) {
             if (msg.equals(s) || msg.equals(s + "座")) {
-                chain = new MessageChainBuilder()
-                        .append(new At(senderId))
-                        .append(new PlainText("\n" + s + "座运势\n" + pluginUtil.getHoroscope(s)))
-                        .build();
+                chain = new MessageChainBuilder().append(new At(senderId)).append(new PlainText("\n" + s + "座运势\n" + pluginUtil.getHoroscope(s))).build();
                 group.sendMessage(chain);
                 return;
             }
         }
 
         if (STRING_HELP.equals(msg)) {
-            chain = new MessageChainBuilder()
-                    .append(new At(senderId))
-                    .append(new PlainText("\n帮助文档:\nhttps://www.miraiqbot.xyz/"))
-                    .build();
+            chain = new MessageChainBuilder().append(new At(senderId)).append(new PlainText("\n帮助文档:\nhttps://www.miraiqbot.xyz/")).build();
             group.sendMessage(chain);
             return;
         }
@@ -275,10 +250,7 @@ public class MessageDeal {
                 qian = pluginUtil.getCq();
                 utils.rewriteData(qqFile, qian);
             }
-            chain = new MessageChainBuilder()
-                    .append(new At(senderId))
-                    .append(new PlainText("\n" + qian))
-                    .build();
+            chain = new MessageChainBuilder().append(new At(senderId)).append(new PlainText("\n" + qian)).build();
             group.sendMessage(chain);
             return;
         }
@@ -292,9 +264,7 @@ public class MessageDeal {
             String txt = jsonObject.getString("content");
             txt = txt.replace("{br}", "\n");
             if (!msg.contains(STRING_WEATHER)) {
-                chain = new MessageChainBuilder()
-                        .append(new PlainText(txt))
-                        .build();
+                chain = new MessageChainBuilder().append(new PlainText(txt)).build();
                 group.sendMessage(chain);
             }
         }
@@ -305,32 +275,7 @@ public class MessageDeal {
      * 菜单
      */
     public MessageChain getMenuTxt() {
-        return new MessageChainBuilder()
-                .append(new Face(147))
-                .append(new PlainText("           菜单          "))
-                .append(new Face(147))
-                .append(new PlainText("\n◇━━━━━━━━◇\n"))
-                .append(new Face(190))
-                .append(new PlainText("今日运势  今日新闻"))
-                .append(new Face(190))
-                .append(new PlainText("\n"))
-                .append(new Face(190))
-                .append(new PlainText("星座运势  观音求签"))
-                .append(new Face(190))
-                .append(new PlainText("\n"))
-                .append(new Face(190))
-                .append(new PlainText("音乐系统  语音系统"))
-                .append(new Face(190))
-                .append(new PlainText("\n"))
-                .append(new Face(190))
-                .append(new PlainText("美女图片  战力查询"))
-                .append(new Face(190))
-                .append(new PlainText("\n"))
-                .append(new Face(190))
-                .append(new PlainText("燃鹅菜单  【摸鱼办】"))
-                .append(new Face(190))
-                .append(new PlainText("\n◇━━━━━━━━◇\nPS:@我并发相应文字查看指令"))
-                .build();
+        return new MessageChainBuilder().append(new Face(147)).append(new PlainText("           菜单          ")).append(new Face(147)).append(new PlainText("\n◇━━━━━━━━◇\n")).append(new Face(190)).append(new PlainText("今日运势  今日新闻")).append(new Face(190)).append(new PlainText("\n")).append(new Face(190)).append(new PlainText("星座运势  观音求签")).append(new Face(190)).append(new PlainText("\n")).append(new Face(190)).append(new PlainText("音乐系统  语音系统")).append(new Face(190)).append(new PlainText("\n")).append(new Face(190)).append(new PlainText("美女图片  战力查询")).append(new Face(190)).append(new PlainText("\n")).append(new Face(190)).append(new PlainText("燃鹅菜单  【摸鱼办】")).append(new Face(190)).append(new PlainText("\n◇━━━━━━━━◇\nPS:@我并发相应文字查看指令")).build();
     }
 
 

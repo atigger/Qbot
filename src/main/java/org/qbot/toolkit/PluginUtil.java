@@ -139,7 +139,7 @@ public class PluginUtil {
         String cqTxt = "";
         String filePath = utils.getPluginsDataPath() + "/cq.txt";
         int maxNum = utils.getFileLen(filePath);
-        int randomNum = utils.getRandomNum(1, maxNum);
+        int randomNum = Utils.getRandomNum(1, maxNum);
         try {
             cqTxt = Files.readAllLines(Paths.get(filePath)).get(randomNum);
         } catch (IOException e) {
@@ -230,7 +230,7 @@ public class PluginUtil {
         } else if (maxFile == 1) {
             return String.valueOf(fs[0]);
         }
-        int randomNum = utils.getRandomNum(0, maxFile - 1);
+        int randomNum = Utils.getRandomNum(0, maxFile - 1);
         return String.valueOf(fs[randomNum]);
     }
 
