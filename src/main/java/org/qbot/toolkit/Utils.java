@@ -401,7 +401,6 @@ public class Utils {
 
     public static String getImage() {
         int num = getRandomNum(1, 7735);
-        num = 1;
         try {
             File file = new File(getPluginsDataPath() + "/cache/image/" + num + ".jpg");
             if (!file.exists()) {
