@@ -1,3 +1,7 @@
+2022年8月1日v2.1.0更新
+
+1.发送美女图片将从图床拉取，无需手动放图
+
 2022年8月1日v2.0.9更新
 
 1.mirai-core支持到[2.12.1](https://github.com/mamoe/mirai/releases/tag/v2.12.1)

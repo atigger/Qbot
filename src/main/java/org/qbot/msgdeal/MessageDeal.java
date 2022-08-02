@@ -201,13 +201,13 @@ public class MessageDeal {
                     continue;
                 }
                 Image image = getImageAdd(filepath);
-                builder.add(2119517658L, "一位不愿透漏姓名的群友", image);
+                builder.add(2119517658L, "一位不愿透露姓名的群友", image);
             }
             if (builder.size() == 0) {
-                builder.add(2119517658L, "一位不愿透漏姓名的群友", new PlainText("获取失败,请重试"));
+                builder.add(2119517658L, "一位不愿透露姓名的群友", new PlainText("获取失败,请重试"));
             }
             ForwardMessage forward = builder.build();
-            ForwardMessage forward1 = builder1.add(2119517658L, "一位不愿透漏姓名的群友", forward).build();
+            ForwardMessage forward1 = builder1.add(2119517658L, "一位不愿透露姓名的群友", forward).build();
             MessageReceipt<Group> messageReceipts = group.sendMessage(forward1);
             messageReceipts1.recall();
             int recallTimes = Setting.getImageRecall();
