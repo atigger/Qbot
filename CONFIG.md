@@ -1,7 +1,7 @@
 配置文件模板
 ```yaml
 #配置文件版本
-Version: 2.5
+Version: 3.0
 #机器人QQ
 QQ: 0
 #百度语音API
@@ -18,7 +18,10 @@ AgreeFriend: false
 #自动同意邀请入群请求
 AgreeGroup: false
 #智能聊天开关
-AI: false
+AI:
+  Open: false
+  Api_Key: ""
+  Api_Secret: ""
 #自动化操作
 Auto:
   #自动发送运势信息

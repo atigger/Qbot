@@ -13,9 +13,10 @@ import java.nio.charset.StandardCharsets;
  */
 
 public class SetSetting {
-    public static void setFile(String version, long qq, String appid, String appKey, String secretKey,int ImageNum,int ImageRecall, boolean agreeFriend,
-                        boolean agreeGroup, boolean AI, boolean autoFortune, boolean autoNews, boolean autoTips, JSONArray groupList,
-                        boolean groupManagement, long AdminQQ) {
+    public static void setFile(String version, long qq, String appid, String apiKey, String secretKey, int imageNum,
+                               int imageRecall, boolean agreeFriend,
+                               boolean agreeGroup, boolean AI, String aiApiKey, String aiApiSecret, boolean autoFortune, boolean autoNews, boolean autoTips, JSONArray groupList,
+                               boolean groupManagement, long adminQQ) {
         String config = "#配置文件版本\n" +
                 "Version: " + version + "\n" +
                 "#机器人QQ\n" +
@@ -23,18 +24,21 @@ public class SetSetting {
                 "#百度语音API\n" +
                 "BaiDuAPI:\n" +
                 "  APP_ID: \"" + appid + "\"\n" +
-                "  API_KEY: \"" + appKey + "\"\n" +
+                "  API_KEY: \"" + apiKey + "\"\n" +
                 "  SECRET_KEY: \"" + secretKey + "\"\n" +
                 "#发送图片数量\n" +
-                "ImageNum: " + ImageNum + "\n" +
+                "ImageNum: " + imageNum + "\n" +
                 "#图片自动撤回时间（0为不撤回,单位秒）\n" +
-                "ImageRecall: " + ImageRecall + "\n" +
+                "ImageRecall: " + imageRecall + "\n" +
                 "#自动同意好友请求\n" +
                 "AgreeFriend: " + agreeFriend + "\n" +
                 "#自动同意邀请入群请求\n" +
                 "AgreeGroup: " + agreeGroup + "\n" +
                 "#智能聊天开关\n" +
-                "AI: " + AI + "\n" +
+                "AI:\n" +
+                "  Open: " + AI + "\n" +
+                "  Api_Key: \"" + aiApiKey + "\"\n" +
+                "  Api_Secret: \"" + aiApiSecret + "\"\n" +
                 "#自动化操作\n" +
                 "Auto:\n" +
                 "  #自动发送运势信息\n" +
@@ -49,7 +53,7 @@ public class SetSetting {
                 "  #开启群管系统\n" +
                 "  Open: " + groupManagement + "\n" +
                 "  #群管系统管理员QQ\n" +
-                "  AdminQQ: " + AdminQQ;
+                "  AdminQQ: " + adminQQ;
 
         File file = new File(Utils.getPluginsPath() + "/setting.yml");
         try {

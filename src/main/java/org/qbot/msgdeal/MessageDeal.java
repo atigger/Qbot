@@ -6,6 +6,7 @@ import net.mamoe.mirai.contact.Group;
 import net.mamoe.mirai.message.MessageReceipt;
 import net.mamoe.mirai.message.data.*;
 import net.mamoe.mirai.utils.ExternalResource;
+import org.qbot.PluginVersion;
 import org.qbot.toolkit.PluginUtil;
 import org.qbot.toolkit.Setting;
 import org.qbot.toolkit.Utils;
@@ -64,7 +65,9 @@ public class MessageDeal {
     private static final String[] TWELVE_HOROSCOPE = {"白羊", "金牛", "双子", "巨蟹", "狮子", "处女", "天秤", "天蝎", "射手", "摩羯", "水瓶", "双鱼"};
 
     @SuppressWarnings("AlibabaMethodTooLong")
-    public void msgDel(Long senderId, Group group, String msg) throws IOException, InterruptedException, ScriptException, NoSuchMethodException, ParseException {
+    public void msgDel(Long senderId, String senderName, Group group, String msg) throws IOException,
+            InterruptedException,
+            ScriptException, NoSuchMethodException, ParseException {
         MessageChain chain;
         this.group = group;
         System.out.println("收到的消息:" + msg + " 消息长度:" + msg.length());
@@ -232,7 +235,8 @@ public class MessageDeal {
         }
 
         if (STRING_HELP.equals(msg)) {
-            chain = new MessageChainBuilder().append(new At(senderId)).append(new PlainText("\n帮助文档:\nhttps://www.miraiqbot.xyz/")).build();
+            chain = new MessageChainBuilder().append(new At(senderId)).append(new PlainText("\n帮助文档:\nhttps://www" +
+                    ".miraiqbot.xyz/\n当前版本：" + PluginVersion.VERSION_NUM)).build();
             group.sendMessage(chain);
             return;
         }
@@ -258,15 +262,7 @@ public class MessageDeal {
         if (STRING_MENU.equals(msg)) {
             group.sendMessage(getMenuTxt());
         } else if (Setting.getAi()) {
-            String url = "http://api.qingyunke.com/api.php?key=free&appid=0&msg=" + msg;
-            String data = utils.okHttpClientGet(url);
-            JSONObject jsonObject = JSON.parseObject(data);
-            String txt = jsonObject.getString("content");
-            txt = txt.replace("{br}", "\n");
-            if (!msg.contains(STRING_WEATHER)) {
-                chain = new MessageChainBuilder().append(new PlainText(txt)).build();
-                group.sendMessage(chain);
-            }
+            group.sendMessage(pluginUtil.aiReply(senderId, senderName, group.getId(), msg));
         }
 
     }
@@ -275,7 +271,7 @@ public class MessageDeal {
      * 菜单
      */
     public MessageChain getMenuTxt() {
-        return new MessageChainBuilder().append(new Face(147)).append(new PlainText("           菜单          ")).append(new Face(147)).append(new PlainText("\n◇━━━━━━━━◇\n")).append(new Face(190)).append(new PlainText("今日运势  今日新闻")).append(new Face(190)).append(new PlainText("\n")).append(new Face(190)).append(new PlainText("星座运势  观音求签")).append(new Face(190)).append(new PlainText("\n")).append(new Face(190)).append(new PlainText("音乐系统  语音系统")).append(new Face(190)).append(new PlainText("\n")).append(new Face(190)).append(new PlainText("美女图片  战力查询")).append(new Face(190)).append(new PlainText("\n")).append(new Face(190)).append(new PlainText("燃鹅菜单  【摸鱼办】")).append(new Face(190)).append(new PlainText("\n◇━━━━━━━━◇\nPS:@我并发相应文字查看指令")).build();
+        return new MessageChainBuilder().append(new Face(147)).append(new PlainText("           菜单          ")).append(new Face(147)).append(new PlainText("\n◇━━━━━━━━◇\n")).append(new Face(190)).append(new PlainText("今日运势  今日新闻")).append(new Face(190)).append(new PlainText("\n")).append(new Face(190)).append(new PlainText("星座运势  观音求签")).append(new Face(190)).append(new PlainText("\n")).append(new Face(190)).append(new PlainText("音乐系统  语音系统")).append(new Face(190)).append(new PlainText("\n")).append(new Face(190)).append(new PlainText("美女图片  战力查询")).append(new Face(190)).append(new PlainText("\n")).append(new Face(190)).append(new PlainText("燃鹅菜单  【摸鱼办】")).append(new Face(190)).append(new PlainText("\n◇━━━━━━━━◇\nPS:@我并发相应文字查看指令\n当前版本："+PluginVersion.VERSION_NUM)).build();
     }
 
 

@@ -31,7 +31,7 @@ public final class Plugin extends JavaPlugin {
     public static final Plugin INSTANCE = new Plugin();
 
     public Plugin() {
-        super(new JvmPluginDescriptionBuilder("org.qbot.plugin", "2.1.1").build());
+        super(new JvmPluginDescriptionBuilder("org.qbot.plugin", PluginVersion.VERSION_NUM).build());
     }
 
     @SuppressWarnings("AlibabaMethodTooLong")
@@ -55,6 +55,7 @@ public final class Plugin extends JavaPlugin {
             //监听群消息
             String groupMsg = g.getMessage().contentToString();//获取消息
             long senderId = g.getSender().getId(); //获取发送者QQ
+            String senderName = g.getSenderName(); //获取发送者名字
             Group group = g.getGroup(); //获取群对象
             MessageChain groupMessageChain = g.getMessage(); //获取消息来源
 
@@ -135,7 +136,7 @@ public final class Plugin extends JavaPlugin {
                     }
                 }
                 if (botTag) {
-                    messagedeal.msgDel(senderId, group, groupMsg);
+                    messagedeal.msgDel(senderId, senderName, group, groupMsg);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -149,7 +150,7 @@ public final class Plugin extends JavaPlugin {
             if (senderQq == superAdmin) {
                 System.out.println("收到管理员消息:" + msg);
                 try {
-                    AdminMessageDeal.msgDel(msg,f.getSender());
+                    AdminMessageDeal.msgDel(msg, f.getSender());
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }

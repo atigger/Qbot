@@ -1,12 +1,13 @@
 package org.qbot.toolkit;
 
 import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import net.mamoe.mirai.console.plugin.PluginManager;
 import net.mamoe.mirai.console.plugin.jvm.JvmPlugin;
-import net.mamoe.mirai.message.data.MusicKind;
-import net.mamoe.mirai.message.data.MusicShare;
+import net.mamoe.mirai.message.data.*;
 import net.mamoe.mirai.utils.ExternalResource;
+import okhttp3.*;
 import org.qbot.Plugin;
 
 import java.io.File;
@@ -18,6 +19,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Objects;
 
 /**
  * Plugin class
@@ -310,7 +312,7 @@ public class PluginUtil {
                 txt = txt + "\n今天是元旦节哦，祝大家元旦节快乐！";
             }
         } else {
-            String[] stringWeek = {"周日","周一","周二","周三","周四","周五","周六"};
+            String[] stringWeek = {"周日", "周一", "周二", "周三", "周四", "周五", "周六"};
             if (week == 5) {
                 txt = txt + superThursday;
             } else if (week == 7 || week == 1) {
@@ -319,7 +321,7 @@ public class PluginUtil {
                 txt = txt + statementAtTheBeginning;
             }
             int day = week - 1;
-            txt = txt + "\n今天【"+stringWeek[day]+"】";
+            txt = txt + "\n今天【" + stringWeek[day] + "】";
             if (week > 1 && week < 7) {
                 int jg = 7 - week;
                 txt = txt + "\n距离【周末】还有:" + jg + "天";
@@ -349,6 +351,55 @@ public class PluginUtil {
         }
         txt = txt + statementAtTheEnd;
         return txt;
+    }
+
+    /**
+     * Ai回复
+     */
+    public MessageChain aiReply(Long senderID, String senderName, long groupID, String msg) {
+        String apiKey = Setting.getAiApiKey();
+        String apiSecret = Setting.getAiApiSecret();
+        if (apiKey.equals("") || apiSecret.equals("")) {
+            return new MessageChainBuilder().append(new PlainText("请先联系管理员配置API")).build();
+        }
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("content", msg);
+        jsonObject.put("type", 2);
+        jsonObject.put("from", senderID);
+        jsonObject.put("fromName", senderName);
+        jsonObject.put("to", groupID);
+        jsonObject.put("tomName", senderName);
+        MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+        RequestBody body = RequestBody.create(JSON, String.valueOf(jsonObject));
+        OkHttpClient httpClient = new OkHttpClient();
+        Request postRequest = new Request.Builder()
+                .url("https://api.mlyai.com/reply")
+                .addHeader("Api-Key", apiKey)
+                .addHeader("Api-Secret", apiSecret)
+                .post(body)
+                .build();
+        Call call = httpClient.newCall(postRequest);
+        try {
+            Response response = call.execute();
+            JSONObject responseJSON = JSONObject.parseObject(Objects.requireNonNull(response.body()).string());
+            if (responseJSON.getInteger("code") == 0) {
+                JSONArray data = responseJSON.getJSONArray("data");
+                String reply = "";
+                if (data.getJSONObject(0).getInteger("typed") == 1) {
+                    reply = data.getJSONObject(0).getString("content");
+                } else {
+                    reply = "暂不支持的消息，消息类型为：" + data.getJSONObject(0).getInteger("typed");
+                }
+                return new MessageChainBuilder().append(new PlainText(reply)).build();
+            } else {
+                return new MessageChainBuilder().append(new PlainText("AI回复失败")).build();
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            return new MessageChainBuilder().append(new PlainText("网络连接失败")).build();
+        }
+
     }
 
 }
