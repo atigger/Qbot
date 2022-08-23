@@ -1,6 +1,5 @@
 package org.qbot.msgdeal;
 
-import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
 import net.mamoe.mirai.contact.Group;
 import net.mamoe.mirai.message.MessageReceipt;
@@ -8,6 +7,7 @@ import net.mamoe.mirai.message.data.*;
 import net.mamoe.mirai.utils.ExternalResource;
 import org.qbot.PluginVersion;
 import org.qbot.toolkit.PluginUtil;
+import org.qbot.toolkit.QrCodeUtil;
 import org.qbot.toolkit.Setting;
 import org.qbot.toolkit.Utils;
 
@@ -15,6 +15,8 @@ import javax.script.ScriptException;
 import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * MessageDeal class
@@ -60,18 +62,25 @@ public class MessageDeal {
     private static final String STRING_WEATHER = "天气";
     private static final String STRING_HELP = "帮助";
     private static final String STRING_FISH = "摸鱼办";
+    private static final String STRING_YUQING = "鱼情";
+    private static final String STRING_YUQINGCX = "鱼情查询";
     private static final String NUM_ONE = "1";
     private static final int NUM_ELEVEN = 11;
     private static final String[] TWELVE_HOROSCOPE = {"白羊", "金牛", "双子", "巨蟹", "狮子", "处女", "天秤", "天蝎", "射手", "摩羯", "水瓶", "双鱼"};
 
+    ExecutorService executorService = Executors.newCachedThreadPool();
+
     @SuppressWarnings("AlibabaMethodTooLong")
-    public void msgDel(Long senderId, String senderName, Group group, String msg) throws IOException,
+    public void msgDel(Long senderId, String senderName, Group group, String msg, MessageChain msgchains) throws IOException,
             InterruptedException,
             ScriptException, NoSuchMethodException, ParseException {
         MessageChain chain;
         this.group = group;
         System.out.println("收到的消息:" + msg + " 消息长度:" + msg.length());
         if (STRING_FISH.equals(msg)) {
+            executorService.execute(() -> {
+                Utils.statisticsGet(0);
+            });
             chain = new MessageChainBuilder().append(new PlainText(pluginUtil.moFish())).build();
             group.sendMessage(chain);
             return;
@@ -79,12 +88,18 @@ public class MessageDeal {
 
 
         if ("".equals(msg)) {
+            executorService.execute(() -> {
+                Utils.statisticsGet(1);
+            });
             chain = new MessageChainBuilder().append(new At(senderId)).append(new PlainText("\n你没得事情干唛？@我作甚么？")).append(new Face(312)).build();
             group.sendMessage(chain);
             return;
         }
 
         if (msg.indexOf(STRING_LISTENTOMUSIC) == 0) {
+            executorService.execute(() -> {
+                Utils.statisticsGet(2);
+            });
             msg = msg.replace(STRING_LISTENTOMUSIC, "");
             if ("".equals(msg)) {
                 chain = new PlainText("？ \n你总得告诉我要听什么吧？").plus(new Face(244));
@@ -98,6 +113,9 @@ public class MessageDeal {
         }
 
         if (msg.indexOf(STRING_SAY) == 0) {
+            executorService.execute(() -> {
+                Utils.statisticsGet(3);
+            });
             msg = msg.replaceFirst(STRING_SAY, "");
             if ("".equals(msg)) {
                 chain = new PlainText("？ \n你总得告诉我要说什么吧？").plus(new Face(244));
@@ -117,6 +135,9 @@ public class MessageDeal {
         }
 
         if (msg.contains(STRING_QQ)) {
+            executorService.execute(() -> {
+                Utils.statisticsGet(4);
+            });
             msg = msg.replace(STRING_QQ, "");
             msg = msg.replace(" ", "");
             JSONObject jsonObject = pluginUtil.getPower(msg, "qq");
@@ -133,6 +154,9 @@ public class MessageDeal {
         }
 
         if (msg.contains(STRING_WE_CHAT)) {
+            executorService.execute(() -> {
+                Utils.statisticsGet(4);
+            });
             msg = msg.replace(STRING_WE_CHAT, "");
             msg = msg.replace(" ", "");
             JSONObject jsonObject = pluginUtil.getPower(msg, "wx");
@@ -149,24 +173,36 @@ public class MessageDeal {
         }
 
         if (STRING_HOROSCOPE.equals(msg)) {
+            executorService.execute(() -> {
+                Utils.statisticsGet(5);
+            });
             chain = new MessageChainBuilder().append(new At(senderId)).append(new PlainText("\n请@我并发送星座名\n例如@XXX 白羊")).build();
             group.sendMessage(chain);
             return;
         }
 
         if (STRING_COMBAT_POWER_QUERY.equals(msg)) {
+            executorService.execute(() -> {
+                Utils.statisticsGet(4);
+            });
             chain = new MessageChainBuilder().append(new At(senderId)).append(new PlainText("\n请@我并发送qq/微信+英雄名\n例如@XXX qq 伽罗")).build();
             group.sendMessage(chain);
             return;
         }
 
         if (STRING_MUSIC_SYSTEM.equals(msg)) {
+            executorService.execute(() -> {
+                Utils.statisticsGet(2);
+            });
             chain = new MessageChainBuilder().append(new At(senderId)).append(new PlainText("\n请@我并发送听歌+音乐名\n例如@XXX 听歌稻香")).build();
             group.sendMessage(chain);
             return;
         }
 
         if (STRING_FORTUNE.equals(msg) || STRING_TODAY_FORTUNE.equals(msg)) {
+            executorService.execute(() -> {
+                Utils.statisticsGet(6);
+            });
             String replaceMsg = pluginUtil.getFortune();
             if (!replaceMsg.contains(STRING_GET_FAILED)) {
                 chain = new At(senderId).plus(new PlainText("\n" + replaceMsg));
@@ -178,6 +214,9 @@ public class MessageDeal {
         }
 
         if (STRING_NEWS.equals(msg) || STRING_TODAY_NEWS.equals(msg)) {
+            executorService.execute(() -> {
+                Utils.statisticsGet(7);
+            });
             String newsImgUrl = pluginUtil.getNews();
             if (!newsImgUrl.contains(STRING_FAIL)) {
                 Image image = getImageAdd(newsImgUrl);
@@ -189,38 +228,84 @@ public class MessageDeal {
             return;
         }
 
+//        if (STRING_BEAUTY.equals(msg) || STRING_BEAUTY_PICTURES.equals(msg)) {
+//            MessageReceipt<Group> messageReceipts1 = group.sendMessage("获取中，请稍后...");
+//            ForwardMessageBuilder builder1 = new ForwardMessageBuilder(group);
+//            ForwardMessageBuilder builder = new ForwardMessageBuilder(group);
+//            int imageNum = Setting.getImageNum();
+//            if (imageNum <= 0) {
+//                group.sendMessage("设置错误，请联系管理员重新设置");
+//                return;
+//            }
+//            for (int i = 0; i < imageNum; i++) {
+//                String filepath = Utils.getImage();
+//                if (filepath.contains(STRING_FAIL)) {
+//                    continue;
+//                }
+//                Image image = getImageAdd(filepath);
+//                builder.add(2119517658L, "一位不愿透露姓名的群友", image);
+//            }
+//            if (builder.size() == 0) {
+//                builder.add(2119517658L, "一位不愿透露姓名的群友", new PlainText("获取失败,请重试"));
+//            }
+//            ForwardMessage forward = builder.build();
+//            ForwardMessage forward1 = builder1.add(2119517658L, "一位不愿透露姓名的群友", forward).build();
+//            MessageReceipt<Group> messageReceipts = group.sendMessage(forward1);
+//            messageReceipts1.recall();
+//            int recallTimes = Setting.getImageRecall();
+//            try {
+//                if (recallTimes != 0) {
+//                    Thread.sleep(recallTimes * 1000);
+//                    messageReceipts.recall();
+//                }
+//            } catch (Exception e) {
+//                System.out.printf("撤回失败");
+//            }
+//            return;
+//        }
+
         if (STRING_BEAUTY.equals(msg) || STRING_BEAUTY_PICTURES.equals(msg)) {
-            MessageReceipt<Group> messageReceipts1 = group.sendMessage("获取中，请稍后...");
+            executorService.execute(() -> {
+                Utils.statisticsGet(8);
+            });
             ForwardMessageBuilder builder1 = new ForwardMessageBuilder(group);
             ForwardMessageBuilder builder = new ForwardMessageBuilder(group);
-            int imageNum = Setting.getImageNum();
-            if (imageNum <= 0) {
-                group.sendMessage("设置错误，请联系管理员重新设置");
+            String token = Utils.getToken();
+            if (token.contains(STRING_FAIL)) {
                 return;
             }
-            for (int i = 0; i < imageNum; i++) {
-                String filepath = Utils.getImage();
-                if (filepath.contains(STRING_FAIL)) {
-                    continue;
-                }
+            token = "https://image.globaldxmfi.com?token=" + token;
+            String filepath =
+                    Utils.getPluginsDataPath() + "/cache/image/" + Utils.getTime() + Utils.getRandomNum(10000000,
+                            99999999) + ".png";
+            if (QrCodeUtil.encodeQrCode(token, filepath)) {
+
                 Image image = getImageAdd(filepath);
                 builder.add(2119517658L, "一位不愿透露姓名的群友", image);
-            }
-            if (builder.size() == 0) {
-                builder.add(2119517658L, "一位不愿透露姓名的群友", new PlainText("获取失败,请重试"));
-            }
-            ForwardMessage forward = builder.build();
-            ForwardMessage forward1 = builder1.add(2119517658L, "一位不愿透露姓名的群友", forward).build();
-            MessageReceipt<Group> messageReceipts = group.sendMessage(forward1);
-            messageReceipts1.recall();
-            int recallTimes = Setting.getImageRecall();
-            try {
-                if (recallTimes != 0) {
-                    Thread.sleep(recallTimes * 1000);
-                    messageReceipts.recall();
+                String tips = Utils.getTipsImage();
+                if (!tips.contains(STRING_FAIL)) {
+                    builder.add(2119517658L, "一位不愿透露姓名的群友", new PlainText("注意\n由于tx限制\n请按照以下提示操作\n使用浏览器打开").plus(getImageAdd(tips)));
                 }
-            } catch (Exception e) {
-                System.out.printf("撤回失败");
+                builder.add(2119517658L, "一位不愿透露姓名的群友",
+                        new PlainText("注意\n刷新即可切换图片\n有效期只有5分钟\n失效请重新获取").plus(new Face(271)));
+                builder.add(2119517658L, "一位不愿透露姓名的群友", new PlainText("提示\n由于服务器带宽限制，图片加载可能较慢，请耐心等待！").plus(new Face(265)));
+                ForwardMessage forward = builder.build();
+                ForwardMessage forward1 = builder1.add(2119517658L, "一位不愿透露姓名的群友", forward).build();
+                MessageReceipt<Group> messageReceipts = group.sendMessage(forward1);
+                int recallTimes = Setting.getImageRecall();
+                try {
+                    MessageSource.recall(msgchains);
+                } catch (Exception e) {
+                    System.out.printf("撤回失败1");
+                }
+                try {
+                    if (recallTimes != 0) {
+                        Thread.sleep(recallTimes * 1000);
+                        messageReceipts.recall();
+                    }
+                } catch (Exception e) {
+                    System.out.printf("撤回失败");
+                }
             }
             return;
         }
@@ -228,6 +313,9 @@ public class MessageDeal {
         //获取星座运势
         for (String s : TWELVE_HOROSCOPE) {
             if (msg.equals(s) || msg.equals(s + "座")) {
+                executorService.execute(() -> {
+                    Utils.statisticsGet(5);
+                });
                 chain = new MessageChainBuilder().append(new At(senderId)).append(new PlainText("\n" + s + "座运势\n" + pluginUtil.getHoroscope(s))).build();
                 group.sendMessage(chain);
                 return;
@@ -235,6 +323,9 @@ public class MessageDeal {
         }
 
         if (STRING_HELP.equals(msg)) {
+            executorService.execute(() -> {
+                Utils.statisticsGet(9);
+            });
             chain = new MessageChainBuilder().append(new At(senderId)).append(new PlainText("\n帮助文档:\nhttps://www" +
                     ".miraiqbot.xyz/\n当前版本：" + PluginVersion.VERSION_NUM)).build();
             group.sendMessage(chain);
@@ -242,6 +333,9 @@ public class MessageDeal {
         }
 
         if (STRING_GET_SIGN.equals(msg) || STRING_GUANYIN_GET_SIGN.equals(msg)) {
+            executorService.execute(() -> {
+                Utils.statisticsGet(10);
+            });
             File qqFile = new File(utils.getPluginsDataPath() + "/cache/qq/" + senderId + ".cache");
             String qian;
             if (qqFile.exists()) {
@@ -258,10 +352,24 @@ public class MessageDeal {
             group.sendMessage(chain);
             return;
         }
+        if(STRING_YUQING.equals(msg) || STRING_YUQINGCX.equals(msg)){
+            executorService.execute(() -> {
+                Utils.statisticsGet(13);
+            });
+            chain = new MessageChainBuilder().append(new PlainText(Utils.CocFishGet())).build();
+            group.sendMessage(chain);
+            return;
+        }
 
         if (STRING_MENU.equals(msg)) {
+            executorService.execute(() -> {
+                Utils.statisticsGet(11);
+            });
             group.sendMessage(getMenuTxt());
         } else if (Setting.getAi()) {
+            executorService.execute(() -> {
+                Utils.statisticsGet(12);
+            });
             group.sendMessage(pluginUtil.aiReply(senderId, senderName, group.getId(), msg));
         }
 
@@ -271,7 +379,7 @@ public class MessageDeal {
      * 菜单
      */
     public MessageChain getMenuTxt() {
-        return new MessageChainBuilder().append(new Face(147)).append(new PlainText("           菜单          ")).append(new Face(147)).append(new PlainText("\n◇━━━━━━━━◇\n")).append(new Face(190)).append(new PlainText("今日运势  今日新闻")).append(new Face(190)).append(new PlainText("\n")).append(new Face(190)).append(new PlainText("星座运势  观音求签")).append(new Face(190)).append(new PlainText("\n")).append(new Face(190)).append(new PlainText("音乐系统  语音系统")).append(new Face(190)).append(new PlainText("\n")).append(new Face(190)).append(new PlainText("美女图片  战力查询")).append(new Face(190)).append(new PlainText("\n")).append(new Face(190)).append(new PlainText("燃鹅菜单  【摸鱼办】")).append(new Face(190)).append(new PlainText("\n◇━━━━━━━━◇\nPS:@我并发相应文字查看指令\n当前版本："+PluginVersion.VERSION_NUM)).build();
+        return new MessageChainBuilder().append(new Face(147)).append(new PlainText("           菜单          ")).append(new Face(147)).append(new PlainText("\n◇━━━━━━━━◇\n")).append(new Face(190)).append(new PlainText("今日运势  今日新闻")).append(new Face(190)).append(new PlainText("\n")).append(new Face(190)).append(new PlainText("星座运势  观音求签")).append(new Face(190)).append(new PlainText("\n")).append(new Face(190)).append(new PlainText("音乐系统  语音系统")).append(new Face(190)).append(new PlainText("\n")).append(new Face(190)).append(new PlainText("美女图片  战力查询")).append(new Face(190)).append(new PlainText("\n")).append(new Face(190)).append(new PlainText("鱼情查询  摸鱼办    ")).append(new Face(190)).append(new PlainText("\n◇━━━━━━━━◇\nPS:@我并发相应文字查看指令\n当前版本：" + PluginVersion.VERSION_NUM)).build();
     }
 
 

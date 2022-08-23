@@ -31,8 +31,8 @@ public class QrCodeUtil {
      * @param text 内容，可以是链接或者文本
      * @param path 生成的二维码位置
      */
-    public static void encodeQrCode(String text, String path) {
-        encodeQrCode(text, path, null, null, null);
+    public static boolean encodeQrCode(String text, String path) {
+       return encodeQrCode(text, path, null, null, null);
     }
 
     /**
@@ -44,7 +44,7 @@ public class QrCodeUtil {
      * @param height 高度，默认300
      * @param format 生成的二维码格式，默认png
      */
-    public static void encodeQrCode(String text, String path, Integer width, Integer height, String format) {
+    public static boolean encodeQrCode(String text, String path, Integer width, Integer height, String format) {
         try {
 
             // 得到文件对象
@@ -55,7 +55,7 @@ public class QrCodeUtil {
                 log.info("目标文件所在目录不存在，准备创建它！");
                 if (!file.getParentFile().mkdirs()) {
                     log.info("创建目标文件所在目录失败！");
-                    return;
+                    return false;
                 }
             }
 
@@ -81,8 +81,10 @@ public class QrCodeUtil {
             Path outputPath = Paths.get(path);
             // 写入文件
             MatrixToImageWriter.writeToPath(bitMatrix, format, outputPath);
+            return true;
         } catch (Exception e) {
             log.error(e.getMessage(), e);
+            return false;
         }
     }
 }

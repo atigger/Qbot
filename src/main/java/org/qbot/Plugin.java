@@ -31,7 +31,10 @@ public final class Plugin extends JavaPlugin {
     public static final Plugin INSTANCE = new Plugin();
 
     public Plugin() {
-        super(new JvmPluginDescriptionBuilder("org.qbot.plugin", PluginVersion.VERSION_NUM).build());
+        super(new JvmPluginDescriptionBuilder("org.qbot.plugin", PluginVersion.VERSION_NUM)
+                .name("Qbot")
+                .author("649953543@qq.com")
+                .build());
     }
 
     @SuppressWarnings("AlibabaMethodTooLong")
@@ -136,7 +139,7 @@ public final class Plugin extends JavaPlugin {
                     }
                 }
                 if (botTag) {
-                    messagedeal.msgDel(senderId, senderName, group, groupMsg);
+                    messagedeal.msgDel(senderId, senderName, group, groupMsg, groupMessageChain);
                 }
             } catch (Exception e) {
                 e.printStackTrace();

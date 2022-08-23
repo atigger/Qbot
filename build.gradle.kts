@@ -3,11 +3,11 @@ plugins {
     kotlin("jvm") version kotlinVersion
     kotlin("plugin.serialization") version kotlinVersion
 
-    id("net.mamoe.mirai-console") version "2.12.1"
+    id("net.mamoe.mirai-console") version "2.12.2"
 }
 
 group = "org.qbot"
-version = "3.0.0"
+version = "3.0.1"
 
 repositories {
     maven("https://maven.aliyun.com/repository/public")

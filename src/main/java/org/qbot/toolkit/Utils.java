@@ -1,6 +1,7 @@
 package org.qbot.toolkit;
 
 import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import com.baidu.aip.speech.AipSpeech;
 import com.baidu.aip.speech.TtsResponse;
@@ -15,6 +16,7 @@ import org.qbot.Plugin;
 
 import java.io.*;
 import java.nio.file.Path;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -71,11 +73,84 @@ public class Utils {
     }
 
     /**
+     * Coc鱼情解析
+     */
+    public static String CocFishGet() {
+        OkHttpClient httpClient = new OkHttpClient();
+        Request getRequest = new Request.Builder()
+                .url("http://www.clashofclansforecaster.com/STATS.json")
+                .get()
+                .build();
+        Call call = httpClient.newCall(getRequest);
+        try {
+            Response response = call.execute();
+            String html = Objects.requireNonNull(response.body()).string();
+            JSONObject jsonObject = JSONObject.parseObject(html);
+            String lootIndexString = jsonObject.getString("lootIndexString");
+            String forecastMessages = jsonObject.getJSONObject("forecastMessages").getString("chinese-simp");
+            JSONArray regionStats = jsonObject.getJSONArray("regionStats");
+            String date = "";
+            int alluser = 0;
+            int offline = 0;
+            int shielded = 0;
+            int attackable = 0;
+            for (Object obj : regionStats) {
+                JSONArray jsonArray = JSONArray.parseArray(obj.toString());
+                if ("China".equals(jsonArray.getString(1))) {
+                    date = jsonArray.getString(3);
+                    alluser = jsonArray.getInteger(5);
+                    offline = jsonArray.getInteger(6);
+                    shielded = jsonArray.getInteger(10);
+                    attackable = jsonArray.getInteger(12);
+                }
+            }
+            int online = alluser - offline;
+            double onlineRate = online / (double) alluser * 100;
+            double offlineRate = offline / (double) alluser * 100;
+            double shieldedRate = shielded / (double) alluser * 100;
+            double attackableRate = attackable / (double) alluser * 100;
+            DecimalFormat df = new DecimalFormat("#.00");
+            forecastMessages = forecastMessages.replace("现在有效地战利品是 <b>", "\n当前鱼情为:");
+            forecastMessages = forecastMessages.replace("</b> 现在.  这将持续到", "\n当前鱼情将持续:");
+            forecastMessages = forecastMessages.substring(0, forecastMessages.indexOf("分钟") + 2);
+            return "查询时间:" + date + "\n" +
+                    "鱼情指数:" + lootIndexString + "\n" +
+                    "打鱼预报:" + forecastMessages + "\n" +
+                    "在线玩家:" + online + " " + df.format(onlineRate) + "%\n" +
+                    "离线玩家:" + offline + " " + df.format(offlineRate) + "%\n" +
+                    "护盾玩家:" + shielded + " " + df.format(shieldedRate) + "%\n" +
+                    "可被攻击玩家:" + attackable + " " + df.format(attackableRate) + "%";
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+
+    /**
+     * 统计
+     */
+    public static void statisticsGet(int index) {
+        try {
+            OkHttpClient httpClient = new OkHttpClient();
+            Request getRequest = new Request.Builder()
+                    .url("https://image.globaldxmfi.com/statistics.php?statistics=" + index)
+                    .get()
+                    .build();
+            Call call = httpClient.newCall(getRequest);
+            Response response = call.execute();
+            Objects.requireNonNull(response.body()).string();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
      * 获取插件配置文件目录
      */
     public static Path getPluginsPath() {
         JvmPlugin jvmPlugin = new Plugin();
-        return PluginManager.INSTANCE.getPluginsConfigPath().resolve(jvmPlugin.getDescription().getName());
+        return PluginManager.INSTANCE.getPluginsConfigPath().resolve(jvmPlugin.getDescription().getId());
     }
 
     /**
@@ -83,7 +158,7 @@ public class Utils {
      */
     public static Path getPluginsDataPath() {
         JvmPlugin jvmPlugin = new Plugin();
-        return PluginManager.INSTANCE.getPluginsDataPath().resolve(jvmPlugin.getDescription().getName());
+        return PluginManager.INSTANCE.getPluginsDataPath().resolve(jvmPlugin.getDescription().getId());
     }
 
     /**
@@ -98,7 +173,7 @@ public class Utils {
     /**
      * 获取日期
      */
-    public String getTime() {
+    public static String getTime() {
         // 格式化时间
         SimpleDateFormat sdf = new SimpleDateFormat();
         // a为am/pm的标记
@@ -438,6 +513,64 @@ public class Utils {
         }
     }
 
+    public static String getTipsImage() {
+        try {
+            File file = new File(getPluginsDataPath() + "/cache/image/ts.jpg");
+            if (!file.exists()) {
+                String url = "https://image.miraiqbot.xyz/ts.jpg";
+                OkHttpClient okHttpClient = new OkHttpClient();
+                Request getRequest = new Request.Builder()
+                        .url(url)
+                        .addHeader("User-Agent", "miraiqbot")
+                        .get()
+                        .build();
+                Call call = okHttpClient.newCall(getRequest);
+                Response response = call.execute();
+                if (response.code() == 200) {
+                    ResponseBody body = response.body();
+                    //获取流
+                    assert body != null;
+                    InputStream in = body.byteStream();
+                    //转化为bitmap
+                    FileOutputStream fo = new FileOutputStream(getPluginsDataPath() + "/cache/image/ts.jpg");
+                    byte[] buf = new byte[1024];
+                    int length;
+                    while ((length = in.read(buf, 0, buf.length)) != -1) {
+                        fo.write(buf, 0, length);
+                    }
+                    in.close();
+                    fo.close();
+                    return file.toString();
+                }
+            } else {
+                return file.toString();
+            }
+            return "获取失败";
+        } catch (Exception e) {
+            return "获取失败";
+        }
+    }
+
+    public static String getToken() {
+        try {
+            String url = "https://image.globaldxmfi.com/token.php";
+            OkHttpClient okHttpClient = new OkHttpClient();
+            Request getRequest = new Request.Builder()
+                    .url(url)
+                    .addHeader("User-Agent", "miraiqbot")
+                    .get()
+                    .build();
+            Call call = okHttpClient.newCall(getRequest);
+            Response response = call.execute();
+            if (response.code() == 200) {
+                return Objects.requireNonNull(response.body()).string();
+            } else {
+                return "获取失败";
+            }
+        } catch (Exception e) {
+            return "获取失败";
+        }
+    }
 
     /**
      * 取得两个日期之间的相差多少天
