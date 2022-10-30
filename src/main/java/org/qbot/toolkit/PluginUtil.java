@@ -278,9 +278,9 @@ public class PluginUtil {
         int ndj = utils.daysBetween(nowdate, ndjdate);
         Date dwjdate = sdf.parse("2023-06-22");
         int dwj = utils.daysBetween(nowdate, dwjdate);
-        Date zqjdate = sdf.parse("2022-09-10");
+        Date zqjdate = sdf.parse("2023-09-28");
         int zqj = utils.daysBetween(nowdate, zqjdate);
-        Date gqjdate = sdf.parse("2022-10-01");
+        Date gqjdate = sdf.parse("2023-10-01");
         int gqj = utils.daysBetween(nowdate, gqjdate);
         Date ydjdate = sdf.parse("2023-01-01");
         int ydj = utils.daysBetween(nowdate, ydjdate);
@@ -291,7 +291,7 @@ public class PluginUtil {
         int week = calendar.get(Calendar.DAY_OF_WEEK);
         if (cj == 0 || qmj == 0 || ndj == 0 || dwj == 0 || zqj == 0 || gqj == 0 || ydj == 0) {
             if (cj == 0) {
-                txt = txt + "\n今天是春节哦，祝大家春节快乐！";
+                txt = txt + "\n今天是春节哦，祝大家新年快乐！";
             }
             if (qmj == 0) {
                 txt = txt + "\n今天是清明节哦，祝大家....算了...";
@@ -328,17 +328,11 @@ public class PluginUtil {
             }
         }
 
-        if (zqj > 0) {
-            txt = txt + "\n距离【中秋】还有:" + zqj + "天";
-        }
-        if (gqj > 0) {
-            txt = txt + "\n距离【国庆】还有:" + gqj + "天";
-        }
         if (ydj > 0) {
             txt = txt + "\n距离【元旦】还有:" + ydj + "天";
         }
         if (cj > 0) {
-            txt = txt + "\n距离【春节】还有:" + cj + "天";
+            txt = txt + "\n距离【新年】还有:" + cj + "天";
         }
         if (qmj > 0) {
             txt = txt + "\n距离【清明】还有:" + qmj + "天";
@@ -348,6 +342,12 @@ public class PluginUtil {
         }
         if (dwj > 0) {
             txt = txt + "\n距离【端午】还有:" + dwj + "天";
+        }
+        if (zqj > 0) {
+            txt = txt + "\n距离【中秋】还有:" + zqj + "天";
+        }
+        if (gqj > 0) {
+            txt = txt + "\n距离【国庆】还有:" + gqj + "天";
         }
         txt = txt + statementAtTheEnd;
         return txt;

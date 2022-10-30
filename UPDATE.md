@@ -1,3 +1,13 @@
+2022年8月23日v3.0.1更新
+
+1.mirai-core支持到[2.12.2](https://github.com/mamoe/mirai/releases/tag/v2.12.2)
+
+2.优化发送图片
+
+3.新增COC鱼情查询
+
+4.增加后台统计
+
 2022年8月3日v3.0.0更新
 
 1.支持茉莉云AI（需要前往[茉莉云官网](https://mlyai.com/)获取key)

@@ -1,14 +1,12 @@
 QQBOT
 
-本项目基于 [mirai](https://github.com/mamoe/mirai) [![Version](https://img.shields.io/badge/version-2.12.2-green)]
-(https://github.com/mamoe/mirai/releases/tag/v2.12.2)
-开发
+本项目基于 [mirai](https://github.com/mamoe/mirai) [![Version](https://img.shields.io/badge/version-2.12.3-green)](https://github.com/mamoe/mirai/releases/tag/v2.12.3)开发
 
-[如何使用](https://github.com/mamoe/mirai/blob/dev/mirai-console/docs/ConfiguringProjects.md) ？
+[如何使用？](https://github.com/mamoe/mirai/blob/dev/mirai-console/docs/ConfiguringProjects.md)
 
-[如何配置](https://github.com/duan649953543/Qbot/blob/main/CONFIG.md) ？
+[如何配置？](https://github.com/duan649953543/Qbot/blob/main/CONFIG.md)
 
-[在群中使用](https://www.miraiqbot.xyz) ？
+[在群中使用？](https://www.miraiqbot.xyz)
 
 ---
 
@@ -42,15 +40,13 @@ Tips:有想要的新功能可以提交issue
 
 更新日志：
 
-2022年8月23日v3.0.1更新
+2022年10月30日v3.0.2更新
 
-1.mirai-core支持到[2.12.2](https://github.com/mamoe/mirai/releases/tag/v2.12.2)
+1.mirai-core支持到[2.12.3](https://github.com/mamoe/mirai/releases/tag/v2.12.3)
 
-2.优化发送图片
+2.更新摸鱼办日期
 
-3.新增COC鱼情查询
-
-4.增加后台统计
+3.更新依赖
 
 ---
 

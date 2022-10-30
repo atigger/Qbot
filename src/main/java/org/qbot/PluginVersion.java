@@ -7,5 +7,5 @@ package org.qbot;
  * @date 2022/8/3
  */
 public class PluginVersion {
-    public final static String VERSION_NUM = "3.0.1";
+    public final static String VERSION_NUM = "3.0.2";
 }

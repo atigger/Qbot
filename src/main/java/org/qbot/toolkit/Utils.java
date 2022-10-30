@@ -110,12 +110,12 @@ public class Utils {
             double shieldedRate = shielded / (double) alluser * 100;
             double attackableRate = attackable / (double) alluser * 100;
             DecimalFormat df = new DecimalFormat("#.00");
-            forecastMessages = forecastMessages.replace("现在有效地战利品是 <b>", "\n当前鱼情为:");
+            forecastMessages = forecastMessages.replace("现在有效地战利品是 <b>", "当前鱼情为:");
             forecastMessages = forecastMessages.replace("</b> 现在.  这将持续到", "\n当前鱼情将持续:");
             forecastMessages = forecastMessages.substring(0, forecastMessages.indexOf("分钟") + 2);
             return "查询时间:" + date + "\n" +
                     "鱼情指数:" + lootIndexString + "\n" +
-                    "打鱼预报:" + forecastMessages + "\n" +
+                    forecastMessages + "\n" +
                     "在线玩家:" + online + " " + df.format(onlineRate) + "%\n" +
                     "离线玩家:" + offline + " " + df.format(offlineRate) + "%\n" +
                     "护盾玩家:" + shielded + " " + df.format(shieldedRate) + "%\n" +
