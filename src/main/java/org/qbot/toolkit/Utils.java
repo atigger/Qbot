@@ -185,20 +185,28 @@ public class Utils {
     }
 
     public String formatText(String text) {
-        text = text.replace("<table class=\"tb\"> \n", "");
-        text = text.replace(" <tbody>\n", "");
-        text = text.replace("  <tr> \n", "");
-        text = text.replace("   <td class=\"tb_td1\">", "");
-        text = text.replace("</td> \n   <td>", ":");
-        text = text.replace("</td> ", "");
-        text = text.replace("  </tr> \n", "");
-        text = text.replace("\n   <td colspan=\"3\">", "");
-        text = text.replace("精评", "");
-        text = text.replace("\n   <td colspan=\"3\" style=\"line-height: 25px;\">", ":");
-        text = text.replace("今日重要天象", "今日重要天象:");
-        text = text.replace(" </tbody>\n", "");
-        text = text.replace("</table>", "");
-        text = text.replace("：", ":");
+        text = text.replace("<table class=\"tb\">\n" +
+                " <tbody>\n" +
+                "  <tr>\n" +
+                "   <td class=\"tb_td1\">", "");
+        text = text.replace("</td>\n" +
+                "   <td>", ":");
+        text = text.replace("</td>\n" +
+                "   <td class=\"tb_td1\">", "\n");
+        text = text.replace("</td>\n" +
+                "  </tr>\n" +
+                "  <tr>\n" +
+                "   <td class=\"tb_td1\">", "\n");
+        text = text.replace("</td>\n" +
+                "   <td colspan=\"3\">", ":");
+        text = text.replace("精评:", "");
+        text = text.replace("</td>\n" +
+                "   <td colspan=\"3\" style=\"line-height: 25px;\">", ":");
+        text = text.replace("</td>\n" +
+                "  </tr>\n" +
+                " </tbody>\n" +
+                "</table>", "");
+        text = text.replace("。", "");
         return text;
     }
 

@@ -20,6 +20,9 @@ public class CreateFile {
         File dataFolderDirectory = new File(String.valueOf(dataFolderPath));
         dataFolderDirectory.mkdir();
 
+        File configFolderDirectory = new File(String.valueOf(configFolderPath));
+        configFolderDirectory.mkdir();
+
         File cacheDirectory = new File(dataFolderPath + "/cache");
         cacheDirectory.mkdir();
 
@@ -75,16 +78,6 @@ public class CreateFile {
         if (!cqFile.exists()) {
             try {
                 createDataFile(cqFile, "cq.txt");
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-
-        File codeFile = new File(dataFolderPath + "/rane/codes.js");
-        if (!codeFile.exists()) {
-            try {
-                createDataFile(codeFile, "codes.js");
             } catch (IOException e) {
                 e.printStackTrace();
             }

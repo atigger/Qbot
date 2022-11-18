@@ -1,6 +1,6 @@
 QQBOT
 
-本项目基于 [mirai](https://github.com/mamoe/mirai) [![Version](https://img.shields.io/badge/version-2.12.3-green)](https://github.com/mamoe/mirai/releases/tag/v2.12.3)开发
+本项目基于 [mirai](https://github.com/mamoe/mirai) [![Version](https://img.shields.io/badge/version-2.13.0-green)](https://github.com/mamoe/mirai/releases/tag/v2.13.0)开发
 
 [如何使用？](https://github.com/mamoe/mirai/blob/dev/mirai-console/docs/ConfiguringProjects.md)
 
@@ -40,21 +40,17 @@ Tips:有想要的新功能可以提交issue
 
 更新日志：
 
-2022年10月30日v3.0.2更新
+2022年11月18日v3.1.0更新
 
-1.mirai-core支持到[2.12.3](https://github.com/mamoe/mirai/releases/tag/v2.12.3)
+1.mirai-core支持到[2.13.0-RC2](https://github.com/mamoe/mirai/releases/tag/v2.13.0-RC2)
 
-2.更新摸鱼办日期
+2.修复获取星座运势有html标签的问题
 
-3.更新依赖
+3.修复创建config文件可以出现错误的问题
 
----
+4.kotlin版本更新到1.7.10
 
-已知问题：在Linux下可能会存在配置文件生成失败的问题
-
-请等待后续修复
-
-群管理可能还有bug，请自行测试
+5.更新依赖
 
 ---
 [更新历史](https://github.com/duan649953543/Qbot/blob/main/UPDATE.md)

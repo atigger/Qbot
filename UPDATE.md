@@ -1,3 +1,11 @@
+2022年10月30日v3.0.2更新
+
+1.mirai-core支持到[2.12.3](https://github.com/mamoe/mirai/releases/tag/v2.12.3)
+
+2.更新摸鱼办日期
+
+3.更新依赖
+
 2022年8月23日v3.0.1更新
 
 1.mirai-core支持到[2.12.2](https://github.com/mamoe/mirai/releases/tag/v2.12.2)

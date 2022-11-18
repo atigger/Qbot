@@ -94,40 +94,40 @@ public class PluginUtil {
         String url;
         switch (name) {
             case "白羊":
-                url = "http://astro.sina.com.cn/fate_day_Aries/";
+                url = "https://astro.sina.com.cn/fate_day_Aries/";
                 return utils.getHoroscopeText(url);
             case "金牛":
-                url = "http://astro.sina.com.cn/fate_day_Taurus/";
+                url = "https://astro.sina.com.cn/fate_day_Taurus/";
                 return utils.getHoroscopeText(url);
             case "双子":
-                url = "http://astro.sina.com.cn/fate_day_Gemini/";
+                url = "https://astro.sina.com.cn/fate_day_Gemini/";
                 return utils.getHoroscopeText(url);
             case "巨蟹":
-                url = "http://astro.sina.com.cn/fate_day_Cancer/";
+                url = "https://astro.sina.com.cn/fate_day_Cancer/";
                 return utils.getHoroscopeText(url);
             case "狮子":
-                url = "http://astro.sina.com.cn/fate_day_leo/";
+                url = "https://astro.sina.com.cn/fate_day_leo/";
                 return utils.getHoroscopeText(url);
             case "处女":
-                url = "http://astro.sina.com.cn/fate_day_Virgo/";
+                url = "https://astro.sina.com.cn/fate_day_Virgo/";
                 return utils.getHoroscopeText(url);
             case "天秤":
-                url = "http://astro.sina.com.cn/fate_day_Libra/";
+                url = "https://astro.sina.com.cn/fate_day_Libra/";
                 return utils.getHoroscopeText(url);
             case "天蝎":
-                url = "http://astro.sina.com.cn/fate_day_Scorpio/";
+                url = "https://astro.sina.com.cn/fate_day_Scorpio/";
                 return utils.getHoroscopeText(url);
             case "射手":
-                url = "http://astro.sina.com.cn/fate_day_Sagittarius/";
+                url = "https://astro.sina.com.cn/fate_day_Sagittarius/";
                 return utils.getHoroscopeText(url);
             case "摩羯":
-                url = "http://astro.sina.com.cn/fate_day_Capricorn/";
+                url = "https://astro.sina.com.cn/fate_day_Capricorn/";
                 return utils.getHoroscopeText(url);
             case "水瓶":
-                url = "http://astro.sina.com.cn/fate_day_Aquarius/";
+                url = "https://astro.sina.com.cn/fate_day_Aquarius/";
                 return utils.getHoroscopeText(url);
             case "双鱼":
-                url = "http://astro.sina.com.cn/fate_day_Pisces/";
+                url = "https://astro.sina.com.cn/fate_day_Pisces/";
                 return utils.getHoroscopeText(url);
             default:
                 return null;
