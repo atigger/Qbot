@@ -184,6 +184,20 @@ public class Utils {
 
     }
 
+
+    /**
+     * 获取日期
+     */
+    public static String getTimeForWorld() {
+        // 格式化时间
+        SimpleDateFormat sdf = new SimpleDateFormat();
+        // a为am/pm的标记
+        sdf.applyPattern("yyyyMMdd");
+        // 获取当前时间
+        Date date = new Date();
+        return sdf.format(date);
+
+    }
     public String formatText(String text) {
         text = text.replace("<table class=\"tb\">\n" +
                 " <tbody>\n" +
@@ -620,6 +634,55 @@ public class Utils {
         } catch (IOException e) {
             e.printStackTrace();
             return false;
+        }
+    }
+
+    /**
+     * 世界杯赛程
+     * @return
+     */
+    public static String getWorldCup() {
+        try {
+            StringBuilder returnData = new StringBuilder();
+            returnData.append("【世界杯赛程】");
+            String url = "https://sport.zijieapi.com/vertical/sport/go/world_cup/match_info";
+            OkHttpClient okHttpClient = new OkHttpClient();
+            Request getRequest = new Request.Builder()
+                    .url(url)
+                    .get()
+                    .build();
+            Call call = okHttpClient.newCall(getRequest);
+            Response response = call.execute();
+            if (response.code() == 200) {
+                JSONObject jsonObject = JSONObject.parseObject(Objects.requireNonNull(response.body()).string());
+                int date = Integer.parseInt(getTimeForWorld());
+                for (int j = 0; j < 2; j++) {
+                    int date1 = date + j;
+                    JSONArray jsonArray = jsonObject.getJSONObject("data").getJSONObject("match_infos").getJSONArray(String.valueOf(date1));
+                    for (int i = 0; i < jsonArray.size(); i++) {
+                        JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+                        if (jsonObject1.getString("group_name") != null) {
+                            //主队名称
+                            String hostTeamName = jsonObject1.getJSONObject("host_team").getString("cn_name");
+                            //客队名称
+                            String guestTeamName = jsonObject1.getJSONObject("guest_team").getString("cn_name");
+                            //主队得分
+                            int hostScore = jsonObject1.getInteger("host_score");
+                            //客队得分
+                            int guestScore = jsonObject1.getInteger("guest_score");
+                            //比赛时间
+                            String matchTime = jsonObject1.getString("match_round_desc");
+                            String data = "\n\n" + matchTime + "\n" + hostTeamName + " " + hostScore + " : " + guestScore + " " + guestTeamName;
+                            returnData.append(data);
+                        }
+                    }
+                }
+                return returnData.toString();
+            } else {
+                return "获取失败";
+            }
+        } catch (Exception e) {
+            return "获取失败";
         }
     }
 }

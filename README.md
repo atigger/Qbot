@@ -40,17 +40,9 @@ Tips:有想要的新功能可以提交issue
 
 更新日志：
 
-2022年11月18日v3.1.0更新
+2022年11月21日v3.1.1更新
 
-1.mirai-core支持到[2.13.0-RC2](https://github.com/mamoe/mirai/releases/tag/v2.13.0-RC2)
-
-2.修复获取星座运势有html标签的问题
-
-3.修复创建config文件可以出现错误的问题
-
-4.kotlin版本更新到1.7.10
-
-5.更新依赖
+1.新增世界杯赛程，发送世界杯即可获取赛程和比分
 
 ---
 [更新历史](https://github.com/duan649953543/Qbot/blob/main/UPDATE.md)

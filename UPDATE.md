@@ -1,3 +1,15 @@
+2022年11月18日v3.1.0更新
+
+1.mirai-core支持到[2.13.0-RC2](https://github.com/mamoe/mirai/releases/tag/v2.13.0-RC2)
+
+2.修复获取星座运势有html标签的问题
+
+3.修复创建config文件可能会出现错误的问题
+
+4.kotlin版本更新到1.7.10
+
+5.更新依赖
+
 2022年10月30日v3.0.2更新
 
 1.mirai-core支持到[2.12.3](https://github.com/mamoe/mirai/releases/tag/v2.12.3)

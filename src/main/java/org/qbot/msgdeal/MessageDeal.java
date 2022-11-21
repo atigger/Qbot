@@ -64,6 +64,7 @@ public class MessageDeal {
     private static final String STRING_FISH = "摸鱼办";
     private static final String STRING_YUQING = "鱼情";
     private static final String STRING_YUQINGCX = "鱼情查询";
+    private static final String STRING_WORLD_CUP = "世界杯";
     private static final String NUM_ONE = "1";
     private static final int NUM_ELEVEN = 11;
     private static final String[] TWELVE_HOROSCOPE = {"白羊", "金牛", "双子", "巨蟹", "狮子", "处女", "天秤", "天蝎", "射手", "摩羯", "水瓶", "双鱼"};
@@ -352,11 +353,17 @@ public class MessageDeal {
             group.sendMessage(chain);
             return;
         }
-        if(STRING_YUQING.equals(msg) || STRING_YUQINGCX.equals(msg)){
+        if (STRING_YUQING.equals(msg) || STRING_YUQINGCX.equals(msg)) {
             executorService.execute(() -> {
                 Utils.statisticsGet(13);
             });
             chain = new MessageChainBuilder().append(new PlainText(Utils.CocFishGet())).build();
+            group.sendMessage(chain);
+            return;
+        }
+
+        if (STRING_WORLD_CUP.equals(msg)) {
+            chain = new MessageChainBuilder().append(new PlainText(Utils.getWorldCup())).build();
             group.sendMessage(chain);
             return;
         }
@@ -379,7 +386,7 @@ public class MessageDeal {
      * 菜单
      */
     public MessageChain getMenuTxt() {
-        return new MessageChainBuilder().append(new Face(147)).append(new PlainText("           菜单          ")).append(new Face(147)).append(new PlainText("\n◇━━━━━━━━◇\n")).append(new Face(190)).append(new PlainText("今日运势  今日新闻")).append(new Face(190)).append(new PlainText("\n")).append(new Face(190)).append(new PlainText("星座运势  观音求签")).append(new Face(190)).append(new PlainText("\n")).append(new Face(190)).append(new PlainText("音乐系统  语音系统")).append(new Face(190)).append(new PlainText("\n")).append(new Face(190)).append(new PlainText("美女图片  战力查询")).append(new Face(190)).append(new PlainText("\n")).append(new Face(190)).append(new PlainText("鱼情查询  摸鱼办    ")).append(new Face(190)).append(new PlainText("\n◇━━━━━━━━◇\nPS:@我并发相应文字查看指令\n当前版本：" + PluginVersion.VERSION_NUM)).build();
+        return new MessageChainBuilder().append(new Face(147)).append(new PlainText("           菜单          ")).append(new Face(147)).append(new PlainText("\n◇━━━━━━━━◇\n")).append(new Face(190)).append(new PlainText("今日运势  今日新闻")).append(new Face(190)).append(new PlainText("\n")).append(new Face(190)).append(new PlainText("星座运势  观音求签")).append(new Face(190)).append(new PlainText("\n")).append(new Face(190)).append(new PlainText("音乐系统  语音系统")).append(new Face(190)).append(new PlainText("\n")).append(new Face(190)).append(new PlainText("美女图片  战力查询")).append(new Face(190)).append(new PlainText("\n")).append(new Face(190)).append(new PlainText("鱼情查询  世界杯    ")).append(new Face(190)).append(new PlainText("\n◇━━━━━━━━◇\nPS:@我并发相应文字查看指令\n当前版本：" + PluginVersion.VERSION_NUM)).build();
     }
 
 
