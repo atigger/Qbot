@@ -4,7 +4,7 @@ QQBOT
 
 [如何使用？](https://github.com/mamoe/mirai/blob/dev/mirai-console/docs/ConfiguringProjects.md)
 
-[如何配置？](https://github.com/duan649953543/Qbot/blob/main/CONFIG.md)
+[如何配置？](CONFIG.md)
 
 [在群中使用？](https://www.miraiqbot.xyz)
 
@@ -32,7 +32,7 @@ QQBOT
 
 - [x] COC鱼情查询
 
-- [x] 群管理插件（关键字撤回、自动审核入群申请）[帮助文档](https://www.miraiqbot.xyz)（测试中）
+- [x] 群管理插件（关键字撤回、自动审核入群申请）[帮助文档](https://www.miraiqbot.xyz/#/?id=群管理功能)（测试中）
 
 Tips:有想要的新功能可以提交issue
 
@@ -40,9 +40,9 @@ Tips:有想要的新功能可以提交issue
 
 更新日志：
 
-2022年11月21日v3.1.1更新
+2022年11月23日v3.1.2更新
 
-1.新增世界杯赛程，发送世界杯即可获取赛程和比分
+1.新增[世界杯小组赛积分](https://www.miraiqbot.xyz/#/?id=世界杯小组积分)
 
 ---
-[更新历史](https://github.com/duan649953543/Qbot/blob/main/UPDATE.md)
+[更新历史](UPDATE.md)

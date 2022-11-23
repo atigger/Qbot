@@ -198,6 +198,7 @@ public class Utils {
         return sdf.format(date);
 
     }
+
     public String formatText(String text) {
         text = text.replace("<table class=\"tb\">\n" +
                 " <tbody>\n" +
@@ -639,6 +640,7 @@ public class Utils {
 
     /**
      * 世界杯赛程
+     *
      * @return
      */
     public static String getWorldCup() {
@@ -675,6 +677,87 @@ public class Utils {
                             String data = "\n\n" + matchTime + "\n" + hostTeamName + " " + hostScore + " : " + guestScore + " " + guestTeamName;
                             returnData.append(data);
                         }
+                    }
+                }
+                return returnData.toString();
+            } else {
+                return "获取失败";
+            }
+        } catch (Exception e) {
+            return "获取失败";
+        }
+    }
+
+    /**
+     * 获取小组积分
+     *
+     * @param group 小组代号
+     * @return
+     */
+    public static String getWorldCupGroup(String group) {
+        try {
+            StringBuilder returnData = new StringBuilder();
+            returnData.append("【").append(group).append("组】\n");
+            String temp =
+                    "\n" +
+                            "%cn1% \n" +
+                            "场次%play1% \n" +
+                            "%win1%胜/%draw1%平/%loss1%负 \n" +
+                            "%goals_for1%进/%goals_against1%失 \n" +
+                            "积分%points1%\n" +
+                            "\n" +
+                            "%cn2% \n" +
+                            "场次%play2% \n" +
+                            "%win2%胜/%draw2%平/%loss2%负 \n" +
+                            "%goals_for2%进/%goals_against2%失 \n" +
+                            "积分%points2%\n" +
+                            "\n" +
+                            "%cn3% \n" +
+                            "场次%play3% \n" +
+                            "%win3%胜/%draw3%平/%loss3%负 \n" +
+                            "%goals_for3%进/%goals_against3%失 \n" +
+                            "积分%points3%\n" +
+                            "\n" +
+                            "%cn4% \n" +
+                            "场次%play4% \n" +
+                            "%win4%胜/%draw4%平/%loss4%负 \n" +
+                            "%goals_for4%进/%goals_against4%失 \n" +
+                            "积分%points4%";
+            String url = "https://sport.zijieapi.com/vertical/sport/go/world_cup/group_ranking";
+            OkHttpClient okHttpClient = new OkHttpClient();
+            Request getRequest = new Request.Builder()
+                    .url(url)
+                    .get()
+                    .build();
+            Call call = okHttpClient.newCall(getRequest);
+            Response response = call.execute();
+            if (response.code() == 200) {
+                JSONObject jsonObject = JSONObject.parseObject(Objects.requireNonNull(response.body()).string());
+                JSONArray jsonArray = jsonObject.getJSONObject("data").getJSONArray("groups");
+                for (int i = 0; i < 8; i++) {
+                    if (jsonArray.getJSONObject(i).getString("group_name").contains(group)) {
+                        JSONArray jsonArray1 = jsonArray.getJSONObject(i).getJSONArray("team_list");
+                        for (int j = 0; j < 4; j++) {
+                            JSONObject jsonObject1 = jsonArray1.getJSONObject(j);
+                            String cn = jsonObject1.getString("cn_name");
+                            int play = jsonObject1.getJSONObject("group_data").getInteger("games_played");
+                            int win = jsonObject1.getJSONObject("group_data").getInteger("wins");
+                            int draw = jsonObject1.getJSONObject("group_data").getInteger("draws");
+                            int loss = jsonObject1.getJSONObject("group_data").getInteger("losses");
+                            int goals_for = jsonObject1.getJSONObject("group_data").getInteger("goals_for");
+                            int goals_against = jsonObject1.getJSONObject("group_data").getInteger("goals_against");
+                            int points = jsonObject1.getJSONObject("group_data").getInteger("points");
+                            temp = temp.replace("%cn" + (j + 1) + "%", cn)
+                                    .replace("%play" + (j + 1) + "%", String.valueOf(play))
+                                    .replace("%win" + (j + 1) + "%", String.valueOf(win))
+                                    .replace("%draw" + (j + 1) + "%", String.valueOf(draw))
+                                    .replace("%loss" + (j + 1) + "%", String.valueOf(loss))
+                                    .replace("%goals_for" + (j + 1) + "%", String.valueOf(goals_for))
+                                    .replace("%goals_against" + (j + 1) + "%", String.valueOf(goals_against))
+                                    .replace("%points" + (j + 1) + "%", String.valueOf(points));
+
+                        }
+                        returnData.append(temp);
                     }
                 }
                 return returnData.toString();

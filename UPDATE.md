@@ -1,3 +1,7 @@
+2022年11月21日v3.1.1更新
+
+1.新增世界杯赛程，发送世界杯即可获取赛程和比分
+
 2022年11月18日v3.1.0更新
 
 1.mirai-core支持到[2.13.0-RC2](https://github.com/mamoe/mirai/releases/tag/v2.13.0-RC2)
