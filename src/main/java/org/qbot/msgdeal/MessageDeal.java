@@ -18,6 +18,8 @@ import java.text.ParseException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import static org.qbot.toolkit.Utils.getTimeForWorld;
+
 /**
  * MessageDeal class
  *
@@ -70,8 +72,6 @@ public class MessageDeal {
     private static final int NUM_ELEVEN = 11;
     private static final String[] TWELVE_HOROSCOPE = {"白羊", "金牛", "双子", "巨蟹", "狮子", "处女", "天秤", "天蝎", "射手", "摩羯", "水瓶", "双鱼"};
 
-    private static final String[] GROUP_NAME = {"A组", "B组", "C组", "D组", "E组", "F组", "G组", "H组"};
-    private static final String[] GROUP_NAME_LOW = {"a组", "b组", "c组", "d组", "e组", "f组", "g组", "h组"};
     ExecutorService executorService = Executors.newCachedThreadPool();
 
     @SuppressWarnings("AlibabaMethodTooLong")
@@ -326,38 +326,6 @@ public class MessageDeal {
             }
         }
 
-        //世界杯帮助
-        if(STRING_WORLD_CUP_HELP.equals(msg)){
-            chain = new MessageChainBuilder().append(new At(senderId)).append(new PlainText("\n获取比赛赛程（仅显示今明两天）\n" +
-                    "请@我并发送世界杯\n" +
-                    "例如@xxx 世界杯\n" +
-                    "\n" +
-                    "获取小组排名\n" +
-                    "请@我并发送X组（A-H组）\n" +
-                    "例如@xxx A组")).build();
-            group.sendMessage(chain);
-            return;
-        }
-
-        //小组积分
-        for (String s : GROUP_NAME) {
-            if (msg.equals(s)) {
-                s = s.replace("组", "");
-                chain = new MessageChainBuilder().append(new PlainText(Utils.getWorldCupGroup(s))).build();
-                group.sendMessage(chain);
-                return;
-            }
-        }
-
-        for (String s : GROUP_NAME_LOW) {
-            if (msg.equals(s)) {
-                s = s.replace("组", "");
-                s = s.toUpperCase();
-                chain = new MessageChainBuilder().append(new PlainText(Utils.getWorldCupGroup(s))).build();
-                group.sendMessage(chain);
-                return;
-            }
-        }
 
         if (STRING_HELP.equals(msg)) {
             executorService.execute(() -> {
@@ -398,11 +366,23 @@ public class MessageDeal {
             return;
         }
 
-        //世界杯
-        if (STRING_WORLD_CUP.equals(msg)) {
-            chain = new MessageChainBuilder().append(new PlainText(Utils.getWorldCup())).build();
-            group.sendMessage(chain);
-            return;
+        int date = Integer.parseInt(getTimeForWorld());
+
+        if (date < 20221220) {
+            //世界杯帮助
+            if (STRING_WORLD_CUP_HELP.equals(msg)) {
+                chain = new MessageChainBuilder().append(new At(senderId)).append(new PlainText("\n获取比赛赛程（仅显示最近四场）\n" +
+                        "请@我并发送世界杯\n" +
+                        "例如@xxx 世界杯\n")).build();
+                group.sendMessage(chain);
+                return;
+            }
+            //世界杯
+            if (STRING_WORLD_CUP.equals(msg)) {
+                chain = new MessageChainBuilder().append(new PlainText(Utils.getWorldCup())).build();
+                group.sendMessage(chain);
+                return;
+            }
         }
 
         if (STRING_MENU.equals(msg)) {
@@ -423,7 +403,12 @@ public class MessageDeal {
      * 菜单
      */
     public MessageChain getMenuTxt() {
-        return new MessageChainBuilder().append(new Face(147)).append(new PlainText("           菜单          ")).append(new Face(147)).append(new PlainText("\n◇━━━━━━━━◇\n")).append(new Face(190)).append(new PlainText("今日运势  今日新闻")).append(new Face(190)).append(new PlainText("\n")).append(new Face(190)).append(new PlainText("星座运势  观音求签")).append(new Face(190)).append(new PlainText("\n")).append(new Face(190)).append(new PlainText("音乐系统  语音系统")).append(new Face(190)).append(new PlainText("\n")).append(new Face(190)).append(new PlainText("美女图片  战力查询")).append(new Face(190)).append(new PlainText("\n")).append(new Face(190)).append(new PlainText("鱼情查询  世界杯    ")).append(new Face(190)).append(new PlainText("\n◇━━━━━━━━◇\nPS:@我并发相应文字查看指令\n当前版本：" + PluginVersion.VERSION_NUM)).build();
+        int date = Integer.parseInt(getTimeForWorld());
+        if (date < 20221220) {
+            return new MessageChainBuilder().append(new Face(147)).append(new PlainText("           菜单          ")).append(new Face(147)).append(new PlainText("\n◇━━━━━━━━◇\n")).append(new Face(190)).append(new PlainText("今日运势  今日新闻")).append(new Face(190)).append(new PlainText("\n")).append(new Face(190)).append(new PlainText("星座运势  观音求签")).append(new Face(190)).append(new PlainText("\n")).append(new Face(190)).append(new PlainText("音乐系统  语音系统")).append(new Face(190)).append(new PlainText("\n")).append(new Face(190)).append(new PlainText("美女图片  战力查询")).append(new Face(190)).append(new PlainText("\n")).append(new Face(190)).append(new PlainText("鱼情查询  世界杯    ")).append(new Face(190)).append(new PlainText("\n◇━━━━━━━━◇\nPS:@我并发相应文字查看指令\n当前版本：" + PluginVersion.VERSION_NUM)).build();
+        }else{
+            return new MessageChainBuilder().append(new Face(147)).append(new PlainText("           菜单          ")).append(new Face(147)).append(new PlainText("\n◇━━━━━━━━◇\n")).append(new Face(190)).append(new PlainText("今日运势  今日新闻")).append(new Face(190)).append(new PlainText("\n")).append(new Face(190)).append(new PlainText("星座运势  观音求签")).append(new Face(190)).append(new PlainText("\n")).append(new Face(190)).append(new PlainText("音乐系统  语音系统")).append(new Face(190)).append(new PlainText("\n")).append(new Face(190)).append(new PlainText("美女图片  战力查询")).append(new Face(190)).append(new PlainText("\n")).append(new Face(190)).append(new PlainText("鱼情查询  摸鱼办    ")).append(new Face(190)).append(new PlainText("\n◇━━━━━━━━◇\nPS:@我并发相应文字查看指令\n当前版本：" + PluginVersion.VERSION_NUM)).build();
+        }
     }
 
 

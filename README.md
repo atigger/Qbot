@@ -1,6 +1,6 @@
 QQBOT
 
-本项目基于 [mirai](https://github.com/mamoe/mirai) [![Version](https://img.shields.io/badge/version-2.13.0-green)](https://github.com/mamoe/mirai/releases/tag/v2.13.0)开发
+本项目基于 [mirai](https://github.com/mamoe/mirai) [![Version](https://img.shields.io/badge/version-2.13.2-green)](https://github.com/mamoe/mirai/releases/tag/v2.13.2)开发
 
 [如何使用？](https://github.com/mamoe/mirai/blob/dev/mirai-console/docs/ConfiguringProjects.md)
 
@@ -40,9 +40,14 @@ Tips:有想要的新功能可以提交issue
 
 更新日志：
 
-2022年11月23日v3.1.2更新
+2022年12月5日v3.1.3更新
 
-1.新增[世界杯小组赛积分](https://www.miraiqbot.xyz/#/?id=世界杯小组积分)
+1.修复获取不到淘汰赛赛程的问题
+
+2.删除世界杯小组赛积分
+
+3.mirai-core支持到[2.13.2](https://github.com/mamoe/mirai/releases/tag/v2.13.2)
+
 
 ---
 [更新历史](UPDATE.md)
