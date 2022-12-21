@@ -128,24 +128,6 @@ public class Utils {
 
 
     /**
-     * 统计
-     */
-    public static void statisticsGet(int index) {
-        try {
-            OkHttpClient httpClient = new OkHttpClient();
-            Request getRequest = new Request.Builder()
-                    .url("https://image.globaldxmfi.com/statistics.php?statistics=" + index)
-                    .get()
-                    .build();
-            Call call = httpClient.newCall(getRequest);
-            Response response = call.execute();
-            Objects.requireNonNull(response.body()).string();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
      * 获取插件配置文件目录
      */
     public static Path getPluginsPath() {
@@ -178,21 +160,6 @@ public class Utils {
         SimpleDateFormat sdf = new SimpleDateFormat();
         // a为am/pm的标记
         sdf.applyPattern("MMddHHmmss");
-        // 获取当前时间
-        Date date = new Date();
-        return sdf.format(date);
-
-    }
-
-
-    /**
-     * 获取日期
-     */
-    public static String getTimeForWorld() {
-        // 格式化时间
-        SimpleDateFormat sdf = new SimpleDateFormat();
-        // a为am/pm的标记
-        sdf.applyPattern("yyyyMMdd");
         // 获取当前时间
         Date date = new Date();
         return sdf.format(date);
@@ -496,105 +463,6 @@ public class Utils {
         }
     }
 
-
-    public static String getImage() {
-        int num = getRandomNum(1, 7735);
-        try {
-            File file = new File(getPluginsDataPath() + "/cache/image/" + num + ".jpg");
-            if (!file.exists()) {
-                String url = "https://image.miraiqbot.xyz/image/" + num + ".jpg";
-                OkHttpClient okHttpClient = new OkHttpClient();
-                Request getRequest = new Request.Builder()
-                        .url(url)
-                        .addHeader("User-Agent", "miraiqbot")
-                        .get()
-                        .build();
-                Call call = okHttpClient.newCall(getRequest);
-                Response response = call.execute();
-                if (response.code() == 200) {
-                    ResponseBody body = response.body();
-                    //获取流
-                    assert body != null;
-                    InputStream in = body.byteStream();
-                    //转化为bitmap
-                    FileOutputStream fo = new FileOutputStream(getPluginsDataPath() + "/cache/image/" + num + ".jpg");
-                    byte[] buf = new byte[1024];
-                    int length;
-                    while ((length = in.read(buf, 0, buf.length)) != -1) {
-                        fo.write(buf, 0, length);
-                    }
-                    in.close();
-                    fo.close();
-                    return file.toString();
-                }
-            } else {
-                return file.toString();
-            }
-            return "获取失败";
-        } catch (Exception e) {
-            return "获取失败";
-        }
-    }
-
-    public static String getTipsImage() {
-        try {
-            File file = new File(getPluginsDataPath() + "/cache/image/ts.jpg");
-            if (!file.exists()) {
-                String url = "https://image.miraiqbot.xyz/ts.jpg";
-                OkHttpClient okHttpClient = new OkHttpClient();
-                Request getRequest = new Request.Builder()
-                        .url(url)
-                        .addHeader("User-Agent", "miraiqbot")
-                        .get()
-                        .build();
-                Call call = okHttpClient.newCall(getRequest);
-                Response response = call.execute();
-                if (response.code() == 200) {
-                    ResponseBody body = response.body();
-                    //获取流
-                    assert body != null;
-                    InputStream in = body.byteStream();
-                    //转化为bitmap
-                    FileOutputStream fo = new FileOutputStream(getPluginsDataPath() + "/cache/image/ts.jpg");
-                    byte[] buf = new byte[1024];
-                    int length;
-                    while ((length = in.read(buf, 0, buf.length)) != -1) {
-                        fo.write(buf, 0, length);
-                    }
-                    in.close();
-                    fo.close();
-                    return file.toString();
-                }
-            } else {
-                return file.toString();
-            }
-            return "获取失败";
-        } catch (Exception e) {
-            return "获取失败";
-        }
-    }
-
-    public static String getToken() {
-        try {
-            String url = "https://image.globaldxmfi.com/token.php";
-            OkHttpClient okHttpClient = new OkHttpClient();
-            Request getRequest = new Request.Builder()
-                    .url(url)
-                    .addHeader("User-Agent", "miraiqbot")
-                    .get()
-                    .build();
-            Call call = okHttpClient.newCall(getRequest);
-            Response response = call.execute();
-            if (response.code() == 200) {
-                return Objects.requireNonNull(response.body()).string();
-            } else {
-                return "获取失败";
-            }
-        } catch (Exception e) {
-            return "获取失败";
-        }
-    }
-
     /**
      * 取得两个日期之间的相差多少天
      **/
@@ -637,66 +505,6 @@ public class Utils {
             return false;
         }
     }
-
-    /**
-     * 世界杯赛程
-     *
-     * @return
-     */
-    public static String getWorldCup() {
-        try {
-            StringBuilder returnData = new StringBuilder();
-            returnData.append("【世界杯赛程】");
-            String url = "https://sport.zijieapi.com/vertical/sport/go/world_cup/match_info";
-            OkHttpClient okHttpClient = new OkHttpClient();
-            Request getRequest = new Request.Builder()
-                    .url(url)
-                    .get()
-                    .build();
-            Call call = okHttpClient.newCall(getRequest);
-            Response response = call.execute();
-            if (response.code() == 200) {
-                JSONObject jsonObject = JSONObject.parseObject(Objects.requireNonNull(response.body()).string());
-                int date = Integer.parseInt(getTimeForWorld());
-                for (int j = 0; j < 2; j++) {
-                    int date1 = date + j;
-                    if (date1 == 20221208 || date1 == 20221213 || date1 == 20221216) {
-                        date1 += 1;
-                    }
-                    if (date1 == 20221212) {
-                        date1 += 2;
-                    }
-                    if (date1 >= 20221219) {
-                        break;
-                    }
-                    JSONArray jsonArray = jsonObject.getJSONObject("data").getJSONObject("match_infos").getJSONArray(String.valueOf(date1));
-                    for (int i = 0; i < jsonArray.size(); i++) {
-                        JSONObject jsonObject1 = jsonArray.getJSONObject(i);
-                        if (jsonObject1.getString("round_name") != null) {
-                            //主队名称
-                            String hostTeamName = jsonObject1.getJSONObject("host_team").getString("cn_name");
-                            //客队名称
-                            String guestTeamName = jsonObject1.getJSONObject("guest_team").getString("cn_name");
-                            //主队得分
-                            int hostScore = jsonObject1.getInteger("host_score");
-                            //客队得分
-                            int guestScore = jsonObject1.getInteger("guest_score");
-                            //比赛时间
-                            String matchTime = jsonObject1.getString("match_round_desc");
-                            String data = "\n\n" + matchTime + "\n" + hostTeamName + " " + hostScore + " : " + guestScore + " " + guestTeamName;
-                            returnData.append(data);
-                        }
-                    }
-                }
-                return returnData.toString();
-            } else {
-                return "获取失败";
-            }
-        } catch (Exception e) {
-            return "获取失败";
-        }
-    }
-
 
 }
 

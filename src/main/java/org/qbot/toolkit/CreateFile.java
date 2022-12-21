@@ -82,6 +82,24 @@ public class CreateFile {
                 e.printStackTrace();
             }
         }
+        //提示文件
+        File tipsFile = new File(dataFolderPath + "/ts.jpg");
+        if (!tipsFile.exists()) {
+            try {
+                createDataFile(tipsFile, "ts.jpg");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        //二维码
+        File ewmFile = new File(dataFolderPath + "/ewm.png");
+        if (!ewmFile.exists()) {
+            try {
+                createDataFile(ewmFile, "ewm.png");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public void createDataFile(File cq, String fileName) throws IOException {
