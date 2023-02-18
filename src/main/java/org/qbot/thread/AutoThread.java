@@ -1,6 +1,5 @@
 package org.qbot.thread;
 
-import com.alibaba.fastjson2.JSONArray;
 import net.mamoe.mirai.Bot;
 import net.mamoe.mirai.contact.Group;
 import net.mamoe.mirai.message.data.Image;
@@ -13,8 +12,6 @@ import org.qbot.toolkit.Setting;
 import org.qbot.toolkit.Utils;
 
 import java.io.File;
-import java.io.IOException;
-import java.text.ParseException;
 
 /**
  * AutoThread class
@@ -36,7 +33,7 @@ public class AutoThread extends Thread {
                 Thread.sleep(1000);
                 boolean autoTips = Setting.getAutoTips();
                 boolean autoNews = Setting.getAutoNews();
-                if ("08:00".equals(utils.getNowTime()) && autoNews) {
+                if ("08:30".equals(utils.getNowTime()) && autoNews) {
                     for (int i = 0; i < Setting.getGroup().size(); i++) {
                         try {
                             Group group = bot.getGroup(Setting.getGroup().getLongValue(i));
@@ -49,6 +46,7 @@ public class AutoThread extends Thread {
                                 MessageChain chain = new MessageChainBuilder()
                                         .append(new PlainText("今日新闻"))
                                         .append(image)
+                                        .append(new PlainText(pluginUtil.getOne()))
                                         .build();
                                 group.sendMessage(chain);
                             }

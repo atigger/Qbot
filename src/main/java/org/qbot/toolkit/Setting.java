@@ -147,7 +147,7 @@ public class Setting {
 
     public static boolean getGroupManagement() {
         try {
-            return main().getJSONObject("GroupManagement").getBooleanValue("GroupManagement");
+            return main().getJSONObject("GroupManagement").getBooleanValue("Open");
         } catch (Exception e) {
             return false;
         }

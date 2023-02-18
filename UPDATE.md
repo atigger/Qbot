@@ -1,3 +1,9 @@
+2022年12月21日v3.1.4更新
+
+1.更改发送图片图床
+
+2.删除世界杯功能
+
 2022年12月5日v3.1.3更新
 
 1.修复获取不到淘汰赛赛程的问题
@@ -90,7 +96,7 @@
 
 2022年7月27日v2.0.5更新
 
-1.新增[超级管理员功能](https://www.miraiqbot.xyz/#/?id=超级管理员功能)
+1.新增[超级管理员功能](https://www.miraiqbot.top/#/?id=超级管理员功能)
 
 2022年7月15日v2.0.4更新
 
@@ -118,7 +124,7 @@
 
 1.mirai-core支持到[2.11.0-M2.2](https://github.com/mamoe/mirai/releases/tag/v2.11.0-M2.2)
 
-2.群管理插件开放([帮助文档](https://www.miraiqbot.xyz/#/?id=%e7%be%a4%e7%ae%a1%e7%90%86%e5%8a%9f%e8%83%bd))
+2.群管理插件开放([帮助文档](https://www.miraiqbot.top/#/?id=%e7%be%a4%e7%ae%a1%e7%90%86%e5%8a%9f%e8%83%bd))
 
 3.[配置文件更新](https://github.com/duan649953543/Qbot/blob/main/CONFIG.md)
 

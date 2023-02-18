@@ -88,6 +88,28 @@ public class PluginUtil {
     }
 
     /**
+     * 获取每日一句
+     */
+    public String getOne() {
+        String url = "https://v1.hitokoto.cn/";
+        String html = utils.okHttpClientGet(url);
+        if (html == null) {
+            return "获取失败";
+        }
+        try {
+            JSONObject json;
+            json = JSON.parseObject(html);
+            String txt = String.valueOf(json.getString("hitokoto"));
+            String from = String.valueOf(json.getString("from"));
+            String from_who = String.valueOf(json.getString("from_who"));
+            String str = "每日一句：" + txt + "\n" + "出处：" + from + "\n" + "作者：" + from_who;
+            return str;
+        } catch (Exception e) {
+            return "获取失败";
+        }
+    }
+
+    /**
      * 星座运势
      */
     public String getHoroscope(String name) {
@@ -270,7 +292,7 @@ public class PluginUtil {
         String superThursday = "\n今天星期四，明天星期五，再坚持一天，然后星期天！";
         String theWeekendToRemind = "\n不是吧不是吧，不会有人还在996、997吧？";
 
-        Date cjdate = sdf.parse("2023-01-22");
+        Date cjdate = sdf.parse("2024-02-10");
         int cj = utils.daysBetween(nowdate, cjdate);
         Date qmjdate = sdf.parse("2023-04-05");
         int qmj = utils.daysBetween(nowdate, qmjdate);
@@ -282,7 +304,7 @@ public class PluginUtil {
         int zqj = utils.daysBetween(nowdate, zqjdate);
         Date gqjdate = sdf.parse("2023-10-01");
         int gqj = utils.daysBetween(nowdate, gqjdate);
-        Date ydjdate = sdf.parse("2023-01-01");
+        Date ydjdate = sdf.parse("2024-01-01");
         int ydj = utils.daysBetween(nowdate, ydjdate);
 
         String title = "【摸鱼办】提醒您：\n" + utils.getTime2() + sjd + "好，摸鱼人！";
@@ -328,12 +350,6 @@ public class PluginUtil {
             }
         }
 
-        if (ydj > 0) {
-            txt = txt + "\n距离【元旦】还有:" + ydj + "天";
-        }
-        if (cj > 0) {
-            txt = txt + "\n距离【新年】还有:" + cj + "天";
-        }
         if (qmj > 0) {
             txt = txt + "\n距离【清明】还有:" + qmj + "天";
         }
@@ -348,6 +364,12 @@ public class PluginUtil {
         }
         if (gqj > 0) {
             txt = txt + "\n距离【国庆】还有:" + gqj + "天";
+        }
+        if (ydj > 0) {
+            txt = txt + "\n距离【元旦】还有:" + ydj + "天";
+        }
+        if (cj > 0) {
+            txt = txt + "\n距离【新年】还有:" + cj + "天";
         }
         txt = txt + statementAtTheEnd;
         return txt;
@@ -401,5 +423,10 @@ public class PluginUtil {
         }
 
     }
+
+
+    /**
+     * 网易云任务
+     */
 
 }

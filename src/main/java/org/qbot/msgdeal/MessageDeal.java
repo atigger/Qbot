@@ -275,7 +275,7 @@ public class MessageDeal {
 
         if (STRING_HELP.equals(msg)) {
             chain = new MessageChainBuilder().append(new At(senderId)).append(new PlainText("\n帮助文档:\nhttps://www" +
-                    ".miraiqbot.xyz/\n当前版本：" + PluginVersion.VERSION_NUM)).build();
+                    ".miraiqbot.top/\n当前版本：" + PluginVersion.VERSION_NUM)).build();
             group.sendMessage(chain);
             return;
         }

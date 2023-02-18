@@ -4,5 +4,5 @@
 
 > 本项目基于 mirai 开发
 
-[GitHub](https://github.com/duan649953543/Qbot)
+[GitHub](https://github.com/atigger/Qbot)
 [开始使用](#基本功能)
