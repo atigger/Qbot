@@ -40,17 +40,7 @@ public class MessageDeal {
     private static final String STRING_HOROSCOPE = "星座运势";
     private static final String STRING_COMBAT_POWER_QUERY = "战力查询";
     private static final String STRING_MUSIC_SYSTEM = "音乐系统";
-    private static final String STRING_RANE_MENU = "燃鹅菜单";
-    private static final String STRING_AUTHORIZATION = "授权";
     private static final String STRING_FAIL = "失败";
-    private static final String STRING_TIME_OUT = "超时";
-    private static final String STRING_LOGIN = "登录";
-    private static final String STRING_SIGN = "签到";
-    private static final String STRING_REISSUE = "补签";
-    private static final String STRING_LOTTERY_RECORD = "抽奖记录";
-    private static final String STRING_SUPER_LOTTERY = "超级抽奖";
-    private static final String STRING_NORMAL_LOTTERY = "普通抽奖";
-    private static final String STRING_MINE_RANE = "我的燃鹅";
     private static final String STRING_FORTUNE = "运势";
     private static final String STRING_TODAY_FORTUNE = "今日运势";
     private static final String STRING_GET_FAILED = "获取失败";
@@ -66,8 +56,6 @@ public class MessageDeal {
     private static final String STRING_FISH = "摸鱼办";
     private static final String STRING_YUQING = "鱼情";
     private static final String STRING_YUQINGCX = "鱼情查询";
-    private static final String STRING_WORLD_CUP = "世界杯";
-    private static final String STRING_WORLD_CUP_HELP = "世界杯帮助";
     private static final String NUM_ONE = "1";
     private static final int NUM_ELEVEN = 11;
     private static final String[] TWELVE_HOROSCOPE = {"白羊", "金牛", "双子", "巨蟹", "狮子", "处女", "天秤", "天蝎", "射手", "摩羯", "水瓶", "双鱼"};
@@ -198,42 +186,6 @@ public class MessageDeal {
             group.sendMessage(chain);
             return;
         }
-
-//        if (STRING_BEAUTY.equals(msg) || STRING_BEAUTY_PICTURES.equals(msg)) {
-//            MessageReceipt<Group> messageReceipts1 = group.sendMessage("获取中，请稍后...");
-//            ForwardMessageBuilder builder1 = new ForwardMessageBuilder(group);
-//            ForwardMessageBuilder builder = new ForwardMessageBuilder(group);
-//            int imageNum = Setting.getImageNum();
-//            if (imageNum <= 0) {
-//                group.sendMessage("设置错误，请联系管理员重新设置");
-//                return;
-//            }
-//            for (int i = 0; i < imageNum; i++) {
-//                String filepath = Utils.getImage();
-//                if (filepath.contains(STRING_FAIL)) {
-//                    continue;
-//                }
-//                Image image = getImageAdd(filepath);
-//                builder.add(2119517658L, "一位不愿透露姓名的群友", image);
-//            }
-//            if (builder.size() == 0) {
-//                builder.add(2119517658L, "一位不愿透露姓名的群友", new PlainText("获取失败,请重试"));
-//            }
-//            ForwardMessage forward = builder.build();
-//            ForwardMessage forward1 = builder1.add(2119517658L, "一位不愿透露姓名的群友", forward).build();
-//            MessageReceipt<Group> messageReceipts = group.sendMessage(forward1);
-//            messageReceipts1.recall();
-//            int recallTimes = Setting.getImageRecall();
-//            try {
-//                if (recallTimes != 0) {
-//                    Thread.sleep(recallTimes * 1000);
-//                    messageReceipts.recall();
-//                }
-//            } catch (Exception e) {
-//                System.out.printf("撤回失败");
-//            }
-//            return;
-//        }
 
         if (STRING_BEAUTY.equals(msg) || STRING_BEAUTY_PICTURES.equals(msg)) {
             ForwardMessageBuilder builder1 = new ForwardMessageBuilder(group);

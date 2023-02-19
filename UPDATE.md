@@ -1,3 +1,15 @@
+2023年2月18日v3.1.5更新
+
+1.修复群管理bug
+
+2.每日新闻改为8：30发送，且增加一言
+
+3.更新摸鱼办日期
+
+4.官网地址由www.miraiqbot.xyz变更为www.miraiqbot.top，旧地址将保留两个月
+
+5.mirai-core支持到[2.14.0](https://github.com/mamoe/mirai/releases/tag/v2.14.0)
+
 2022年12月21日v3.1.4更新
 
 1.更改发送图片图床

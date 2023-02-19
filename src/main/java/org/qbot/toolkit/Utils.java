@@ -73,6 +73,25 @@ public class Utils {
     }
 
     /**
+     * okhttp get请求
+     */
+    public String okHttpClientGetMusic(String url, String cookie) {
+        OkHttpClient httpClient = new OkHttpClient();
+        Request getRequest = new Request.Builder()
+                .url(url)
+                .addHeader("Cookie", cookie)
+                .get()
+                .build();
+        Call call = httpClient.newCall(getRequest);
+        try {
+            Response response = call.execute();
+            return Objects.requireNonNull(response.body()).string();
+        } catch (IOException e) {
+            return null;
+        }
+    }
+
+    /**
      * Coc鱼情解析
      */
     public static String CocFishGet() {
@@ -381,6 +400,19 @@ public class Utils {
         return sdf.format(date);
     }
 
+    /**
+     * 获取时间4
+     */
+    public String getTime4() {
+        // 格式化时间
+        SimpleDateFormat sdf = new SimpleDateFormat();
+        // a为am/pm的标记
+        sdf.applyPattern("yyyy-MM-dd HH:mm:ss");
+        // 获取当前时间
+        Date date = new Date();
+        return sdf.format(date);
+    }
+
 
     /**
      * 重写星期文件
@@ -503,6 +535,27 @@ public class Utils {
         } catch (IOException e) {
             e.printStackTrace();
             return false;
+        }
+    }
+
+    public void GenerateImage(String imgStr, String img_name) { //对字节数组字符串进行Base64解码并生成图片
+        Base64.Decoder decoder = Base64.getDecoder();
+        try {
+            //Base64解码
+            byte[] b = decoder.decode(imgStr);
+            for (int i = 0; i < b.length; ++i) {
+                if (b[i] < 0) {//调整异常数据
+                    b[i] += 256;
+                }
+            }
+            //生成jpeg图片
+
+            String imgFilePath = getPluginsDataPath() + "/cache/image/" + img_name;//新生成的图片
+            OutputStream out = new FileOutputStream(imgFilePath);
+            out.write(b);
+            out.flush();
+            out.close();
+        } catch (Exception e) {
         }
     }
 

@@ -16,6 +16,8 @@ import org.qbot.group.GroupManagementSetting;
 import org.qbot.group.GroupManagementUtil;
 import org.qbot.msgdeal.AdminMessageDeal;
 import org.qbot.msgdeal.MessageDeal;
+import org.qbot.music.MusicMessageDeal;
+import org.qbot.music.NeteaseCloudMusicTask;
 import org.qbot.thread.StartThread;
 import org.qbot.toolkit.*;
 
@@ -150,15 +152,22 @@ public final class Plugin extends JavaPlugin {
         GlobalEventChannel.INSTANCE.subscribeAlways(FriendMessageEvent.class, f -> {
             long senderQq = f.getSender().getId();
             String msg = f.getMessage().contentToString();
-            if (senderQq == superAdmin) {
-                System.out.println("收到管理员消息:" + msg);
-                try {
-                    AdminMessageDeal.msgDel(msg, f.getSender());
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
+            MusicMessageDeal musicMessageDeal = new MusicMessageDeal();
+            try {
+                if (!musicMessageDeal.msgDel(f.getFriend(), msg)) {
+                    if (senderQq == superAdmin) {
+                        System.out.println("收到管理员消息:" + msg);
+                        try {
+                            AdminMessageDeal.msgDel(msg, f.getSender());
+                        } catch (InterruptedException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
                 }
+            } catch (IOException | InterruptedException e) {
+                System.out.printf(String.valueOf(e));
+                throw new RuntimeException(e);
             }
-
         });
 
         GlobalEventChannel.INSTANCE.subscribeAlways(GroupTempMessageEvent.class, f -> {

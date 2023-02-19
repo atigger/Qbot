@@ -44,6 +44,9 @@ public class CreateFile {
         File qqDirectory = new File(dataFolderPath + "/cache/qq");
         qqDirectory.mkdir();
 
+        File musicDirectory = new File(dataFolderPath + "/cache/music");
+        musicDirectory.mkdir();
+
         File groupManagementDirectory = new File(dataFolderPath + "/groupManagement");
         groupManagementDirectory.mkdir();
 
@@ -53,7 +56,7 @@ public class CreateFile {
             System.out.println("检测到配置文件不存在，生成中");
             SetSetting.setFile(Setting.VERSION_NUM, 0, "", "", "", 1, 119, false, false, false, "", "", false, false,
                     false,
-                    new JSONArray(), false, 0);
+                    new JSONArray(), false, 0, "");
         } else {
             System.out.println("配置文件存在");
             Setting setting1 = new Setting();
