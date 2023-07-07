@@ -52,7 +52,7 @@ Tips:有想要的新功能可以提交issue
 
 3.摸鱼办倒计时更新
 
-4.5.mirai-core支持到[2.15.0-RC](https://github.com/mamoe/mirai/releases/tag/v2.15.0-RC)
+4.mirai-core支持到[2.15.0-RC](https://github.com/mamoe/mirai/releases/tag/v2.15.0-RC)
 
 5.kotlin版本更新到1.8.10
 
