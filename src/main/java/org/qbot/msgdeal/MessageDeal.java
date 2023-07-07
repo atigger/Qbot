@@ -104,18 +104,22 @@ public class MessageDeal {
         }
 
         if (msg.contains(STRING_BEAUTY_VIDEO)) {
-            int type = 0;
-            try{
-                type = Integer.parseInt(msg.replace(STRING_BEAUTY_VIDEO, ""));
-                System.out.println(type);
-            }catch (Exception e){
-                group.sendMessage("格式错误，请输入正确的格式");
-                return;
-            }
             try {
                 MessageSource.recall(msgchains);
             } catch (Exception e) {
                 System.out.printf("撤回失败1");
+            }
+            int type = 0;
+            try{
+                type = Integer.parseInt(msg.replace(STRING_BEAUTY_VIDEO, ""));
+                if(type>10||type<1){
+                    group.sendMessage("格式错误，请输入正确的格式");
+                    return;
+                }
+                System.out.println(type);
+            }catch (Exception e){
+                group.sendMessage("格式错误，请输入正确的格式");
+                return;
             }
             MessageReceipt<Group> messageReceipts = group.sendMessage("正在上传，请稍后...");
             String filePath = "";
