@@ -19,6 +19,7 @@ import java.nio.file.Path;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Utils class
@@ -557,6 +558,58 @@ public class Utils {
             out.close();
         } catch (Exception e) {
         }
+    }
+
+    public void sendMsgToWeChat(String msg) throws Exception {
+        String botKeyUrl = "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=" + Setting.getQYWXKEY();
+        JSONObject text = new JSONObject();
+        text.put("content", msg);
+        JSONObject reqBody = new JSONObject();
+        reqBody.put("msgtype", "text");
+        reqBody.put("text", text);
+        reqBody.put("safe", 0);
+
+        MediaType contentType = MediaType.parse("application/json; charset=utf-8");
+        RequestBody body = RequestBody.create(contentType, reqBody.toString());
+        String respMsg = okHttp(body, botKeyUrl);
+        if ("0".equals(respMsg.substring(11, 12))) {
+            System.out.println("发送消息成功！");
+        } else {
+            System.out.println("请求失败！");
+            System.out.println("群机器人推送消息失败，错误信息：\n" + respMsg);
+        }
+    }
+
+    public String okHttp(RequestBody body, String url) throws Exception {
+        // 构造和配置OkHttpClient
+        OkHttpClient client;
+
+        client = new OkHttpClient.Builder()
+                .connectTimeout(10, TimeUnit.SECONDS) // 设置连接超时时间
+                .readTimeout(20, TimeUnit.SECONDS) // 设置读取超时时间
+                .build();
+
+
+        // 构造Request对象
+        Request request = new Request.Builder()
+                .url(url)
+                .post(body)
+                .addHeader("cache-control", "no-cache") // 响应消息不缓存
+                .build();
+
+        // 构建Call对象，通过Call对象的execute()方法提交异步请求
+        Response response = null;
+        try {
+            response = client.newCall(request).execute();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // 请求结果处理
+        byte[] datas = response.body().bytes();
+        String respMsg = new String(datas);
+
+        return respMsg;
     }
 
 }

@@ -11,7 +11,12 @@ import org.qbot.toolkit.PluginUtil;
 import org.qbot.toolkit.Setting;
 import org.qbot.toolkit.Utils;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+
+import static org.qbot.toolkit.Utils.getPluginsDataPath;
 
 /**
  * AutoThread class
@@ -73,6 +78,17 @@ public class AutoThread extends Thread {
                 sleep(30000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
+            } finally {
+                if (!bot.isOnline()) {
+                    try {
+                        utils.sendMsgToWeChat("机器人已离线\n" + utils.getTime4());
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                    System.out.println("机器人已离线");
+                } else {
+                    System.out.println("机器人在线");
+                }
             }
         }
     }

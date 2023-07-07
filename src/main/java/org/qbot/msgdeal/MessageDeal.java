@@ -2,6 +2,7 @@ package org.qbot.msgdeal;
 
 import com.alibaba.fastjson2.JSONObject;
 import net.mamoe.mirai.contact.Group;
+import net.mamoe.mirai.contact.file.AbsoluteFile;
 import net.mamoe.mirai.message.MessageReceipt;
 import net.mamoe.mirai.message.data.*;
 import net.mamoe.mirai.utils.ExternalResource;
@@ -56,9 +57,13 @@ public class MessageDeal {
     private static final String STRING_FISH = "摸鱼办";
     private static final String STRING_YUQING = "鱼情";
     private static final String STRING_YUQINGCX = "鱼情查询";
+
+    private static final String STRING_BEAUTY_VIDEO = "美女视频";
     private static final String NUM_ONE = "1";
     private static final int NUM_ELEVEN = 11;
     private static final String[] TWELVE_HOROSCOPE = {"白羊", "金牛", "双子", "巨蟹", "狮子", "处女", "天秤", "天蝎", "射手", "摩羯", "水瓶", "双鱼"};
+    private static final String[] BEAUTY_VIDEO_URL = {"http://www.yujn.cn/api/zzxjj.php", "http://www.yujn.cn/api/yuzu.php", "http://www.yujn.cn/api/tianmei.php", "http://www.yujn.cn/api/jksp.php", "http://www.yujn.cn/api/ndym.php", "http://www.yujn.cn/api/sbkl.php", "http://www.yujn.cn/api/rewu.php", "http://www.yujn.cn/api/luoli.php", "http://www.yujn.cn/api/manhuay.php", "http://www.yujn.cn/api/shejie.php"}
+            ;
 
     ExecutorService executorService = Executors.newCachedThreadPool();
 
@@ -79,6 +84,90 @@ public class MessageDeal {
         if ("".equals(msg)) {
             chain = new MessageChainBuilder().append(new At(senderId)).append(new PlainText("\n你没得事情干唛？@我作甚么？")).append(new Face(312)).build();
             group.sendMessage(chain);
+            return;
+        }
+
+        if(msg.equals(STRING_BEAUTY_VIDEO)){
+            group.sendMessage("美女视频列表:\n" +
+                    "1小姐姐视频\n" +
+                    "2玉足美腿\n" +
+                    "3甜妹系列\n" +
+                    "4jk洛丽塔\n" +
+                    "5你的欲梦\n" +
+                    "6双倍快乐\n" +
+                    "7热舞系列\n" +
+                    "8萝莉系列\n" +
+                    "9漫画芋\n" +
+                    "10蛇姐系列\n"+
+                    "例如：美女视频1");
+            return;
+        }
+
+        if (msg.contains(STRING_BEAUTY_VIDEO)) {
+            int type = 0;
+            try{
+                type = Integer.parseInt(msg.replace(STRING_BEAUTY_VIDEO, ""));
+                System.out.println(type);
+            }catch (Exception e){
+                group.sendMessage("格式错误，请输入正确的格式");
+                return;
+            }
+            MessageReceipt<Group> messageReceipts = group.sendMessage("正在上传，请稍后...");
+            String filePath = "";
+            switch (type) {
+                case 1:
+                    filePath = pluginUtil.getVideo(BEAUTY_VIDEO_URL[0]);
+                    break;
+                case 2:
+                    filePath = pluginUtil.getVideo(BEAUTY_VIDEO_URL[1]);
+                    break;
+                case 3:
+                    filePath = pluginUtil.getVideo(BEAUTY_VIDEO_URL[2]);
+                    break;
+                case 4:
+                    filePath = pluginUtil.getVideo(BEAUTY_VIDEO_URL[3]);
+                    break;
+                case 5:
+                    filePath = pluginUtil.getVideo(BEAUTY_VIDEO_URL[4]);
+                    break;
+                case 6:
+                    filePath = pluginUtil.getVideo(BEAUTY_VIDEO_URL[5]);
+                    break;
+                case 7:
+                    filePath = pluginUtil.getVideo(BEAUTY_VIDEO_URL[6]);
+                    break;
+                case 8:
+                    filePath = pluginUtil.getVideo(BEAUTY_VIDEO_URL[7]);
+                    break;
+                case 9:
+                    filePath = pluginUtil.getVideo(BEAUTY_VIDEO_URL[8]);
+                    break;
+                case 10:
+                    filePath = pluginUtil.getVideo(BEAUTY_VIDEO_URL[9]);
+                    break;
+                default:
+                    group.sendMessage("格式错误，请输入正确的格式");
+                    return;
+            }
+
+            File video = new File(filePath);
+            try (ExternalResource resource = ExternalResource.create(video)) {
+                AbsoluteFile uploadFile = group.getFiles().getRoot().uploadNewFile("/" + video.getName(), resource);
+                messageReceipts.recall();
+                int recallTimes = Setting.getImageRecall();
+                try {
+                    if (recallTimes != 0) {
+                        Thread.sleep(recallTimes * 1000);
+                        uploadFile.delete();
+                    }
+                } catch (Exception e) {
+                    System.out.printf("撤回失败");
+                }
+            } catch (Exception e) {
+                group.sendMessage("发送失败");
+            } finally {
+
+            }
             return;
         }
 
@@ -267,7 +356,7 @@ public class MessageDeal {
      * 菜单
      */
     public MessageChain getMenuTxt() {
-        return new MessageChainBuilder().append(new Face(147)).append(new PlainText("           菜单          ")).append(new Face(147)).append(new PlainText("\n◇━━━━━━━━◇\n")).append(new Face(190)).append(new PlainText("今日运势  今日新闻")).append(new Face(190)).append(new PlainText("\n")).append(new Face(190)).append(new PlainText("星座运势  观音求签")).append(new Face(190)).append(new PlainText("\n")).append(new Face(190)).append(new PlainText("音乐系统  语音系统")).append(new Face(190)).append(new PlainText("\n")).append(new Face(190)).append(new PlainText("美女图片  战力查询")).append(new Face(190)).append(new PlainText("\n")).append(new Face(190)).append(new PlainText("鱼情查询  摸鱼办    ")).append(new Face(190)).append(new PlainText("\n◇━━━━━━━━◇\nPS:@我并发相应文字查看指令\n当前版本：" + PluginVersion.VERSION_NUM)).build();
+        return new MessageChainBuilder().append(new Face(147)).append(new PlainText("           菜单          ")).append(new Face(147)).append(new PlainText("\n◇━━━━━━━━◇\n")).append(new Face(190)).append(new PlainText("今日运势  今日新闻")).append(new Face(190)).append(new PlainText("\n")).append(new Face(190)).append(new PlainText("星座运势  观音求签")).append(new Face(190)).append(new PlainText("\n")).append(new Face(190)).append(new PlainText("音乐系统  语音系统")).append(new Face(190)).append(new PlainText("\n")).append(new Face(190)).append(new PlainText("美女图片  美女视频")).append(new Face(190)).append(new PlainText("\n")).append(new Face(190)).append(new PlainText("战力查询  鱼情查询")).append(new Face(190)).append(new PlainText("\n◇━━━━━━━━◇\nPS:@我并发相应文字查看指令\n当前版本：" + PluginVersion.VERSION_NUM)).build();
     }
 
 
@@ -277,4 +366,6 @@ public class MessageDeal {
         img.close();
         return image;
     }
+
+
 }

@@ -87,6 +87,27 @@ public class PluginUtil {
         }
     }
 
+
+    /**
+     * 获取视频
+     */
+    public String getVideo(String url) {
+        String nowDay = utils.getTime1();
+        int randomNum = Utils.getRandomNum(0, 10000);
+        String fileName = Utils.getTime() + randomNum;
+        File newsFile = new File(utils.getPluginsDataPath() + "/cache/video/" + fileName + ".mp4");
+        String filePath = utils.getPluginsDataPath() + "/cache/video/" + fileName + ".mp4";
+        if (newsFile.exists()) {
+            return newsFile.getPath();
+        } else {
+            if (utils.downloadImg(url, filePath)) {
+                return newsFile.getPath();
+            } else {
+                return "失败";
+            }
+        }
+    }
+
     /**
      * 获取每日一句
      */
@@ -294,11 +315,11 @@ public class PluginUtil {
 
         Date cjdate = sdf.parse("2024-02-10");
         int cj = utils.daysBetween(nowdate, cjdate);
-        Date qmjdate = sdf.parse("2023-04-05");
+        Date qmjdate = sdf.parse("2024-04-04");
         int qmj = utils.daysBetween(nowdate, qmjdate);
-        Date ndjdate = sdf.parse("2023-05-01");
+        Date ndjdate = sdf.parse("2024-05-01");
         int ndj = utils.daysBetween(nowdate, ndjdate);
-        Date dwjdate = sdf.parse("2023-06-22");
+        Date dwjdate = sdf.parse("2024-06-10");
         int dwj = utils.daysBetween(nowdate, dwjdate);
         Date zqjdate = sdf.parse("2023-09-28");
         int zqj = utils.daysBetween(nowdate, zqjdate);
@@ -350,15 +371,6 @@ public class PluginUtil {
             }
         }
 
-        if (qmj > 0) {
-            txt = txt + "\n距离【清明】还有:" + qmj + "天";
-        }
-        if (ndj > 0) {
-            txt = txt + "\n距离【劳动】还有:" + ndj + "天";
-        }
-        if (dwj > 0) {
-            txt = txt + "\n距离【端午】还有:" + dwj + "天";
-        }
         if (zqj > 0) {
             txt = txt + "\n距离【中秋】还有:" + zqj + "天";
         }
@@ -370,6 +382,15 @@ public class PluginUtil {
         }
         if (cj > 0) {
             txt = txt + "\n距离【新年】还有:" + cj + "天";
+        }
+        if (qmj > 0) {
+            txt = txt + "\n距离【清明】还有:" + qmj + "天";
+        }
+        if (ndj > 0) {
+            txt = txt + "\n距离【劳动】还有:" + ndj + "天";
+        }
+        if (dwj > 0) {
+            txt = txt + "\n距离【端午】还有:" + dwj + "天";
         }
         txt = txt + statementAtTheEnd;
         return txt;

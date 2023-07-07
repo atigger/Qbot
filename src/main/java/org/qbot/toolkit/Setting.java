@@ -187,8 +187,19 @@ public class Setting {
         }
     }
 
+    public static String getQYWXKEY() {
+        try {
+            if (main().getString("QYWXKEY") == null) {
+                return "";
+            }
+            return main().getString("QYWXKEY");
+        } catch (Exception e) {
+            return "";
+        }
+    }
+
     private static final String VERSION = "Version";
-    public static final String VERSION_NUM = "3.2";
+    public static final String VERSION_NUM = "3.3";
 
     public void getVersion() {
         boolean isUpdate = false;
@@ -201,7 +212,7 @@ public class Setting {
         } finally {
             if (isUpdate) {
                 System.out.println("正在更新配置文件");
-                SetSetting.setFile(VERSION_NUM, getQq(), getAppId(), getApiKey(), getSecretKey(), getImageNum(), getImageRecall(), getAgreeFriend(), getAgreeGroup(), getOldAi(), getAiApiKey(), getAiApiSecret(), getAutoFortune(), getAutoNews(), getAutoTips(), getGroup(), getGroupManagement(), getAdminQQ(), "");
+                SetSetting.setFile(VERSION_NUM, getQq(), getAppId(), getApiKey(), getSecretKey(), getImageNum(), getImageRecall(), getAgreeFriend(), getAgreeGroup(), getOldAi(), getAiApiKey(), getAiApiSecret(), getAutoFortune(), getAutoNews(), getAutoTips(), getGroup(), getGroupManagement(), getAdminQQ(), getMusicAPIURL(), "");
                 System.out.println("更新配置文件成功");
             }
         }
@@ -234,7 +245,7 @@ public class Setting {
         }
         SetSetting.setFile(VERSION_NUM, getQq(), getAppId(), getApiKey(), getSecretKey(), getImageNum(),
                 getImageRecall(), getAgreeFriend(), getAgreeGroup(), getAi(), getAiApiKey(), getAiApiSecret(),
-                getAutoFortune(), getAutoNews(), getAutoTips(), jsonArray, getGroupManagement(), getAdminQQ(), getMusicAPIURL());
+                getAutoFortune(), getAutoNews(), getAutoTips(), jsonArray, getGroupManagement(), getAdminQQ(), getMusicAPIURL(), getQYWXKEY());
         return true;
     }
 
@@ -242,25 +253,25 @@ public class Setting {
         System.out.println("正在更新配置文件");
         switch (options) {
             case "Friend":
-                SetSetting.setFile(VERSION_NUM, getQq(), getAppId(), getApiKey(), getSecretKey(), getImageNum(), getImageRecall(), value, getAgreeGroup(), getAi(), getAiApiKey(), getAiApiSecret(), getAutoFortune(), getAutoNews(), getAutoTips(), getGroup(), getGroupManagement(), getAdminQQ(), getMusicAPIURL());
+                SetSetting.setFile(VERSION_NUM, getQq(), getAppId(), getApiKey(), getSecretKey(), getImageNum(), getImageRecall(), value, getAgreeGroup(), getAi(), getAiApiKey(), getAiApiSecret(), getAutoFortune(), getAutoNews(), getAutoTips(), getGroup(), getGroupManagement(), getAdminQQ(), getMusicAPIURL(), getQYWXKEY());
                 return true;
             case "Group":
-                SetSetting.setFile(VERSION_NUM, getQq(), getAppId(), getApiKey(), getSecretKey(), getImageNum(), getImageRecall(), getAgreeFriend(), value, getAi(), getAiApiKey(), getAiApiSecret(), getAutoFortune(), getAutoNews(), getAutoTips(), getGroup(), getGroupManagement(), getAdminQQ(), getMusicAPIURL());
+                SetSetting.setFile(VERSION_NUM, getQq(), getAppId(), getApiKey(), getSecretKey(), getImageNum(), getImageRecall(), getAgreeFriend(), value, getAi(), getAiApiKey(), getAiApiSecret(), getAutoFortune(), getAutoNews(), getAutoTips(), getGroup(), getGroupManagement(), getAdminQQ(), getMusicAPIURL(), getQYWXKEY());
                 return true;
             case "AI":
-                SetSetting.setFile(VERSION_NUM, getQq(), getAppId(), getApiKey(), getSecretKey(), getImageNum(), getImageRecall(), getAgreeFriend(), getAgreeGroup(), value, getAiApiKey(), getAiApiSecret(), getAutoFortune(), getAutoNews(), getAutoTips(), getGroup(), getGroupManagement(), getAdminQQ(), getMusicAPIURL());
+                SetSetting.setFile(VERSION_NUM, getQq(), getAppId(), getApiKey(), getSecretKey(), getImageNum(), getImageRecall(), getAgreeFriend(), getAgreeGroup(), value, getAiApiKey(), getAiApiSecret(), getAutoFortune(), getAutoNews(), getAutoTips(), getGroup(), getGroupManagement(), getAdminQQ(), getMusicAPIURL(), getQYWXKEY());
                 return true;
             case "Fortune":
-                SetSetting.setFile(VERSION_NUM, getQq(), getAppId(), getApiKey(), getSecretKey(), getImageNum(), getImageRecall(), getAgreeFriend(), getAgreeGroup(), getAi(), getAiApiKey(), getAiApiSecret(), value, getAutoNews(), getAutoTips(), getGroup(), getGroupManagement(), getAdminQQ(), getMusicAPIURL());
+                SetSetting.setFile(VERSION_NUM, getQq(), getAppId(), getApiKey(), getSecretKey(), getImageNum(), getImageRecall(), getAgreeFriend(), getAgreeGroup(), getAi(), getAiApiKey(), getAiApiSecret(), value, getAutoNews(), getAutoTips(), getGroup(), getGroupManagement(), getAdminQQ(), getMusicAPIURL(), getQYWXKEY());
                 return true;
             case "News":
-                SetSetting.setFile(VERSION_NUM, getQq(), getAppId(), getApiKey(), getSecretKey(), getImageNum(), getImageRecall(), getAgreeFriend(), getAgreeGroup(), getAi(), getAiApiKey(), getAiApiSecret(), getAutoFortune(), value, getAutoTips(), getGroup(), getGroupManagement(), getAdminQQ(), getMusicAPIURL());
+                SetSetting.setFile(VERSION_NUM, getQq(), getAppId(), getApiKey(), getSecretKey(), getImageNum(), getImageRecall(), getAgreeFriend(), getAgreeGroup(), getAi(), getAiApiKey(), getAiApiSecret(), getAutoFortune(), value, getAutoTips(), getGroup(), getGroupManagement(), getAdminQQ(), getMusicAPIURL(), getQYWXKEY());
                 return true;
             case "Tips":
-                SetSetting.setFile(VERSION_NUM, getQq(), getAppId(), getApiKey(), getSecretKey(), getImageNum(), getImageRecall(), getAgreeFriend(), getAgreeGroup(), getAi(), getAiApiKey(), getAiApiSecret(), getAutoFortune(), getAutoNews(), value, getGroup(), getGroupManagement(), getAdminQQ(), getMusicAPIURL());
+                SetSetting.setFile(VERSION_NUM, getQq(), getAppId(), getApiKey(), getSecretKey(), getImageNum(), getImageRecall(), getAgreeFriend(), getAgreeGroup(), getAi(), getAiApiKey(), getAiApiSecret(), getAutoFortune(), getAutoNews(), value, getGroup(), getGroupManagement(), getAdminQQ(), getMusicAPIURL(), getQYWXKEY());
                 return true;
             case "GroupManagement":
-                SetSetting.setFile(VERSION_NUM, getQq(), getAppId(), getApiKey(), getSecretKey(), getImageNum(), getImageRecall(), getAgreeFriend(), getAgreeGroup(), getAi(), getAiApiKey(), getAiApiSecret(), getAutoFortune(), getAutoNews(), getAutoTips(), getGroup(), value, getAdminQQ(), getMusicAPIURL());
+                SetSetting.setFile(VERSION_NUM, getQq(), getAppId(), getApiKey(), getSecretKey(), getImageNum(), getImageRecall(), getAgreeFriend(), getAgreeGroup(), getAi(), getAiApiKey(), getAiApiSecret(), getAutoFortune(), getAutoNews(), getAutoTips(), getGroup(), value, getAdminQQ(), getMusicAPIURL(), getQYWXKEY());
                 return true;
             default:
                 System.out.println("更新失败");
@@ -272,10 +283,10 @@ public class Setting {
         try {
             switch (options) {
                 case 1:
-                    SetSetting.setFile(VERSION_NUM, getQq(), getAppId(), getApiKey(), getSecretKey(), value, getImageRecall(), getAgreeFriend(), getAgreeGroup(), getAi(), getAiApiKey(), getAiApiSecret(), getAutoFortune(), getAutoNews(), getAutoTips(), getGroup(), getGroupManagement(), getAdminQQ(), getMusicAPIURL());
+                    SetSetting.setFile(VERSION_NUM, getQq(), getAppId(), getApiKey(), getSecretKey(), value, getImageRecall(), getAgreeFriend(), getAgreeGroup(), getAi(), getAiApiKey(), getAiApiSecret(), getAutoFortune(), getAutoNews(), getAutoTips(), getGroup(), getGroupManagement(), getAdminQQ(), getMusicAPIURL(), getQYWXKEY());
                     break;
                 case 2:
-                    SetSetting.setFile(VERSION_NUM, getQq(), getAppId(), getApiKey(), getSecretKey(), getImageNum(), value, getAgreeFriend(), getAgreeGroup(), getAi(), getAiApiKey(), getAiApiSecret(), getAutoFortune(), getAutoNews(), getAutoTips(), getGroup(), getGroupManagement(), getAdminQQ(), getMusicAPIURL());
+                    SetSetting.setFile(VERSION_NUM, getQq(), getAppId(), getApiKey(), getSecretKey(), getImageNum(), value, getAgreeFriend(), getAgreeGroup(), getAi(), getAiApiKey(), getAiApiSecret(), getAutoFortune(), getAutoNews(), getAutoTips(), getGroup(), getGroupManagement(), getAdminQQ(), getMusicAPIURL(), getQYWXKEY());
                     break;
                 default:
                     System.out.println("更新失败");

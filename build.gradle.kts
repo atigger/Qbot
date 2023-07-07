@@ -1,13 +1,13 @@
 plugins {
-    val kotlinVersion = "1.7.10"
+    val kotlinVersion = "1.8.10"
     kotlin("jvm") version kotlinVersion
     kotlin("plugin.serialization") version kotlinVersion
 
-    id("net.mamoe.mirai-console") version "2.14.0"
+    id("net.mamoe.mirai-console") version "2.15.0-RC"
 }
 
 group = "org.qbot"
-version = "3.2.0-RC"
+version = "3.2.0"
 
 repositories {
     maven("https://maven.aliyun.com/repository/public")
@@ -24,4 +24,8 @@ dependencies {
     implementation("com.google.zxing:javase:3.5.1")
     implementation("org.yaml:snakeyaml:1.33")
 
+}
+
+mirai {
+    jvmTarget = JavaVersion.VERSION_17
 }

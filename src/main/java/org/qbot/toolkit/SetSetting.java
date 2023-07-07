@@ -16,7 +16,7 @@ public class SetSetting {
     public static void setFile(String version, long qq, String appid, String apiKey, String secretKey, int imageNum,
                                int imageRecall, boolean agreeFriend,
                                boolean agreeGroup, boolean AI, String aiApiKey, String aiApiSecret, boolean autoFortune, boolean autoNews, boolean autoTips, JSONArray groupList,
-                               boolean groupManagement, long adminQQ, String musicAPIurl) {
+                               boolean groupManagement, long adminQQ, String musicAPIurl, String QYWXKEY) {
         String config = "#配置文件版本\n" +
                 "Version: " + version + "\n" +
                 "#机器人QQ\n" +
@@ -55,7 +55,9 @@ public class SetSetting {
                 "  #群管系统管理员QQ\n" +
                 "  AdminQQ: " + adminQQ + "\n" +
                 "#网易云API接口网址\n" +
-                "MusicAPIURL: \"" + musicAPIurl + "\"";
+                "MusicAPIURL: \"" + musicAPIurl + "\"\n" +
+                "#企业微信Key\n" +
+                "QYWXKEY: \"" + QYWXKEY + "\"";
 
         File file = new File(Utils.getPluginsPath() + "/setting.yml");
         try {
