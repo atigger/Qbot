@@ -112,6 +112,11 @@ public class MessageDeal {
                 group.sendMessage("格式错误，请输入正确的格式");
                 return;
             }
+            try {
+                MessageSource.recall(msgchains);
+            } catch (Exception e) {
+                System.out.printf("撤回失败1");
+            }
             MessageReceipt<Group> messageReceipts = group.sendMessage("正在上传，请稍后...");
             String filePath = "";
             switch (type) {
