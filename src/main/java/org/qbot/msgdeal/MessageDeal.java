@@ -163,6 +163,7 @@ public class MessageDeal {
             File video = new File(filePath);
             try (ExternalResource resource = ExternalResource.create(video)) {
                 AbsoluteFile uploadFile = group.getFiles().getRoot().uploadNewFile("/" + video.getName(), resource);
+                messageReceipts.recall();
                 int recallTimes = Setting.getImageRecall();
                 try {
                     if (recallTimes != 0) {
@@ -173,9 +174,8 @@ public class MessageDeal {
                     System.out.printf("撤回失败");
                 }
             } catch (Exception e) {
-                group.sendMessage("发送失败");
-            } finally {
                 messageReceipts.recall();
+                group.sendMessage("发送失败");
             }
             return;
         }
