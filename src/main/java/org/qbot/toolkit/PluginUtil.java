@@ -399,11 +399,11 @@ public class PluginUtil {
     /**
      * Ai回复
      */
-    public MessageChain aiReply(Long senderID, String senderName, long groupID, String msg) {
+    public String aiReply(Long senderID, String senderName, long groupID, String msg) {
         String apiKey = Setting.getAiApiKey();
         String apiSecret = Setting.getAiApiSecret();
         if (apiKey.equals("") || apiSecret.equals("")) {
-            return new MessageChainBuilder().append(new PlainText("请先联系管理员配置API")).build();
+            return "请先联系管理员配置API";
         }
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("content", msg);
@@ -433,14 +433,14 @@ public class PluginUtil {
                 } else {
                     reply = "暂不支持的消息，消息类型为：" + data.getJSONObject(0).getInteger("typed");
                 }
-                return new MessageChainBuilder().append(new PlainText(reply)).build();
+                return reply;
             } else {
-                return new MessageChainBuilder().append(new PlainText("AI回复失败")).build();
+                return "AI回复失败";
             }
 
         } catch (IOException e) {
             e.printStackTrace();
-            return new MessageChainBuilder().append(new PlainText("网络连接失败")).build();
+            return "网络连接失败";
         }
 
     }
