@@ -1,7 +1,7 @@
 配置文件模板
 ```yaml
 #配置文件版本
-Version: 3.2
+Version: 3.3
 #机器人QQ
 QQ: 0
 #百度语音API
@@ -39,5 +39,7 @@ GroupManagement:
   AdminQQ: 0
 #网易云API接口网址
 MusicAPIURL: ""
+#企业微信Key
+QYWXKEY: ""
 ```
 
