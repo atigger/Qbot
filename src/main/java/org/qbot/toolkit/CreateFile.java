@@ -50,6 +50,9 @@ public class CreateFile {
         File musicDirectory = new File(dataFolderPath + "/cache/music");
         musicDirectory.mkdir();
 
+        File mofishDirectory = new File(dataFolderPath + "/cache/mofish");
+        mofishDirectory.mkdir();
+
         File groupManagementDirectory = new File(dataFolderPath + "/groupManagement");
         groupManagementDirectory.mkdir();
 

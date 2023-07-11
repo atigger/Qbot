@@ -55,16 +55,11 @@ public class MessageDeal {
     private static final String STRING_WEATHER = "天气";
     private static final String STRING_HELP = "帮助";
     private static final String STRING_FISH = "摸鱼办";
-    private static final String STRING_YUQING = "鱼情";
-    private static final String STRING_YUQINGCX = "鱼情查询";
-
     private static final String STRING_BEAUTY_VIDEO = "美女视频";
     private static final String NUM_ONE = "1";
     private static final int NUM_ELEVEN = 11;
-    private static final String[] TWELVE_HOROSCOPE = {"白羊", "金牛", "双子", "巨蟹", "狮子", "处女", "天秤", "天蝎", "射手", "摩羯", "水瓶", "双鱼"};
-    private static final String[] BEAUTY_VIDEO_URL = {"http://www.yujn.cn/api/zzxjj.php", "http://www.yujn.cn/api/yuzu.php", "http://www.yujn.cn/api/tianmei.php", "http://www.yujn.cn/api/jksp.php", "http://www.yujn.cn/api/ndym.php", "http://www.yujn.cn/api/sbkl.php", "http://www.yujn.cn/api/rewu.php", "http://www.yujn.cn/api/luoli.php", "http://www.yujn.cn/api/manhuay.php", "http://www.yujn.cn/api/shejie.php"}
-            ;
-
+    private static final JSONObject TWELVE_HOROSCOPE = JSONObject.parseObject("{'白羊':'aries','金牛':'taurus','双子':'gemini','巨蟹':'cancer','狮子':'leo','处女':'virgo','天秤':'libra','天蝎':'scorpio','射手':'sagittarius','摩羯':'capricorn','水瓶':'aquarius','双鱼':'pisces'}");
+    private static final JSONObject HOT_LIST = JSONObject.parseObject("{'微博热搜':'wbHot'}");
     ExecutorService executorService = Executors.newCachedThreadPool();
 
     @SuppressWarnings("AlibabaMethodTooLong")
@@ -75,33 +70,27 @@ public class MessageDeal {
         this.group = group;
         System.out.println("收到的消息:" + msg + " 消息长度:" + msg.length());
         if (STRING_FISH.equals(msg)) {
-            chain = new MessageChainBuilder().append(new PlainText(pluginUtil.moFish())).build();
+//            chain = new MessageChainBuilder().append(new PlainText(pluginUtil.moFish())).build();
+//            group.sendMessage(chain);
+//            return;
+            String mofishImgUrl = pluginUtil.moFishNew();
+            if (!mofishImgUrl.contains(STRING_FAIL)) {
+                Image image = getImageAdd(mofishImgUrl);
+                chain = new MessageChainBuilder().append(image).build();
+            } else {
+                chain = new At(senderId).plus(new PlainText("\n获取失败"));
+            }
             group.sendMessage(chain);
             return;
         }
 
 
         if ("".equals(msg)) {
-            chain = new MessageChainBuilder().append(new At(senderId)).append(new PlainText("\n你没得事情干唛？@我作甚么？")).append(new Face(312)).append("\n发送<菜单>命令可获取菜单").build();
+            chain = new MessageChainBuilder().append(new At(senderId)).append(new PlainText("\n你没得事情干唛？@我作甚么？")).append(new Face(312)).append("\n发送<运势小助手 菜单>命令可获取菜单").build();
             group.sendMessage(chain);
             return;
         }
 
-        if(msg.equals(STRING_BEAUTY_VIDEO)){
-            group.sendMessage("美女视频列表:\n" +
-                    "1小姐姐视频\n" +
-                    "2玉足美腿\n" +
-                    "3甜妹系列\n" +
-                    "4jk洛丽塔\n" +
-                    "5你的欲梦\n" +
-                    "6双倍快乐\n" +
-                    "7热舞系列\n" +
-                    "8萝莉系列\n" +
-                    "9漫画芋\n" +
-                    "10蛇姐系列\n"+
-                    "例如：<美女视频1>");
-            return;
-        }
 
         if (msg.contains(STRING_BEAUTY_VIDEO)) {
             try {
@@ -109,57 +98,8 @@ public class MessageDeal {
             } catch (Exception e) {
                 System.out.printf("撤回失败1");
             }
-            int type = 0;
-            try{
-                type = Integer.parseInt(msg.replace(STRING_BEAUTY_VIDEO, ""));
-                if(type>10||type<1){
-                    group.sendMessage("格式错误，请输入正确的格式");
-                    return;
-                }
-                System.out.println(type);
-            }catch (Exception e){
-                group.sendMessage("格式错误，请输入正确的格式");
-                return;
-            }
             MessageReceipt<Group> messageReceipts = group.sendMessage("正在上传，请稍后...");
-            String filePath = "";
-            switch (type) {
-                case 1:
-                    filePath = pluginUtil.getVideo(BEAUTY_VIDEO_URL[0]);
-                    break;
-                case 2:
-                    filePath = pluginUtil.getVideo(BEAUTY_VIDEO_URL[1]);
-                    break;
-                case 3:
-                    filePath = pluginUtil.getVideo(BEAUTY_VIDEO_URL[2]);
-                    break;
-                case 4:
-                    filePath = pluginUtil.getVideo(BEAUTY_VIDEO_URL[3]);
-                    break;
-                case 5:
-                    filePath = pluginUtil.getVideo(BEAUTY_VIDEO_URL[4]);
-                    break;
-                case 6:
-                    filePath = pluginUtil.getVideo(BEAUTY_VIDEO_URL[5]);
-                    break;
-                case 7:
-                    filePath = pluginUtil.getVideo(BEAUTY_VIDEO_URL[6]);
-                    break;
-                case 8:
-                    filePath = pluginUtil.getVideo(BEAUTY_VIDEO_URL[7]);
-                    break;
-                case 9:
-                    filePath = pluginUtil.getVideo(BEAUTY_VIDEO_URL[8]);
-                    break;
-                case 10:
-                    filePath = pluginUtil.getVideo(BEAUTY_VIDEO_URL[9]);
-                    break;
-                default:
-                    messageReceipts.recall();
-                    group.sendMessage("格式错误，请输入正确的格式");
-                    return;
-            }
-
+            String filePath = pluginUtil.getVideo();
             File video = new File(filePath);
             try (ExternalResource resource = ExternalResource.create(video)) {
                 AbsoluteFile uploadFile = group.getFiles().getRoot().uploadNewFile("/" + video.getName(), resource);
@@ -245,19 +185,19 @@ public class MessageDeal {
         }
 
         if (STRING_HOROSCOPE.equals(msg)) {
-            chain = new MessageChainBuilder().append(new At(senderId)).append(new PlainText("\n请@我并发送星座名\n例如 <@运势运势小助手 白羊>")).build();
+            chain = new MessageChainBuilder().append(new At(senderId)).append(new PlainText("\n请@我并发送星座名\n例如 <@运势小助手 白羊>")).build();
             group.sendMessage(chain);
             return;
         }
 
         if (STRING_COMBAT_POWER_QUERY.equals(msg)) {
-            chain = new MessageChainBuilder().append(new At(senderId)).append(new PlainText("\n请@我并发送qq/微信+英雄名\n例如 <@运势运势小助手 qq 伽罗>")).build();
+            chain = new MessageChainBuilder().append(new At(senderId)).append(new PlainText("\n请@我并发送qq/微信+英雄名\n例如 <@运势小助手 qq 伽罗>")).build();
             group.sendMessage(chain);
             return;
         }
 
         if (STRING_MUSIC_SYSTEM.equals(msg)) {
-            chain = new MessageChainBuilder().append(new At(senderId)).append(new PlainText("\n请@我并发送听歌+音乐名\n注歌曲源来自网易云\n例如 <@运势运势小助手 听歌稻香>")).build();
+            chain = new MessageChainBuilder().append(new At(senderId)).append(new PlainText("\n请@我并发送听歌+音乐名\n注歌曲源来自网易云\n例如 <@运势小助手 听歌稻香>")).build();
             group.sendMessage(chain);
             return;
         }
@@ -314,14 +254,22 @@ public class MessageDeal {
         }
 
         //获取星座运势
-        for (String s : TWELVE_HOROSCOPE) {
-            if (msg.equals(s) || msg.equals(s + "座")) {
-                chain = new MessageChainBuilder().append(new At(senderId)).append(new PlainText("\n" + s + "座运势\n" + pluginUtil.getHoroscope(s))).build();
+        for (String s : TWELVE_HOROSCOPE.keySet()) {
+            if (msg.equals(s) || msg.equals(s + "座") || msg.equals(s + "座运势")) {
+                chain = new MessageChainBuilder().append(new At(senderId)).append(new PlainText("\n" + utils.getHoroscope(TWELVE_HOROSCOPE.getString(s)))).build();
                 group.sendMessage(chain);
                 return;
             }
         }
 
+        //获取热点
+        for (String s : HOT_LIST.keySet()) {
+            if (msg.equals(s)) {
+                chain = new MessageChainBuilder().append(s + ":\n" + utils.getHotList(HOT_LIST.getString(s))).build();
+                group.sendMessage(chain);
+                return;
+            }
+        }
 
         if (STRING_HELP.equals(msg)) {
             chain = new MessageChainBuilder().append(new At(senderId)).append(new PlainText("\n帮助文档:\nhttps://www" +
@@ -347,11 +295,6 @@ public class MessageDeal {
             group.sendMessage(chain);
             return;
         }
-        if (STRING_YUQING.equals(msg) || STRING_YUQINGCX.equals(msg)) {
-            chain = new MessageChainBuilder().append(new PlainText(Utils.CocFishGet())).build();
-            group.sendMessage(chain);
-            return;
-        }
 
         if (STRING_MENU.equals(msg)) {
             group.sendMessage(getMenuTxt());
@@ -360,9 +303,9 @@ public class MessageDeal {
 
         if (Setting.getAi()) {
             String reply = pluginUtil.aiReply(senderId, senderName, group.getId(), msg);
-            if(reply.equals("你干嘛！哎哟~")){
+            if (reply.equals("你干嘛！哎哟~")) {
                 chain = new MessageChainBuilder().append(new PlainText(reply)).append("\n发送<菜单>命令可获取菜单").build();
-            }else {
+            } else {
                 chain = new MessageChainBuilder().append(new PlainText(reply)).build();
             }
             group.sendMessage(chain);
@@ -375,7 +318,7 @@ public class MessageDeal {
      * 菜单
      */
     public MessageChain getMenuTxt() {
-        return new MessageChainBuilder().append(new Face(147)).append(new PlainText("           菜单          ")).append(new Face(147)).append(new PlainText("\n◇━━━━━━━━◇\n")).append(new Face(190)).append(new PlainText("今日运势  今日新闻")).append(new Face(190)).append(new PlainText("\n")).append(new Face(190)).append(new PlainText("星座运势  观音求签")).append(new Face(190)).append(new PlainText("\n")).append(new Face(190)).append(new PlainText("音乐系统  语音系统")).append(new Face(190)).append(new PlainText("\n")).append(new Face(190)).append(new PlainText("美女图片  美女视频")).append(new Face(190)).append(new PlainText("\n")).append(new Face(190)).append(new PlainText("战力查询  鱼情查询")).append(new Face(190)).append(new PlainText("\n◇━━━━━━━━◇\nPS:@我并发相应文字查看指令\n当前版本：" + PluginVersion.VERSION_NUM)).build();
+        return new MessageChainBuilder().append(new Face(147)).append(new PlainText("           菜单          ")).append(new Face(147)).append(new PlainText("\n◇━━━━━━━━◇\n")).append(new Face(190)).append(new PlainText("今日运势  今日新闻")).append(new Face(190)).append(new PlainText("\n")).append(new Face(190)).append(new PlainText("星座运势  观音求签")).append(new Face(190)).append(new PlainText("\n")).append(new Face(190)).append(new PlainText("音乐系统  语音系统")).append(new Face(190)).append(new PlainText("\n")).append(new Face(190)).append(new PlainText("美女图片  美女视频")).append(new Face(190)).append(new PlainText("\n")).append(new Face(190)).append(new PlainText("战力查询  敬请期待")).append(new Face(190)).append(new PlainText("\n◇━━━━━━━━◇\nPS:@我并发相应文字查看指令\n当前版本：" + PluginVersion.VERSION_NUM)).build();
     }
 
 

@@ -62,13 +62,29 @@ public class AutoThread extends Thread {
                     sleep(60000);
                 } else if ("15:00".equals(utils.getNowTime()) && autoTips) {
                     for (int i = 0; i < Setting.getGroup().size(); i++) {
+//                        try {
+//                            Group group = bot.getGroup(Setting.getGroup().getLongValue(i));
+//                            assert group != null;
+//                            MessageChain chain = new MessageChainBuilder()
+//                                    .append(new PlainText(pluginUtil.moFish()))
+//                                    .build();
+//                            group.sendMessage(chain);
+//                        } catch (Exception e) {
+//                            System.out.println("发送小提醒失败");
+//                        }
                         try {
                             Group group = bot.getGroup(Setting.getGroup().getLongValue(i));
-                            assert group != null;
-                            MessageChain chain = new MessageChainBuilder()
-                                    .append(new PlainText(pluginUtil.moFish()))
-                                    .build();
-                            group.sendMessage(chain);
+                            String mofishImgUrl = pluginUtil.moFishNew();
+                            if (!mofishImgUrl.contains("失败")) {
+                                ExternalResource img = ExternalResource.create(new File(mofishImgUrl));
+                                assert group != null;
+                                Image image = group.uploadImage(img);
+                                img.close();
+                                MessageChain chain = new MessageChainBuilder()
+                                        .append(image)
+                                        .build();
+                                group.sendMessage(chain);
+                            }
                         } catch (Exception e) {
                             System.out.println("发送小提醒失败");
                         }
@@ -86,8 +102,6 @@ public class AutoThread extends Thread {
                         throw new RuntimeException(e);
                     }
                     System.out.println("机器人已离线");
-                } else {
-                    System.out.println("机器人在线");
                 }
             }
         }

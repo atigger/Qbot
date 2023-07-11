@@ -13,6 +13,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 import org.qbot.Plugin;
+import org.qbot.api.API;
 
 import java.io.*;
 import java.nio.file.Path;
@@ -93,61 +94,6 @@ public class Utils {
     }
 
     /**
-     * Coc鱼情解析
-     */
-    public static String CocFishGet() {
-        OkHttpClient httpClient = new OkHttpClient();
-        Request getRequest = new Request.Builder()
-                .url("http://www.clashofclansforecaster.com/STATS.json")
-                .get()
-                .build();
-        Call call = httpClient.newCall(getRequest);
-        try {
-            Response response = call.execute();
-            String html = Objects.requireNonNull(response.body()).string();
-            JSONObject jsonObject = JSONObject.parseObject(html);
-            String lootIndexString = jsonObject.getString("lootIndexString");
-            String forecastMessages = jsonObject.getJSONObject("forecastMessages").getString("chinese-simp");
-            JSONArray regionStats = jsonObject.getJSONArray("regionStats");
-            String date = "";
-            int alluser = 0;
-            int offline = 0;
-            int shielded = 0;
-            int attackable = 0;
-            for (Object obj : regionStats) {
-                JSONArray jsonArray = JSONArray.parseArray(obj.toString());
-                if ("China".equals(jsonArray.getString(1))) {
-                    date = jsonArray.getString(3);
-                    alluser = jsonArray.getInteger(5);
-                    offline = jsonArray.getInteger(6);
-                    shielded = jsonArray.getInteger(10);
-                    attackable = jsonArray.getInteger(12);
-                }
-            }
-            int online = alluser - offline;
-            double onlineRate = online / (double) alluser * 100;
-            double offlineRate = offline / (double) alluser * 100;
-            double shieldedRate = shielded / (double) alluser * 100;
-            double attackableRate = attackable / (double) alluser * 100;
-            DecimalFormat df = new DecimalFormat("#.00");
-            forecastMessages = forecastMessages.replace("现在有效地战利品是 <b>", "当前鱼情为:");
-            forecastMessages = forecastMessages.replace("</b> 现在.  这将持续到", "\n当前鱼情将持续:");
-            forecastMessages = forecastMessages.substring(0, forecastMessages.indexOf("分钟") + 2);
-            return "查询时间:" + date + "\n" +
-                    "鱼情指数:" + lootIndexString + "\n" +
-                    forecastMessages + "\n" +
-                    "在线玩家:" + online + " " + df.format(onlineRate) + "%\n" +
-                    "离线玩家:" + offline + " " + df.format(offlineRate) + "%\n" +
-                    "护盾玩家:" + shielded + " " + df.format(shieldedRate) + "%\n" +
-                    "可被攻击玩家:" + attackable + " " + df.format(attackableRate) + "%";
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-
-    /**
      * 获取插件配置文件目录
      */
     public static Path getPluginsPath() {
@@ -212,15 +158,52 @@ public class Utils {
         return text;
     }
 
-    public String getHoroscopeText(String url) {
+    /**
+     * 获取星座运势
+     *
+     * @param msg
+     * @return
+     */
+    public String getHoroscope(String msg) {
+        String url = API.HOROSCOPE_URL + "?type=" + msg + "&time=today";
         try {
-            Document doc = Jsoup.connect(url).get();
-            Elements html = doc.select("table");
-            String html1 = String.valueOf(html);
-            return formatText(html1);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
+            JSONObject jsonObject = JSONObject.parseObject(okHttpClientGet(url)).getJSONObject("data");
+            String title = jsonObject.getString("title") + jsonObject.getString("type") + "\n";
+            String todo = "宜:" + jsonObject.getJSONObject("todo").getString("yi") + "\n忌:" + jsonObject.getJSONObject("todo").getString("ji") + "\n";
+            String fortune = "总运势:" + jsonObject.getJSONObject("index").getString("all") + "\n" + jsonObject.getJSONObject("fortunetext").getString("all") + "\n" +
+                    "爱情运势:" + jsonObject.getJSONObject("index").getString("love") + "\n" + jsonObject.getJSONObject("fortunetext").getString("love") + "\n" +
+                    "财富运势:" + jsonObject.getJSONObject("index").getString("money") + "\n" + jsonObject.getJSONObject("fortunetext").getString("money") + "\n" +
+                    "工作运势:" + jsonObject.getJSONObject("index").getString("work") + "\n" + jsonObject.getJSONObject("fortunetext").getString("work") + "\n" +
+                    "健康运势:" + jsonObject.getJSONObject("index").getString("health") + "\n" + jsonObject.getJSONObject("fortunetext").getString("health") + "\n";
+            String luckyNumber = "幸运数字:" + jsonObject.getString("luckynumber") + "\n";
+            String luckyColor = "幸运颜色:" + jsonObject.getString("luckycolor") + "\n";
+            String shortComment = "短评:" + jsonObject.getString("shortcomment");
+            return title + todo + luckyNumber + luckyColor + todo + fortune + shortComment;
+        } catch (Exception e) {
+            return "\n获取失败";
+        }
+    }
+
+
+    /**
+     * 获取热点
+     *
+     * @param msg
+     * @return
+     */
+    public String getHotList(String msg) {
+        String url = API.HOT_LIST_URL + "?type=" + msg;
+        try {
+            JSONArray jsonArray = JSONObject.parseObject(okHttpClientGet(url)).getJSONArray("data");
+            StringBuilder data = new StringBuilder();
+            for (int i = 0; i < 10; i++) {
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                int num = i + 1;
+                data.append(num).append(" ").append(jsonObject.getString("title")).append("\n");
+            }
+            return data.toString();
+        } catch (Exception e) {
+            return "\n获取失败";
         }
     }
 
@@ -259,7 +242,7 @@ public class Utils {
      * 获取音乐信息
      */
     public JSONObject getMusicInfo(String musicName) {
-        String url = "http://music.163.com/api/search/get/web?s=" + musicName + "&type=1&limit=1";
+        String url = "https://music.163.com/api/search/get/web?s=" + musicName + "&type=1&limit=1";
         String html = okHttpClientGet(url, "220.181.108.104");
         JSONObject json = JSONObject.parseObject(html);
         System.out.println(json);
@@ -471,6 +454,7 @@ public class Utils {
         OkHttpClient okHttpClient = new OkHttpClient();
         Request getRequest = new Request.Builder()
                 .url(url)
+                .addHeader("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.77 Safari/537.36")
                 .get()
                 .build();
         Call call = okHttpClient.newCall(getRequest);

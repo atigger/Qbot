@@ -9,6 +9,7 @@ import net.mamoe.mirai.message.data.*;
 import net.mamoe.mirai.utils.ExternalResource;
 import okhttp3.*;
 import org.qbot.Plugin;
+import org.qbot.api.API;
 
 import java.io.File;
 import java.io.IOException;
@@ -75,7 +76,7 @@ public class PluginUtil {
         String nowDay = utils.getTime1();
         File newsFile = new File(utils.getPluginsDataPath() + "/cache/news/" + nowDay + ".jpg");
         String filePath = utils.getPluginsDataPath() + "/cache/news/" + utils.getTime1() + ".jpg";
-        String url = "http://api.03c3.cn/zb";
+        String url = API.NEWS_URL;
         if (newsFile.exists()) {
             return newsFile.getPath();
         } else {
@@ -91,7 +92,8 @@ public class PluginUtil {
     /**
      * 获取视频
      */
-    public String getVideo(String url) {
+    public String getVideo() {
+        String url = API.VIDEO_URL;
         String nowDay = utils.getTime1();
         int randomNum = Utils.getRandomNum(0, 10000);
         String fileName = Utils.getTime() + randomNum;
@@ -112,7 +114,7 @@ public class PluginUtil {
      * 获取每日一句
      */
     public String getOne() {
-        String url = "https://v1.hitokoto.cn/";
+        String url = API.ONE_WORD_URL;
         String html = utils.okHttpClientGet(url);
         if (html == null) {
             return "获取失败";
@@ -127,53 +129,6 @@ public class PluginUtil {
             return str;
         } catch (Exception e) {
             return "获取失败";
-        }
-    }
-
-    /**
-     * 星座运势
-     */
-    public String getHoroscope(String name) {
-        String url;
-        switch (name) {
-            case "白羊":
-                url = "https://astro.sina.com.cn/fate_day_Aries/";
-                return utils.getHoroscopeText(url);
-            case "金牛":
-                url = "https://astro.sina.com.cn/fate_day_Taurus/";
-                return utils.getHoroscopeText(url);
-            case "双子":
-                url = "https://astro.sina.com.cn/fate_day_Gemini/";
-                return utils.getHoroscopeText(url);
-            case "巨蟹":
-                url = "https://astro.sina.com.cn/fate_day_Cancer/";
-                return utils.getHoroscopeText(url);
-            case "狮子":
-                url = "https://astro.sina.com.cn/fate_day_leo/";
-                return utils.getHoroscopeText(url);
-            case "处女":
-                url = "https://astro.sina.com.cn/fate_day_Virgo/";
-                return utils.getHoroscopeText(url);
-            case "天秤":
-                url = "https://astro.sina.com.cn/fate_day_Libra/";
-                return utils.getHoroscopeText(url);
-            case "天蝎":
-                url = "https://astro.sina.com.cn/fate_day_Scorpio/";
-                return utils.getHoroscopeText(url);
-            case "射手":
-                url = "https://astro.sina.com.cn/fate_day_Sagittarius/";
-                return utils.getHoroscopeText(url);
-            case "摩羯":
-                url = "https://astro.sina.com.cn/fate_day_Capricorn/";
-                return utils.getHoroscopeText(url);
-            case "水瓶":
-                url = "https://astro.sina.com.cn/fate_day_Aquarius/";
-                return utils.getHoroscopeText(url);
-            case "双鱼":
-                url = "https://astro.sina.com.cn/fate_day_Pisces/";
-                return utils.getHoroscopeText(url);
-            default:
-                return null;
         }
     }
 
@@ -201,9 +156,9 @@ public class PluginUtil {
         JSONObject musicInfo = utils.getMusicInfo(musicName);
         return new MusicShare(MusicKind.NeteaseCloudMusic, musicInfo.getString("song_name"),
                 musicInfo.getString("songer_name"),
-                "http://music.163.com/song/" + musicInfo.getString("song_id") + "/?userid=380034310",
+                "https://music.163.com/song/" + musicInfo.getString("song_id") + "/?userid=380034310",
                 musicInfo.getString("cover_url"),
-                "http://music.163.com/song/media/outer/url?id=" + musicInfo.getString("song_id") + "&userid=380034310"
+                "https://music.163.com/song/media/outer/url?id=" + musicInfo.getString("song_id") + "&userid=380034310"
         );
     }
 
@@ -224,7 +179,7 @@ public class PluginUtil {
      * 战力查询
      */
     public JSONObject getPower(String hero, String qu) {
-        String heroUrl = "https://www.sapi.run/hero/select.php?hero=" + hero + "&type=" + qu;
+        String heroUrl = API.HERO_POWER_URL + "?hero=" + hero + "&type=" + qu;
         String data = utils.okHttpClientGet(heroUrl);
         JSONObject jsonData = JSON.parseObject(data);
         int code = jsonData.getInteger("code");
@@ -394,6 +349,25 @@ public class PluginUtil {
         }
         txt = txt + statementAtTheEnd;
         return txt;
+    }
+
+    /**
+     * 摸鱼办新
+     */
+    public String moFishNew() {
+        String nowDay = utils.getTime1();
+        File newsFile = new File(utils.getPluginsDataPath() + "/cache/mofish/" + nowDay + ".jpg");
+        String filePath = utils.getPluginsDataPath() + "/cache/mofish/" + utils.getTime1() + ".jpg";
+        String url = API.FISH_URL;
+        if (newsFile.exists()) {
+            return newsFile.getPath();
+        } else {
+            if (utils.downloadImg(url, filePath)) {
+                return newsFile.getPath();
+            } else {
+                return "失败";
+            }
+        }
     }
 
     /**
