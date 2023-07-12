@@ -80,7 +80,7 @@ public class PluginUtil {
         if (newsFile.exists()) {
             return newsFile.getPath();
         } else {
-            if (utils.downloadImg(url, filePath)) {
+            if (utils.downloadFile(url, filePath)) {
                 return newsFile.getPath();
             } else {
                 return "失败";
@@ -102,7 +102,7 @@ public class PluginUtil {
         if (newsFile.exists()) {
             return newsFile.getPath();
         } else {
-            if (utils.downloadImg(url, filePath)) {
+            if (utils.downloadFile(url, filePath)) {
                 return newsFile.getPath();
             } else {
                 return "失败";
@@ -137,7 +137,7 @@ public class PluginUtil {
      */
     public String getCq() {
         String cqTxt = "";
-        String filePath = utils.getPluginsDataPath() + "/cq.txt";
+        String filePath = utils.getPluginsDataPath() + "/诸葛神签.txt";
         int maxNum = utils.getFileLen(filePath);
         int randomNum = Utils.getRandomNum(1, maxNum);
         try {
@@ -201,7 +201,7 @@ public class PluginUtil {
                 heroInfo.put("img", heroImgPath.toString());
                 return heroInfo;
             } else {
-                if (utils.downloadImg(heroPhoto, filePath)) {
+                if (utils.downloadFile(heroPhoto, filePath)) {
                     heroInfo.put("img", heroImgPath.toString());
                     return heroInfo;
                 }
@@ -362,7 +362,7 @@ public class PluginUtil {
         if (newsFile.exists()) {
             return newsFile.getPath();
         } else {
-            if (utils.downloadImg(url, filePath)) {
+            if (utils.downloadFile(url, filePath)) {
                 return newsFile.getPath();
             } else {
                 return "失败";

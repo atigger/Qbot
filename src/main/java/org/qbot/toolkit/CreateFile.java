@@ -1,6 +1,7 @@
 package org.qbot.toolkit;
 
 import com.alibaba.fastjson2.JSONArray;
+import org.qbot.api.API;
 
 import java.io.*;
 import java.nio.file.Path;
@@ -13,6 +14,8 @@ import java.nio.file.Path;
  */
 
 public class CreateFile {
+    Utils utils = new Utils();
+
     public void createFile() {
         Path dataFolderPath = Utils.getPluginsDataPath();
         Path configFolderPath = Utils.getPluginsPath();
@@ -62,7 +65,7 @@ public class CreateFile {
             System.out.println("检测到配置文件不存在，生成中");
             SetSetting.setFile(Setting.VERSION_NUM, 0, "", "", "", 1, 119, false, false, false, "", "", false, false,
                     false,
-                    new JSONArray(), false, 0, "","");
+                    new JSONArray(), false, 0, "", "");
         } else {
             System.out.println("配置文件存在");
             Setting setting1 = new Setting();
@@ -83,48 +86,35 @@ public class CreateFile {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        File cqFile = new File(dataFolderPath + "/cq.txt");
+        File cqFile = new File(dataFolderPath + "/诸葛神签.txt");
         if (!cqFile.exists()) {
-            try {
-                createDataFile(cqFile, "cq.txt");
-            } catch (IOException e) {
-                e.printStackTrace();
+            System.out.println("正在下载资源文件:" + cqFile.getName());
+            if (utils.downloadFile(API.ZHU_GE_URL, cqFile.getAbsolutePath())) {
+                System.out.println("下载完成");
+            } else {
+                System.out.println("下载失败");
             }
         }
         //提示文件
-        File tipsFile = new File(dataFolderPath + "/ts.jpg");
+        File tipsFile = new File(dataFolderPath + "/image_tips.png");
         if (!tipsFile.exists()) {
-            try {
-                createDataFile(tipsFile, "ts.jpg");
-            } catch (IOException e) {
-                e.printStackTrace();
+            System.out.println("正在下载资源文件:" + tipsFile.getName());
+            if (utils.downloadFile(API.IMAGE_TIPS_URL, tipsFile.getAbsolutePath())) {
+                System.out.println("下载完成");
+            } else {
+                System.out.println("下载失败");
             }
         }
         //二维码
-        File ewmFile = new File(dataFolderPath + "/ewm.png");
+        File ewmFile = new File(dataFolderPath + "/image_qr_code.png");
         if (!ewmFile.exists()) {
-            try {
-                createDataFile(ewmFile, "ewm.png");
-            } catch (IOException e) {
-                e.printStackTrace();
+            System.out.println("正在下载资源文件:" + ewmFile.getName());
+            if (utils.downloadFile(API.IMAGE_URL, ewmFile.getAbsolutePath())) {
+                System.out.println("下载完成");
+            } else {
+                System.out.println("下载失败");
             }
         }
-    }
-
-    public void createDataFile(File cq, String fileName) throws IOException {
-        int bytesum = 0;
-        int byteread;
-        InputStream in = this.getClass().getResourceAsStream("../../../../../" + fileName);
-        FileOutputStream fs = new FileOutputStream(cq);
-        byte[] buffer = new byte[1444];
-        if (in != null) {
-            while ((byteread = in.read(buffer)) != -1) {
-                bytesum += byteread;
-                fs.write(buffer, 0, byteread);
-            }
-            in.close();
-        }
-        fs.close();
     }
 
 }

@@ -9,15 +9,11 @@ import com.baidu.aip.util.Util;
 import net.mamoe.mirai.console.plugin.PluginManager;
 import net.mamoe.mirai.console.plugin.jvm.JvmPlugin;
 import okhttp3.*;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.select.Elements;
 import org.qbot.Plugin;
 import org.qbot.api.API;
 
 import java.io.*;
 import java.nio.file.Path;
-import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -450,7 +446,7 @@ public class Utils {
         return "0";
     }
 
-    public boolean downloadImg(String url, String filePath) {
+    public boolean downloadFile(String url, String filePath) {
         OkHttpClient okHttpClient = new OkHttpClient();
         Request getRequest = new Request.Builder()
                 .url(url)
@@ -473,6 +469,17 @@ public class Utils {
             }
             in.close();
             fo.close();
+            //检测下载是否成功
+            File file = new File(filePath);
+            if (file.exists()) {
+                //基本上没那么小的文件
+                if (file.length() < 1000) {
+                    file.delete();
+                    return false;
+                }
+            } else {
+                return false;
+            }
             return true;
         } catch (IOException e) {
             e.printStackTrace();

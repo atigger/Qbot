@@ -115,7 +115,7 @@ public class MessageDeal {
                 }
             } catch (Exception e) {
                 messageReceipts.recall();
-                group.sendMessage("发送失败");
+                group.sendMessage("发送失败,请重试");
             }
             return;
         }
@@ -229,8 +229,8 @@ public class MessageDeal {
             ForwardMessageBuilder builder1 = new ForwardMessageBuilder(group);
             ForwardMessageBuilder builder = new ForwardMessageBuilder(group);
 
-            builder.add(2119517658L, "一位不愿透露姓名的群友", getImageAdd(dataFolderPath + "/ewm.png"));
-            builder.add(2119517658L, "一位不愿透露姓名的群友", new PlainText("注意\n由于tx限制\n请按照以下提示操作\n使用浏览器打开").plus(getImageAdd(dataFolderPath + "/ts.jpg")));
+            builder.add(2119517658L, "一位不愿透露姓名的群友", getImageAdd(dataFolderPath + "/image_qr_code.png"));
+            builder.add(2119517658L, "一位不愿透露姓名的群友", new PlainText("注意\n由于tx限制\n请按照以下提示操作\n使用浏览器打开").plus(getImageAdd(dataFolderPath + "/image_tips.png")));
             builder.add(2119517658L, "一位不愿透露姓名的群友",
                     new PlainText("注意\n刷新即可切换图片").plus(new Face(271)));
             ForwardMessage forward = builder.build();

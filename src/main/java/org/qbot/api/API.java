@@ -43,4 +43,19 @@ public class API {
      * 新闻
      */
     public static final String NEWS_URL = BASE_URL + "/news";
+
+    /**
+     * 诸葛神签
+     */
+    public static final String ZHU_GE_URL = BASE_URL + "/file/诸葛神签.txt";
+
+    /**
+     * 图片网站二维码
+     */
+    public static final String IMAGE_URL = BASE_URL + "/file/image_qr_code.png";
+
+    /**
+     * 图片网站提示
+     */
+    public static final String IMAGE_TIPS_URL = BASE_URL + "/file/image_tips.png";
 }

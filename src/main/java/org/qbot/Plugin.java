@@ -17,9 +17,10 @@ import org.qbot.group.GroupManagementUtil;
 import org.qbot.msgdeal.AdminMessageDeal;
 import org.qbot.msgdeal.MessageDeal;
 import org.qbot.music.MusicMessageDeal;
-import org.qbot.music.NeteaseCloudMusicTask;
 import org.qbot.thread.StartThread;
-import org.qbot.toolkit.*;
+import org.qbot.toolkit.CreateFile;
+import org.qbot.toolkit.Setting;
+import org.qbot.toolkit.Utils;
 
 import java.io.File;
 import java.io.IOException;
