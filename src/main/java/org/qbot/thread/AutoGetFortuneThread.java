@@ -31,6 +31,7 @@ public class AutoGetFortuneThread extends Thread {
         super.run();
         String filePath = Utils.getPluginsDataPath() + "/cache/week.cache";
         PluginUtil pluginUtil = new PluginUtil();
+        Utils utils = new Utils();
         System.out.println("开启自动获取运势线程成功！");
         try {
             while (true) {
@@ -62,6 +63,14 @@ public class AutoGetFortuneThread extends Thread {
                         }
                         Utils.rewrite(week1);
                     }
+                }
+                if (!bot.isOnline()) {
+                    try {
+                        utils.sendMsgToWeChat("机器人:" + bot.getId() + "\n已离线\n" + utils.getTime4());
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                    System.out.println("机器人已离线");
                 }
                 Thread.sleep(600000);
             }

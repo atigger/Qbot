@@ -16,7 +16,8 @@ public class StartThread extends Thread {
     @SuppressWarnings("InfiniteLoopStatement")
     public void run() {
         try {
-            sleep(10000);
+            System.out.println("定时任务将在一分钟后启动");
+            sleep(60000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -32,7 +33,7 @@ public class StartThread extends Thread {
             autoThread.start();
         }
         while (true) {
-            try{
+            try {
                 sleep(60000);
                 if (autoFortune) {
                     if (!autoGetFortuneThread.isAlive()) {

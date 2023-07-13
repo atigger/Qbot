@@ -48,11 +48,7 @@ public class AutoThread extends Thread {
                                 assert group != null;
                                 Image image = group.uploadImage(img);
                                 img.close();
-                                MessageChain chain = new MessageChainBuilder()
-                                        .append(new PlainText("今日新闻"))
-                                        .append(image)
-                                        .append(new PlainText(pluginUtil.getOne()))
-                                        .build();
+                                MessageChain chain = new MessageChainBuilder().append(new PlainText("今日新闻")).append(image).append(new PlainText(pluginUtil.getOne())).build();
                                 group.sendMessage(chain);
                             }
                         } catch (Exception e) {
@@ -80,9 +76,7 @@ public class AutoThread extends Thread {
                                 assert group != null;
                                 Image image = group.uploadImage(img);
                                 img.close();
-                                MessageChain chain = new MessageChainBuilder()
-                                        .append(image)
-                                        .build();
+                                MessageChain chain = new MessageChainBuilder().append(image).build();
                                 group.sendMessage(chain);
                             }
                         } catch (Exception e) {
@@ -94,15 +88,6 @@ public class AutoThread extends Thread {
                 sleep(30000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
-            } finally {
-                if (!bot.isOnline()) {
-                    try {
-                        utils.sendMsgToWeChat("机器人已离线\n" + utils.getTime4());
-                    } catch (Exception e) {
-                        throw new RuntimeException(e);
-                    }
-                    System.out.println("机器人已离线");
-                }
             }
         }
     }
