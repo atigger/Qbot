@@ -86,7 +86,7 @@ public class MessageDeal {
 
 
         if ("".equals(msg)) {
-            chain = new MessageChainBuilder().append(new At(senderId)).append(new PlainText("\n你没得事情干唛？@我作甚么？")).append(new Face(312)).append("\n发送<运势小助手 菜单>命令可获取菜单").build();
+            chain = new MessageChainBuilder().append(new At(senderId)).append("\n发送<菜单>命令可获取菜单").build();
             group.sendMessage(chain);
             return;
         }
@@ -96,7 +96,7 @@ public class MessageDeal {
             try {
                 MessageSource.recall(msgchains);
             } catch (Exception e) {
-                System.out.printf("撤回失败1");
+                System.out.println("撤回失败1");
             }
             MessageReceipt<Group> messageReceipts = group.sendMessage("正在上传，请稍后...");
             String filePath = pluginUtil.getVideo();
@@ -111,7 +111,7 @@ public class MessageDeal {
                         uploadFile.delete();
                     }
                 } catch (Exception e) {
-                    System.out.printf("撤回失败");
+                    System.out.println("撤回失败");
                 }
             } catch (Exception e) {
                 messageReceipts.recall();
@@ -240,7 +240,7 @@ public class MessageDeal {
             try {
                 MessageSource.recall(msgchains);
             } catch (Exception e) {
-                System.out.printf("撤回失败1");
+                System.out.println("撤回失败1");
             }
             try {
                 if (recallTimes != 0) {
@@ -248,7 +248,7 @@ public class MessageDeal {
                     messageReceipts.recall();
                 }
             } catch (Exception e) {
-                System.out.printf("撤回失败");
+                System.out.println("撤回失败");
             }
             return;
         }
