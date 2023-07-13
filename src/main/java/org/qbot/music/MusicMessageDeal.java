@@ -8,6 +8,7 @@ import net.mamoe.mirai.message.data.MessageChain;
 import net.mamoe.mirai.message.data.MessageChainBuilder;
 import net.mamoe.mirai.message.data.PlainText;
 import net.mamoe.mirai.utils.ExternalResource;
+import org.qbot.toolkit.Setting;
 import org.qbot.toolkit.Utils;
 
 import java.io.File;
@@ -33,9 +34,7 @@ public class MusicMessageDeal {
     private static final String STRING_LOGIN_OUT = "退出登录";
 
     public boolean msgDel(Friend frind, String msg) throws IOException, InterruptedException {
-
-
-        System.out.println("收到消息:" + msg);
+        Setting.getBot().getLogger().info("收到消息:" + msg);
 
         long senderId = frind.getId();
 
@@ -210,7 +209,7 @@ public class MusicMessageDeal {
     /**
      * 设置缓存文件
      *
-     * @return
+     * @return boolean 是否成功
      */
     public static boolean setFile(long senderId, String key, String value) throws IOException {
         Utils utils1 = new Utils();
@@ -260,25 +259,25 @@ public class MusicMessageDeal {
         File file = new File(filePath);
         JSONObject jsonObject = utils.readFile(file);
 
-        String Sign = jsonObject.getString("Sign");
-        String NumberOfBrushes = jsonObject.getString("NumberOfBrushes");
-        String LastDate = jsonObject.getString("LastDate");
-        String Lock = jsonObject.getString("Lock");
-        if (!LastDate.equals(utils.getTime3())) {
-            Sign = "未签到";
-            NumberOfBrushes = "0";
-            Lock = "未启动";
-            setFile(senderId, "Sign", Sign);
-            setFile(senderId, "NumberOfBrushes", NumberOfBrushes);
-            setFile(senderId, "Lock", Lock);
+        String sign = jsonObject.getString("Sign");
+        String numberOfBrushes = jsonObject.getString("NumberOfBrushes");
+        String lastDate = jsonObject.getString("LastDate");
+        String lock = jsonObject.getString("Lock");
+        if (!lastDate.equals(utils.getTime3())) {
+            sign = "未签到";
+            numberOfBrushes = "0";
+            lock = "未启动";
+            setFile(senderId, "Sign", sign);
+            setFile(senderId, "NumberOfBrushes", numberOfBrushes);
+            setFile(senderId, "Lock", lock);
             setFile(senderId, "ExitTag", "false");
         }
 
         return "昵称:" + jsonObject.getString("Name") + "\n" +
-                "签到状态:" + Sign + "\n" +
-                "已刷歌次数:" + NumberOfBrushes + "\n" +
-                "上次刷歌时间:\n" + LastDate + "\n" +
-                "刷歌状态:" + Lock + "\n" +
+                "签到状态:" + sign + "\n" +
+                "已刷歌次数:" + numberOfBrushes + "\n" +
+                "上次刷歌时间:\n" + lastDate + "\n" +
+                "刷歌状态:" + lock + "\n" +
                 "上次登录时间:\n" + jsonObject.getString("LastLoginDate");
     }
 

@@ -64,7 +64,7 @@ public class NeteaseCloudMusicTask {
             for (int i = 0; i < TIMEOUT; i++) {
                 JSONObject jsonObject = JSONObject.parseObject(utils.okHttpClientGetMusic(baseUrl + "/login/qr/check?key=" + qrKey + "&timerstamp=" + System.currentTimeMillis(), ""));
                 int code = jsonObject.getIntValue("code");
-                System.out.println("" + jsonObject);
+                Setting.getBot().getLogger().info(String.valueOf(jsonObject));
                 if (code != 801) {
                     if (code == 803) {
                         String cookie = jsonObject.getString("cookie");
@@ -84,7 +84,7 @@ public class NeteaseCloudMusicTask {
                 Thread.sleep(1000);
             }
         } catch (Exception e) {
-            System.out.println(e + "");
+            Setting.getBot().getLogger().info(e);
         }
         return "已过期请重新获取1";
     }
@@ -154,7 +154,7 @@ public class NeteaseCloudMusicTask {
             MusicMessageDeal.setFile(senderId, "Lock", "未启动");
             return "获取歌单ID失败";
         } else {
-            System.out.println("QQ:" + senderId + "----获取歌单ID成功:" + likeListId);
+            Setting.getBot().getLogger().info("QQ:" + senderId + "----获取歌单ID成功:" + likeListId);
         }
         String songId1 = getPlaylistSongId(cookie, likeListId);
         if (songId1 == null) {
@@ -162,7 +162,7 @@ public class NeteaseCloudMusicTask {
             MusicMessageDeal.setFile(senderId, "Lock", "未启动");
             return "获取歌曲ID失败";
         } else {
-            System.out.println("QQ:" + senderId + "----获取歌曲ID成功:" + songId1);
+            Setting.getBot().getLogger().info("QQ:" + senderId + "----获取歌曲ID成功:" + songId1);
         }
         JSONArray likeListArray = getIntelligenceList(cookie, songId1, likeListId);
         if (likeListArray == null) {
@@ -170,11 +170,11 @@ public class NeteaseCloudMusicTask {
             MusicMessageDeal.setFile(senderId, "Lock", "未启动");
             return "获取心动模式歌曲失败";
         } else {
-            System.out.println("QQ:" + senderId + "----获取心动模式歌曲成功,歌曲数:" + likeListArray.size());
+            Setting.getBot().getLogger().info("QQ:" + senderId + "----获取心动模式歌曲成功,歌曲数:" + likeListArray.size());
         }
         Set<String> count = new HashSet<>();
         int tag = 0;
-        System.out.println("QQ:" + senderId + "----刷歌次数:" + LISTEN_COUNT);
+        Setting.getBot().getLogger().info("QQ:" + senderId + "----刷歌次数:" + LISTEN_COUNT);
         int num = Integer.parseInt(Objects.requireNonNull(MusicMessageDeal.getFile(senderId, "NumberOfBrushes")));
         while (count.size() < LISTEN_COUNT) {
             String songId = songId1;
@@ -197,7 +197,7 @@ public class NeteaseCloudMusicTask {
                     }
                 } catch (Exception ignored) {
                 }
-                System.out.println("QQ:" + senderId + "----第" + count.size() + "首----歌曲ID:" + songId + "----结果:" + result);
+                Setting.getBot().getLogger().info("QQ:" + senderId + "----第" + count.size() + "首----歌曲ID:" + songId + "----结果:" + result);
                 Thread.sleep(Utils.getRandomNum(1000, 10000));
                 //防止死循环
                 if (tag > LISTEN_COUNT * 2) {
@@ -213,7 +213,7 @@ public class NeteaseCloudMusicTask {
                 MusicMessageDeal.setFile(senderId, "Lock", "未启动");
                 return "更新心动模式歌曲失败,刷歌完成：共刷歌" + count.size() + "首";
             } else {
-                System.out.println("QQ:" + senderId + "----更新心动模式歌曲成功,歌曲数:" + likeListArray.size());
+                Setting.getBot().getLogger().info("QQ:" + senderId + "----更新心动模式歌曲成功,歌曲数:" + likeListArray.size());
             }
         }
         MusicMessageDeal.setFile(senderId, "ExitTag", "false");
@@ -241,10 +241,10 @@ public class NeteaseCloudMusicTask {
     public int getSongDetailTime(String cookie, String songId) {
         try {
             JSONObject jsonObject = JSONObject.parseObject(utils.okHttpClientGetMusic(baseUrl + "/song/detail?ids=" + songId, cookie)).getJSONArray("songs").getJSONObject(0);
-            System.out.println("歌曲ID：" + songId + "--歌曲名:" + jsonObject.getString("name") + "--时长:" + jsonObject.getInteger("dt") / 1000);
+            Setting.getBot().getLogger().info("歌曲ID：" + songId + "--歌曲名:" + jsonObject.getString("name") + "--时长:" + jsonObject.getInteger("dt") / 1000);
             return jsonObject.getInteger("dt") / 1000;
         } catch (Exception e) {
-            System.out.println("歌曲ID：" + songId + "--获取歌曲时长失败");
+            Setting.getBot().getLogger().info("歌曲ID：" + songId + "--获取歌曲时长失败");
             return 5;
         }
     }
@@ -270,7 +270,7 @@ public class NeteaseCloudMusicTask {
             } else {
                 msg += "PC签到失败:" + pCJsonObject.getString("msg");
             }
-            System.out.println(msg);
+            Setting.getBot().getLogger().info(msg);
             return msg;
         } catch (Exception e) {
             return "签到失败";
@@ -289,7 +289,7 @@ public class NeteaseCloudMusicTask {
             } else {
                 msg = "云贝签到失败:" + jsonObject.getString("msg");
             }
-            System.out.println(msg);
+            Setting.getBot().getLogger().info(msg);
             return msg;
         } catch (Exception e) {
             return "云贝签到失败";
@@ -302,9 +302,9 @@ public class NeteaseCloudMusicTask {
     public void yunbeiGet(String cookie) {
         JSONObject jsonObject = JSONObject.parseObject(utils.okHttpClientGetMusic(baseUrl + "/yunbei/get?timerstamp=" + System.currentTimeMillis(), cookie));
         if (jsonObject.getInteger("code") == SUCCESS_CODE) {
-            System.out.println("领取云贝成功，获得云贝:" + jsonObject.getJSONObject("data").getInteger("point"));
+            Setting.getBot().getLogger().info("领取云贝成功，获得云贝:" + jsonObject.getJSONObject("data").getInteger("point"));
         } else {
-            System.out.println("领取云贝失败:" + jsonObject.getString("msg"));
+            Setting.getBot().getLogger().info("领取云贝失败:" + jsonObject.getString("msg"));
         }
 
     }
@@ -315,9 +315,9 @@ public class NeteaseCloudMusicTask {
     public void yunbeiTask(String cookie) {
         JSONObject jsonObject = JSONObject.parseObject(utils.okHttpClientGetMusic(baseUrl + "/yunbei/task?timerstamp=" + System.currentTimeMillis(), cookie));
         if (jsonObject.getInteger("code") == SUCCESS_CODE) {
-            System.out.println("完成云贝任务成功，获得云贝:" + jsonObject.getJSONObject("data").getInteger("point"));
+            Setting.getBot().getLogger().info("完成云贝任务成功，获得云贝:" + jsonObject.getJSONObject("data").getInteger("point"));
         } else {
-            System.out.println("完成云贝任务失败:" + jsonObject.getString("msg"));
+            Setting.getBot().getLogger().info("完成云贝任务失败:" + jsonObject.getString("msg"));
         }
     }
 
@@ -327,9 +327,9 @@ public class NeteaseCloudMusicTask {
     public void yunbeiPush(String cookie, String songId) {
         JSONObject jsonObject = JSONObject.parseObject(utils.okHttpClientGetMusic(baseUrl + "/yunbei/rcmd/song?id=" + songId, cookie));
         if (jsonObject.getInteger("code") == SUCCESS_CODE) {
-            System.out.println("云贝推歌成功");
+            Setting.getBot().getLogger().info("云贝推歌成功");
         } else {
-            System.out.println("云贝推歌失败:" + jsonObject.getString("message"));
+            Setting.getBot().getLogger().info("云贝推歌失败:" + jsonObject.getString("message"));
         }
     }
 
@@ -341,12 +341,12 @@ public class NeteaseCloudMusicTask {
         if (jsonObject.getInteger("code") == SUCCESS_CODE) {
             String nickname = jsonObject.getJSONObject("profile").getString("nickname");
             String userid = jsonObject.getJSONObject("profile").getString("userId");
-            System.out.println("用户信息:用户名:" + nickname + " 用户ID:" + userid);
+            Setting.getBot().getLogger().info("用户信息:用户名:" + nickname + " 用户ID:" + userid);
             jsonObject.put("nickname", nickname);
             jsonObject.put("userId", userid);
             return jsonObject;
         } else {
-            System.out.println("获取用户信息失败:" + jsonObject.getString("msg"));
+            Setting.getBot().getLogger().info("获取用户信息失败:" + jsonObject.getString("msg"));
         }
         return null;
     }

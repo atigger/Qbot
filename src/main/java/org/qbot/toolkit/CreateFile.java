@@ -1,9 +1,13 @@
 package org.qbot.toolkit;
 
 import com.alibaba.fastjson2.JSONArray;
+import org.qbot.Plugin;
 import org.qbot.api.API;
 
-import java.io.*;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.nio.file.Path;
 
 /**
@@ -15,8 +19,7 @@ import java.nio.file.Path;
 
 public class CreateFile {
     Utils utils = new Utils();
-
-    public void createFile() {
+    public void createFile(Plugin plugin) {
         Path dataFolderPath = Utils.getPluginsDataPath();
         Path configFolderPath = Utils.getPluginsPath();
 
@@ -62,12 +65,12 @@ public class CreateFile {
         File file = new File(configFolderPath + "/setting.yml");
 
         if (!file.exists()) {
-            System.out.println("检测到配置文件不存在，生成中");
+            plugin.getLogger().info("检测到配置文件不存在，生成中");
             SetSetting.setFile(Setting.VERSION_NUM, 0, "", "", "", 1, 119, false, false, false, "", "", false, false,
                     false,
                     new JSONArray(), false, 0, "", "");
         } else {
-            System.out.println("配置文件存在");
+            plugin.getLogger().info("配置文件存在");
             Setting setting1 = new Setting();
             setting1.getVersion();
         }
@@ -88,31 +91,31 @@ public class CreateFile {
         }
         File cqFile = new File(dataFolderPath + "/诸葛神签.txt");
         if (!cqFile.exists()) {
-            System.out.println("正在下载资源文件:" + cqFile.getName());
+            plugin.getLogger().info("正在下载资源文件:" + cqFile.getName());
             if (utils.downloadFile(API.ZHU_GE_URL, cqFile.getAbsolutePath())) {
-                System.out.println("下载完成");
+                plugin.getLogger().info("下载完成");
             } else {
-                System.out.println("下载失败");
+                plugin.getLogger().info("下载失败");
             }
         }
         //提示文件
         File tipsFile = new File(dataFolderPath + "/image_tips.png");
         if (!tipsFile.exists()) {
-            System.out.println("正在下载资源文件:" + tipsFile.getName());
+            plugin.getLogger().info("正在下载资源文件:" + tipsFile.getName());
             if (utils.downloadFile(API.IMAGE_TIPS_URL, tipsFile.getAbsolutePath())) {
-                System.out.println("下载完成");
+                plugin.getLogger().info("下载完成");
             } else {
-                System.out.println("下载失败");
+                plugin.getLogger().info("下载失败");
             }
         }
         //二维码
         File ewmFile = new File(dataFolderPath + "/image_qr_code.png");
         if (!ewmFile.exists()) {
-            System.out.println("正在下载资源文件:" + ewmFile.getName());
+            plugin.getLogger().info("正在下载资源文件:" + ewmFile.getName());
             if (utils.downloadFile(API.IMAGE_URL, ewmFile.getAbsolutePath())) {
-                System.out.println("下载完成");
+                plugin.getLogger().info("下载完成");
             } else {
-                System.out.println("下载失败");
+                plugin.getLogger().info("下载失败");
             }
         }
     }

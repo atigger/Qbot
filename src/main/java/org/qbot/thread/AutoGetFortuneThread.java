@@ -12,7 +12,6 @@ import org.qbot.toolkit.Setting;
 import org.qbot.toolkit.Utils;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Calendar;
@@ -32,20 +31,19 @@ public class AutoGetFortuneThread extends Thread {
         String filePath = Utils.getPluginsDataPath() + "/cache/week.cache";
         PluginUtil pluginUtil = new PluginUtil();
         Utils utils = new Utils();
-        System.out.println("开启自动获取运势线程成功！");
+        Setting.getBot().getLogger().info("开启自动获取运势线程成功！");
         try {
             while (true) {
+                Bot bot = Bot.getInstance(Setting.getQq());
                 Calendar calendar = Calendar.getInstance();
                 int week1 = calendar.get(Calendar.DAY_OF_WEEK);
                 BufferedReader in = new BufferedReader(new FileReader(filePath));
                 int week = Integer.parseInt(in.readLine());
-                long botqq = Setting.getQq();
                 JSONArray groupList = Setting.getGroup();
-                Bot bot = Bot.getInstance(botqq);
                 if (week != week1) {
                     String txt = pluginUtil.getFortune();
                     if (!txt.contains("失败")) {
-                        System.out.println("正在发送运势");
+                        Setting.getBot().getLogger().info("正在发送运势");
                         for (int i = 0; i < groupList.size(); i++) {
                             try {
                                 Group group = bot.getGroup(groupList.getLongValue(i));
@@ -58,7 +56,7 @@ public class AutoGetFortuneThread extends Thread {
                                 group.sendMessage(chain);
                                 Thread.sleep(1000);
                             } catch (Exception e) {
-                                System.out.println("发送运势失败");
+                                Setting.getBot().getLogger().info("发送运势失败");
                             }
                         }
                         Utils.rewrite(week1);
@@ -70,7 +68,7 @@ public class AutoGetFortuneThread extends Thread {
                     } catch (Exception e) {
                         throw new RuntimeException(e);
                     }
-                    System.out.println("机器人已离线");
+                    Setting.getBot().getLogger().info("机器人已离线");
                 }
                 Thread.sleep(600000);
             }

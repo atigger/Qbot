@@ -16,7 +16,6 @@ public class StartThread extends Thread {
     @SuppressWarnings("InfiniteLoopStatement")
     public void run() {
         try {
-            System.out.println("定时任务将在一分钟后启动");
             sleep(60000);
         } catch (InterruptedException e) {
             e.printStackTrace();

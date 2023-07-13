@@ -241,7 +241,6 @@ public class Utils {
         String url = "https://music.163.com/api/search/get/web?s=" + musicName + "&type=1&limit=1";
         String html = okHttpClientGet(url, "220.181.108.104");
         JSONObject json = JSONObject.parseObject(html);
-        System.out.println(json);
         JSONObject musicInfoJson = json.getJSONObject("result").getJSONArray("songs").getJSONObject(0);
         JSONObject artists = musicInfoJson.getJSONArray("artists").getJSONObject(0);
         String songName = musicInfoJson.getString("name");
@@ -304,7 +303,7 @@ public class Utils {
             }
         }
         if (res1 != null) {
-            System.out.println(res1.toString(2));
+            Setting.getBot().getLogger().info(res1.toString(2));
             return "0";
         }
         return "0";
@@ -564,10 +563,10 @@ public class Utils {
         RequestBody body = RequestBody.create(contentType, reqBody.toString());
         String respMsg = okHttp(body, botKeyUrl);
         if ("0".equals(respMsg.substring(11, 12))) {
-            System.out.println("发送消息成功！");
+            Setting.getBot().getLogger().info("发送消息成功！");
         } else {
-            System.out.println("请求失败！");
-            System.out.println("群机器人推送消息失败，错误信息：\n" + respMsg);
+            Setting.getBot().getLogger().info("请求失败！");
+            Setting.getBot().getLogger().info("群机器人推送消息失败，错误信息：\n" + respMsg);
         }
     }
 

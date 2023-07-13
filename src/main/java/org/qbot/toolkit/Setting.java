@@ -2,6 +2,7 @@ package org.qbot.toolkit;
 
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
+import net.mamoe.mirai.Bot;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.FileInputStream;
@@ -16,6 +17,10 @@ import java.util.Map;
  */
 
 public class Setting {
+
+    public static Bot getBot() {
+        return Bot.getInstance(getQq());
+    }
 
     public static long getQq() {
         try {
@@ -211,9 +216,9 @@ public class Setting {
             isUpdate = true;
         } finally {
             if (isUpdate) {
-                System.out.println("正在更新配置文件");
+                Setting.getBot().getLogger().info("正在更新配置文件");
                 SetSetting.setFile(VERSION_NUM, getQq(), getAppId(), getApiKey(), getSecretKey(), getImageNum(), getImageRecall(), getAgreeFriend(), getAgreeGroup(), getOldAi(), getAiApiKey(), getAiApiSecret(), getAutoFortune(), getAutoNews(), getAutoTips(), getGroup(), getGroupManagement(), getAdminQQ(), getMusicAPIURL(), "");
-                System.out.println("更新配置文件成功");
+                Setting.getBot().getLogger().info("更新配置文件成功");
             }
         }
 
@@ -225,7 +230,7 @@ public class Setting {
      */
 
     public static boolean updateConfig(boolean options, long value) {
-        System.out.println("正在更新配置文件");
+        Setting.getBot().getLogger().info("正在更新配置文件");
         JSONArray jsonArray = getGroup();
         if (options) {
             for (int i = 0; i < jsonArray.size(); i++) {
@@ -250,7 +255,7 @@ public class Setting {
     }
 
     public static boolean updateConfig(String options, boolean value) {
-        System.out.println("正在更新配置文件");
+        Setting.getBot().getLogger().info("正在更新配置文件");
         switch (options) {
             case "Friend":
                 SetSetting.setFile(VERSION_NUM, getQq(), getAppId(), getApiKey(), getSecretKey(), getImageNum(), getImageRecall(), value, getAgreeGroup(), getAi(), getAiApiKey(), getAiApiSecret(), getAutoFortune(), getAutoNews(), getAutoTips(), getGroup(), getGroupManagement(), getAdminQQ(), getMusicAPIURL(), getQYWXKEY());
@@ -274,7 +279,7 @@ public class Setting {
                 SetSetting.setFile(VERSION_NUM, getQq(), getAppId(), getApiKey(), getSecretKey(), getImageNum(), getImageRecall(), getAgreeFriend(), getAgreeGroup(), getAi(), getAiApiKey(), getAiApiSecret(), getAutoFortune(), getAutoNews(), getAutoTips(), getGroup(), value, getAdminQQ(), getMusicAPIURL(), getQYWXKEY());
                 return true;
             default:
-                System.out.println("更新失败");
+                Setting.getBot().getLogger().info("更新失败");
                 return false;
         }
     }
@@ -289,7 +294,7 @@ public class Setting {
                     SetSetting.setFile(VERSION_NUM, getQq(), getAppId(), getApiKey(), getSecretKey(), getImageNum(), value, getAgreeFriend(), getAgreeGroup(), getAi(), getAiApiKey(), getAiApiSecret(), getAutoFortune(), getAutoNews(), getAutoTips(), getGroup(), getGroupManagement(), getAdminQQ(), getMusicAPIURL(), getQYWXKEY());
                     break;
                 default:
-                    System.out.println("更新失败");
+                    Setting.getBot().getLogger().info("更新失败");
                     return false;
             }
             return true;

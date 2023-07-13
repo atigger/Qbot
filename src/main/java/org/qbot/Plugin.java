@@ -45,7 +45,7 @@ public final class Plugin extends JavaPlugin {
     public void onEnable() {
         getLogger().info("启动中。。。");
         CreateFile createFile = new CreateFile();
-        createFile.createFile();
+        createFile.createFile(this);
         Utils utils = new Utils();
 
         GroupManagementSetting groupManagementSetting = new GroupManagementSetting();
@@ -157,7 +157,7 @@ public final class Plugin extends JavaPlugin {
             try {
                 if (!musicMessageDeal.msgDel(f.getFriend(), msg)) {
                     if (senderQq == superAdmin) {
-                        System.out.println("收到管理员消息:" + msg);
+                        getLogger().info("收到管理员消息:" + msg);
                         try {
                             AdminMessageDeal.msgDel(msg, f.getSender());
                         } catch (InterruptedException e) {
@@ -166,7 +166,7 @@ public final class Plugin extends JavaPlugin {
                     }
                 }
             } catch (IOException | InterruptedException e) {
-                System.out.printf(String.valueOf(e));
+                getLogger().info(String.valueOf(e));
                 throw new RuntimeException(e);
             }
         });
@@ -226,6 +226,7 @@ public final class Plugin extends JavaPlugin {
         });
 
         StartThread startThread = new StartThread();
+        getLogger().info("定时任务将在一分钟后启动");
         startThread.start();
     }
 

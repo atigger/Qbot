@@ -50,14 +50,13 @@ public class MessageDeal {
     private static final String STRING_BEAUTY = "美女";
     private static final String STRING_BEAUTY_PICTURES = "美女图片";
     private static final String STRING_GET_SIGN = "求签";
-    private static final String STRING_GUANYIN_GET_SIGN = "观音求签";
+    private static final String STRING_GUANYIN_GET_SIGN = "诸葛神签";
     private static final String STRING_MENU = "菜单";
     private static final String STRING_WEATHER = "天气";
     private static final String STRING_HELP = "帮助";
     private static final String STRING_FISH = "摸鱼办";
     private static final String STRING_BEAUTY_VIDEO = "美女视频";
     private static final String NUM_ONE = "1";
-    private static final int NUM_ELEVEN = 11;
     private static final JSONObject TWELVE_HOROSCOPE = JSONObject.parseObject("{'白羊':'aries','金牛':'taurus','双子':'gemini','巨蟹':'cancer','狮子':'leo','处女':'virgo','天秤':'libra','天蝎':'scorpio','射手':'sagittarius','摩羯':'capricorn','水瓶':'aquarius','双鱼':'pisces'}");
     private static final JSONObject HOT_LIST = JSONObject.parseObject("{'微博热搜':'wbHot'}");
     ExecutorService executorService = Executors.newCachedThreadPool();
@@ -68,7 +67,7 @@ public class MessageDeal {
             ScriptException, NoSuchMethodException, ParseException {
         MessageChain chain;
         this.group = group;
-        System.out.println("收到的消息:" + msg + " 消息长度:" + msg.length());
+        Setting.getBot().getLogger().info("收到的消息:" + msg + " 消息长度:" + msg.length());
         if (STRING_FISH.equals(msg)) {
 //            chain = new MessageChainBuilder().append(new PlainText(pluginUtil.moFish())).build();
 //            group.sendMessage(chain);
@@ -96,7 +95,7 @@ public class MessageDeal {
             try {
                 MessageSource.recall(msgchains);
             } catch (Exception e) {
-                System.out.println("撤回失败1");
+                Setting.getBot().getLogger().info("撤回失败1");
             }
             MessageReceipt<Group> messageReceipts = group.sendMessage("正在上传，请稍后...");
             String filePath = pluginUtil.getVideo();
@@ -111,7 +110,7 @@ public class MessageDeal {
                         uploadFile.delete();
                     }
                 } catch (Exception e) {
-                    System.out.println("撤回失败");
+                    Setting.getBot().getLogger().info("撤回失败");
                 }
             } catch (Exception e) {
                 messageReceipts.recall();
@@ -120,7 +119,7 @@ public class MessageDeal {
             return;
         }
 
-        if (msg.indexOf(STRING_LISTENTOMUSIC) == 0) {
+        if (msg.startsWith(STRING_LISTENTOMUSIC)) {
             msg = msg.replace(STRING_LISTENTOMUSIC, "");
             if ("".equals(msg)) {
                 chain = new PlainText("？ \n你总得告诉我要听什么吧？").plus(new Face(244));
@@ -133,7 +132,7 @@ public class MessageDeal {
             return;
         }
 
-        if (msg.indexOf(STRING_SAY) == 0) {
+        if (msg.startsWith(STRING_SAY)) {
             msg = msg.replaceFirst(STRING_SAY, "");
             if ("".equals(msg)) {
                 chain = new PlainText("？ \n你总得告诉我要说什么吧？").plus(new Face(244));
@@ -152,7 +151,7 @@ public class MessageDeal {
             return;
         }
 
-        if (msg.contains(STRING_QQ)) {
+        if (msg.startsWith(STRING_QQ)) {
             msg = msg.replace(STRING_QQ, "");
             msg = msg.replace(" ", "");
             JSONObject jsonObject = pluginUtil.getPower(msg, "qq");
@@ -168,7 +167,7 @@ public class MessageDeal {
             return;
         }
 
-        if (msg.contains(STRING_WE_CHAT)) {
+        if (msg.startsWith(STRING_WE_CHAT)) {
             msg = msg.replace(STRING_WE_CHAT, "");
             msg = msg.replace(" ", "");
             JSONObject jsonObject = pluginUtil.getPower(msg, "wx");
@@ -204,11 +203,7 @@ public class MessageDeal {
 
         if (STRING_FORTUNE.equals(msg) || STRING_TODAY_FORTUNE.equals(msg)) {
             String replaceMsg = pluginUtil.getFortune();
-            if (!replaceMsg.contains(STRING_GET_FAILED)) {
-                chain = new At(senderId).plus(new PlainText("\n" + replaceMsg));
-            } else {
-                chain = new At(senderId).plus(new PlainText("\n" + replaceMsg).plus(new Face(263)));
-            }
+            chain = new At(senderId).plus(new PlainText("\n" + replaceMsg));
             group.sendMessage(chain);
             return;
         }
@@ -240,7 +235,7 @@ public class MessageDeal {
             try {
                 MessageSource.recall(msgchains);
             } catch (Exception e) {
-                System.out.println("撤回失败1");
+                Setting.getBot().getLogger().info("撤回失败1");
             }
             try {
                 if (recallTimes != 0) {
@@ -248,7 +243,7 @@ public class MessageDeal {
                     messageReceipts.recall();
                 }
             } catch (Exception e) {
-                System.out.println("撤回失败");
+                Setting.getBot().getLogger().info("撤回失败");
             }
             return;
         }
@@ -271,7 +266,7 @@ public class MessageDeal {
             }
         }
 
-        if (STRING_HELP.equals(msg)) {
+        if (msg.contains(STRING_HELP)) {
             chain = new MessageChainBuilder().append(new At(senderId)).append(new PlainText("\n帮助文档:\nhttps://www" +
                     ".miraiqbot.top/\n当前版本：" + PluginVersion.VERSION_NUM)).build();
             group.sendMessage(chain);
@@ -318,7 +313,7 @@ public class MessageDeal {
      * 菜单
      */
     public MessageChain getMenuTxt() {
-        return new MessageChainBuilder().append(new Face(147)).append(new PlainText("           菜单          ")).append(new Face(147)).append(new PlainText("\n◇━━━━━━━━◇\n")).append(new Face(190)).append(new PlainText("今日运势  今日新闻")).append(new Face(190)).append(new PlainText("\n")).append(new Face(190)).append(new PlainText("星座运势  观音求签")).append(new Face(190)).append(new PlainText("\n")).append(new Face(190)).append(new PlainText("音乐系统  语音系统")).append(new Face(190)).append(new PlainText("\n")).append(new Face(190)).append(new PlainText("美女图片  美女视频")).append(new Face(190)).append(new PlainText("\n")).append(new Face(190)).append(new PlainText("战力查询  敬请期待")).append(new Face(190)).append(new PlainText("\n◇━━━━━━━━◇\nPS:@我并发相应文字查看指令\n当前版本：" + PluginVersion.VERSION_NUM)).build();
+        return new MessageChainBuilder().append(new Face(147)).append(new PlainText("           菜单          ")).append(new Face(147)).append(new PlainText("\n◇━━━━━━━━◇\n")).append(new Face(190)).append(new PlainText("今日运势  今日新闻")).append(new Face(190)).append(new PlainText("\n")).append(new Face(190)).append(new PlainText("星座运势  诸葛神签")).append(new Face(190)).append(new PlainText("\n")).append(new Face(190)).append(new PlainText("音乐系统  语音系统")).append(new Face(190)).append(new PlainText("\n")).append(new Face(190)).append(new PlainText("美女图片  美女视频")).append(new Face(190)).append(new PlainText("\n")).append(new Face(190)).append(new PlainText("战力查询  帮助文档")).append(new Face(190)).append(new PlainText("\n◇━━━━━━━━◇\nPS:@我并发相应文字查看指令\n当前版本：" + PluginVersion.VERSION_NUM)).build();
     }
 
 

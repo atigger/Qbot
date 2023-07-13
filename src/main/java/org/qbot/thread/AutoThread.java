@@ -11,12 +11,7 @@ import org.qbot.toolkit.PluginUtil;
 import org.qbot.toolkit.Setting;
 import org.qbot.toolkit.Utils;
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-
-import static org.qbot.toolkit.Utils.getPluginsDataPath;
 
 /**
  * AutoThread class
@@ -30,11 +25,11 @@ public class AutoThread extends Thread {
     @SuppressWarnings("InfiniteLoopStatement")
     public void run() {
         Utils utils = new Utils();
-        System.out.println("开启自动发送小提醒线程成功！");
+        Setting.getBot().getLogger().info("开启自动发送小提醒线程成功！");
         PluginUtil pluginUtil = new PluginUtil();
-        Bot bot = Bot.getInstance(Setting.getQq());
         while (true) {
             try {
+                Bot bot = Bot.getInstance(Setting.getQq());
                 Thread.sleep(1000);
                 boolean autoTips = Setting.getAutoTips();
                 boolean autoNews = Setting.getAutoNews();
@@ -52,7 +47,7 @@ public class AutoThread extends Thread {
                                 group.sendMessage(chain);
                             }
                         } catch (Exception e) {
-                            System.out.println("发送小提醒失败");
+                            bot.getLogger().info("发送小提醒失败");
                         }
                     }
                     sleep(60000);
@@ -66,7 +61,7 @@ public class AutoThread extends Thread {
 //                                    .build();
 //                            group.sendMessage(chain);
 //                        } catch (Exception e) {
-//                            System.out.println("发送小提醒失败");
+//                            bot.getLogger().info("发送小提醒失败");
 //                        }
                         try {
                             Group group = bot.getGroup(Setting.getGroup().getLongValue(i));
@@ -80,7 +75,7 @@ public class AutoThread extends Thread {
                                 group.sendMessage(chain);
                             }
                         } catch (Exception e) {
-                            System.out.println("发送小提醒失败");
+                            bot.getLogger().info("发送小提醒失败");
                         }
                     }
                     sleep(60000);
