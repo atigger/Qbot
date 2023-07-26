@@ -226,7 +226,7 @@ public final class Plugin extends JavaPlugin {
         });
 
         StartThread startThread = new StartThread();
-        getLogger().info("定时任务将在一分钟后启动");
+        getLogger().info("定时任务将在Bot登录后启动");
         startThread.start();
     }
 
