@@ -18,15 +18,17 @@ public class StartThread extends Thread {
         boolean autoFortune = Setting.getAutoFortune();
         boolean autoTips = Setting.getAutoTips();
         boolean autoNews = Setting.getAutoNews();
-        AutoGetFortuneThread autoGetFortuneThread = new AutoGetFortuneThread();
-        AutoThread autoThread = new AutoThread();
-        while (!Setting.getBot().isOnline()) {
+        while (true) {
             try {
+                if (Setting.getBot().isOnline()) {
+                    break;
+                }
                 Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
+            } catch (Exception ignored) {
             }
         }
+        AutoGetFortuneThread autoGetFortuneThread = new AutoGetFortuneThread();
+        AutoThread autoThread = new AutoThread();
         if (autoFortune) {
             autoGetFortuneThread.start();
         }
