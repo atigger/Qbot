@@ -7,7 +7,7 @@ plugins {
 }
 
 group = "org.qbot"
-version = "3.4.0-RC"
+version = "3.4.0"
 
 repositories {
     maven("https://maven.aliyun.com/repository/public")

@@ -85,7 +85,7 @@ public class MessageDeal {
 
 
         if ("".equals(msg)) {
-            chain = new MessageChainBuilder().append(new At(senderId)).append("\n发送<菜单>命令可获取菜单").build();
+            chain = new MessageChainBuilder().append(new At(senderId)).append("\n发送<菜单>命令可获取菜单\n发送<帮助>命令可获取帮助文档").build();
             group.sendMessage(chain);
             return;
         }
