@@ -149,6 +149,16 @@ public final class Plugin extends JavaPlugin {
             }
         });
 
+        GlobalEventChannel.INSTANCE.subscribeAlways(NudgeEvent.class, n -> {
+            if (n.getTarget().getId() == botQq) {
+                try {
+                    messagedeal.nudgeDel(n.getFrom().getId(), n.getSubject().getId());
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
+
         //监听好友消息
         GlobalEventChannel.INSTANCE.subscribeAlways(FriendMessageEvent.class, f -> {
             long senderQq = f.getSender().getId();

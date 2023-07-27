@@ -43,8 +43,7 @@ public class MusicMessageDeal {
         if (STRING_LOGIN.equals(msg)) {
             chain = new MessageChainBuilder().append(new PlainText("正在获取二维码,请稍后")).build();
             MessageReceipt<Friend> messageReceipts = frind.sendMessage(chain);
-            int randomNum = Utils.getRandomNum(0, 10000);
-            String filename = Utils.getTime() + randomNum + ".jpg";
+            String filename = Utils.getTime() + Utils.getRandomNum(0, 10000) + ".jpg";
             try {
                 String qrkey = neteaseCloudMusicTask.getQrKey();
                 String orCodeBase64 = neteaseCloudMusicTask.getQrCode(qrkey).replace("data:image/png;base64,", "");

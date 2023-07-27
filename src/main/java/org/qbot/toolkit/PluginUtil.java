@@ -5,7 +5,8 @@ import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import net.mamoe.mirai.console.plugin.PluginManager;
 import net.mamoe.mirai.console.plugin.jvm.JvmPlugin;
-import net.mamoe.mirai.message.data.*;
+import net.mamoe.mirai.message.data.MusicKind;
+import net.mamoe.mirai.message.data.MusicShare;
 import net.mamoe.mirai.utils.ExternalResource;
 import okhttp3.*;
 import org.qbot.Plugin;
@@ -355,20 +356,45 @@ public class PluginUtil {
      * 摸鱼办新
      */
     public String moFishNew() {
-        String nowDay = utils.getTime1();
-        File newsFile = new File(utils.getPluginsDataPath() + "/cache/mofish/" + nowDay + ".jpg");
-        String filePath = utils.getPluginsDataPath() + "/cache/mofish/" + utils.getTime1() + ".jpg";
-        String url = API.FISH_URL;
-        if (newsFile.exists()) {
-            return newsFile.getPath();
+        File File = new File(utils.getPluginsDataPath() + "/cache/mofish/" + utils.getTime1() + ".jpg");
+        if (File.exists()) {
+            return File.getPath();
         } else {
-            if (utils.downloadFile(url, filePath)) {
-                return newsFile.getPath();
+            if (utils.downloadFile(API.FISH_URL, File.getPath())) {
+                return File.getPath();
             } else {
                 return "失败";
             }
         }
     }
+
+    public String generatePicture(String key, String text, String type) {
+        String nowDay = utils.getTime1();
+        File file = new File(utils.getPluginsDataPath() + "/cache/image/" + Utils.getTime() + Utils.getRandomNum(0, 10000) + ".jpg");
+        String url = null;
+        switch (type) {
+            case "txt":
+                url = API.PETPET_URL + "?key=" + key + "&textList=" + text;
+                break;
+            case "img":
+                url = API.PETPET_URL + "?key=" + key + "&toAvatar=" + text;
+                break;
+            case "gif":
+                url = API.PETPET_URL + "?key=" + key + "&toAvatar=" + text;
+                file = new File(utils.getPluginsDataPath() + "/cache/image/" + Utils.getTime() + Utils.getRandomNum(0, 10000) + ".gif");
+                break;
+        }
+        if (file.exists()) {
+            file.delete();
+        }
+        if (utils.downloadFile(url, file.getPath())) {
+            return file.getPath();
+        } else {
+            return "失败";
+        }
+    }
+
+
 
     /**
      * Ai回复

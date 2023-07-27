@@ -16,6 +16,8 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.text.ParseException;
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -56,6 +58,8 @@ public class MessageDeal {
     private static final String STRING_HELP = "帮助";
     private static final String STRING_FISH = "摸鱼办";
     private static final String STRING_BEAUTY_VIDEO = "美女视频";
+    private static final String STRING_GOOD_NEWS = "喜报";
+    private static final String STRING_BAD_NEWS = "悲报";
     private static final String NUM_ONE = "1";
     private static final JSONObject TWELVE_HOROSCOPE = JSONObject.parseObject("{'白羊':'aries','金牛':'taurus','双子':'gemini','巨蟹':'cancer','狮子':'leo','处女':'virgo','天秤':'libra','天蝎':'scorpio','射手':'sagittarius','摩羯':'capricorn','水瓶':'aquarius','双鱼':'pisces'}");
     private static final JSONObject HOT_LIST = JSONObject.parseObject("{'微博热搜':'wbHot'}");
@@ -85,7 +89,13 @@ public class MessageDeal {
 
 
         if ("".equals(msg)) {
-            chain = new MessageChainBuilder().append(new At(senderId)).append("\n发送<菜单>命令可获取菜单\n发送<帮助>命令可获取帮助文档").build();
+            String ImgUrl = pluginUtil.generatePicture("crawl", java.net.URLEncoder.encode("http://q.qlogo.cn/g?b=qq&nk=" + senderId + "&s=640", "UTF-8"), "img");
+            if (!ImgUrl.contains(STRING_FAIL)) {
+                Image image = getImageAdd(ImgUrl);
+                chain = new MessageChainBuilder().append(image).append("\n发送<菜单>命令可获取菜单\n发送<帮助>命令可获取帮助文档").build();
+            } else {
+                chain = new At(senderId).plus(new PlainText("\n发送<菜单>命令可获取菜单\n发送<帮助>命令可获取帮助文档"));
+            }
             group.sendMessage(chain);
             return;
         }
@@ -296,10 +306,44 @@ public class MessageDeal {
             return;
         }
 
+        if (msg.contains(STRING_GOOD_NEWS)) {
+            msg = msg.replace("喜报", "");
+            msg = msg.replace(" ", "");
+            String ImgUrl = pluginUtil.generatePicture("certificate", msg, "txt");
+            if (!ImgUrl.contains(STRING_FAIL)) {
+                Image image = getImageAdd(ImgUrl);
+                chain = new MessageChainBuilder().append(image).build();
+            } else {
+                chain = new At(senderId).plus(new PlainText("\n获取失败"));
+            }
+            group.sendMessage(chain);
+            return;
+        }
+
+        if (msg.contains(STRING_BAD_NEWS)) {
+            msg = msg.replace("悲报", "");
+            msg = msg.replace(" ", "");
+            String ImgUrl = pluginUtil.generatePicture("sad_news", msg, "txt");
+            if (!ImgUrl.contains(STRING_FAIL)) {
+                Image image = getImageAdd(ImgUrl);
+                chain = new MessageChainBuilder().append(image).build();
+            } else {
+                chain = new At(senderId).plus(new PlainText("\n获取失败"));
+            }
+            group.sendMessage(chain);
+            return;
+        }
+
         if (Setting.getAi()) {
             String reply = pluginUtil.aiReply(senderId, senderName, group.getId(), msg);
             if (reply.equals("你干嘛！哎哟~")) {
-                chain = new MessageChainBuilder().append(new PlainText(reply)).append("\n发送<菜单>命令可获取菜单").build();
+                String ImgUrl = pluginUtil.generatePicture("crawl", java.net.URLEncoder.encode("http://q.qlogo.cn/g?b=qq&nk=" + senderId + "&s=640", "UTF-8"), "img");
+                if (!ImgUrl.contains(STRING_FAIL)) {
+                    Image image = getImageAdd(ImgUrl);
+                    chain = new MessageChainBuilder().append(image).append("\n发送<菜单>命令可获取菜单\n发送<帮助>命令可获取帮助文档").build();
+                } else {
+                    chain = new At(senderId).plus(new PlainText("\n发送<菜单>命令可获取菜单\n发送<帮助>命令可获取帮助文档"));
+                }
             } else {
                 chain = new MessageChainBuilder().append(new PlainText(reply)).build();
             }
@@ -309,11 +353,26 @@ public class MessageDeal {
 
     }
 
+    public void nudgeDel(Long formId, Long groupId) throws IOException {
+        MessageChain chain;
+        List<String> keyList = Arrays.asList("breakdown", "monad", "remake", "bite", "cast", "crawl", "dont_touch", "hammer", "knock", "petpet", "play", "pound", "suck");
+        String ImgUrl = pluginUtil.generatePicture(keyList.get(Utils.getRandomNum(0, 12)), java.net.URLEncoder.encode("http://q.qlogo.cn/g?b=qq&nk=" + formId + "&s=640", "UTF-8"), "gif");
+        this.group = Setting.getBot().getGroup(groupId);
+        if (!ImgUrl.contains(STRING_FAIL)) {
+            Image image = getImageAdd(ImgUrl);
+            chain = new MessageChainBuilder().append(image).build();
+        } else {
+            chain = new At(formId).plus(new PlainText("\n你戳我干啥"));
+        }
+        this.group.sendMessage(chain);
+        return;
+    }
+
     /**
      * 菜单
      */
     public MessageChain getMenuTxt() {
-        return new MessageChainBuilder().append(new Face(147)).append(new PlainText("           菜单          ")).append(new Face(147)).append(new PlainText("\n◇━━━━━━━━◇\n")).append(new Face(190)).append(new PlainText("今日运势  今日新闻")).append(new Face(190)).append(new PlainText("\n")).append(new Face(190)).append(new PlainText("星座运势  诸葛神签")).append(new Face(190)).append(new PlainText("\n")).append(new Face(190)).append(new PlainText("音乐系统  语音系统")).append(new Face(190)).append(new PlainText("\n")).append(new Face(190)).append(new PlainText("美女图片  美女视频")).append(new Face(190)).append(new PlainText("\n")).append(new Face(190)).append(new PlainText("战力查询  帮助文档")).append(new Face(190)).append(new PlainText("\n◇━━━━━━━━◇\nPS:@我并发相应文字查看指令\n当前版本：" + PluginVersion.VERSION_NUM)).build();
+        return new MessageChainBuilder().append(new Face(147)).append(new PlainText("           菜单          ")).append(new Face(147)).append(new PlainText("\n◇━━━━━━━━◇\n")).append(new Face(190)).append(new PlainText("今日运势  今日新闻")).append(new Face(190)).append(new PlainText("\n")).append(new Face(190)).append(new PlainText("星座运势  诸葛神签")).append(new Face(190)).append(new PlainText("\n")).append(new Face(190)).append(new PlainText("音乐系统  语音系统")).append(new Face(190)).append(new PlainText("\n")).append(new Face(190)).append(new PlainText("美女图片  美女视频")).append(new Face(190)).append(new PlainText("\n")).append(new Face(190)).append(new PlainText("战力查询  帮助文档")).append(new Face(190)).append(new PlainText("\n")).append(new Face(190)).append(new PlainText("喜报悲报  敬请期待")).append(new Face(190)).append(new PlainText("\n◇━━━━━━━━◇\nPS:@我并发相应文字查看指令\n当前版本：" + PluginVersion.VERSION_NUM)).build();
     }
 
 

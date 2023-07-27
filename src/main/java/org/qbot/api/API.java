@@ -58,4 +58,9 @@ public class API {
      * 图片网站提示
      */
     public static final String IMAGE_TIPS_URL = BASE_URL + "/file/image_tips.png";
+
+    /**
+     * petpet
+     */
+    public static final String PETPET_URL = BASE_URL + "/petpet";
 }
