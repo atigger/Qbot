@@ -355,8 +355,8 @@ public class MessageDeal {
 
     public void nudgeDel(Long formId, Long groupId) throws IOException {
         MessageChain chain;
-        List<String> keyList = Arrays.asList("breakdown", "monad", "remake", "bite", "cast", "crawl", "dont_touch", "hammer", "knock", "petpet", "play", "pound", "suck");
-        String ImgUrl = pluginUtil.generatePicture(keyList.get(Utils.getRandomNum(0, 12)), java.net.URLEncoder.encode("http://q.qlogo.cn/g?b=qq&nk=" + formId + "&s=640", "UTF-8"), "gif");
+        List<String> keyList = Arrays.asList("breakdown", "bite", "cast", "crawl", "dont_touch", "eat", "hammer", "knock", "pat", "petpet", "play", "pound", "roll", "suck", "tear", "thump", "tightly");
+        String ImgUrl = pluginUtil.generatePicture(keyList.get(Utils.getRandomNum(0, 16)), java.net.URLEncoder.encode("http://q.qlogo.cn/g?b=qq&nk=" + formId + "&s=640", "UTF-8"), "gif");
         this.group = Setting.getBot().getGroup(groupId);
         if (!ImgUrl.contains(STRING_FAIL)) {
             Image image = getImageAdd(ImgUrl);
