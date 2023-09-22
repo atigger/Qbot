@@ -224,6 +224,7 @@ public class Utils {
                 while (lnr.readLine() != null) {
                     linenumber++;
                 }
+                fr.close();
                 lnr.close();
                 return linenumber;
             }
@@ -434,6 +435,7 @@ public class Utils {
             JSONObject jsonObject = JSON.parseObject(data);
             String time = jsonObject.getString("date");
             String qian = jsonObject.getString("qian");
+            in.close();
             if (time.equals(getTime1())) {
                 return qian;
             } else {

@@ -37,8 +37,11 @@ public class AutoGetFortuneThread extends Thread {
                 Bot bot = Bot.getInstance(Setting.getQq());
                 Calendar calendar = Calendar.getInstance();
                 int week1 = calendar.get(Calendar.DAY_OF_WEEK);
-                BufferedReader in = new BufferedReader(new FileReader(filePath));
+                FileReader fileReader = new FileReader(filePath);
+                BufferedReader in = new BufferedReader(fileReader);
+                fileReader.close();
                 int week = Integer.parseInt(in.readLine());
+                in.close();
                 JSONArray groupList = Setting.getGroup();
                 if (week != week1) {
                     String txt = pluginUtil.getFortune();

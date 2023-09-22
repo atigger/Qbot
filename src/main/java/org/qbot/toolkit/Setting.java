@@ -6,7 +6,7 @@ import net.mamoe.mirai.Bot;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Map;
 
 /**
@@ -308,8 +308,10 @@ public class Setting {
         Yaml yaml = new Yaml();
         Map<String, Object> map = null;
         try {
-            map = yaml.load(new FileInputStream(filePath));
-        } catch (FileNotFoundException e) {
+            FileInputStream fileInputStream = new FileInputStream(filePath);
+            map = yaml.load(fileInputStream);
+            fileInputStream.close();
+        } catch (IOException e) {
             e.printStackTrace();
         }
         assert map != null;

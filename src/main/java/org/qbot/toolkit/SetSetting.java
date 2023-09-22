@@ -65,6 +65,8 @@ public class SetSetting {
             BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(writerStream, StandardCharsets.UTF_8));
             writer.write(config);
             writer.close();
+            writerStream.flush();
+            writerStream.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
