@@ -37,7 +37,7 @@ public class StartThread extends Thread {
         }
         while (true) {
             try {
-                sleep(60000);
+                Thread.sleep(60000);
                 if (autoFortune) {
                     if (!autoGetFortuneThread.isAlive()) {
                         autoGetFortuneThread = new AutoGetFortuneThread();

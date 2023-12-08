@@ -1,6 +1,6 @@
 QQBOT
 
-本项目基于 [mirai](https://github.com/mamoe/mirai) [![Version](https://img.shields.io/badge/version-2.15.0-green)](https://github.com/mamoe/mirai/releases/tag/v2.15.0)开发
+本项目基于 [mirai](https://github.com/mamoe/mirai) [![Version](https://img.shields.io/badge/version-2.16.0-green)](https://github.com/mamoe/mirai/releases/tag/v2.16.0)开发
 
 [如何使用？](https://github.com/mamoe/mirai/blob/dev/mirai-console/docs/ConfiguringProjects.md) 
 
@@ -44,9 +44,11 @@ Tips:有想要的新功能可以提交issue
 
 更新日志：
 
-2023年9月22日v3.5.1更新
+2023年12月8日v3.5.2更新
 
-1.优化可能存在的内存泄漏问题
+1.mirai-core支持到[2.16.0](https://github.com/mamoe/mirai/releases/tag/v2.16.0)
+
+2.修复API可能因为CDN缓存导致的无法使用的问题
 
 ---
 [更新历史](UPDATE.md)

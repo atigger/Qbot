@@ -12,37 +12,37 @@ public class API {
     /**
      * 热点接口
      */
-    public static final String HOT_LIST_URL = BASE_URL + "/hotlist";
+    public static final String HOT_LIST_URL = BASE_URL + "/hotlist/index.php";
 
     /**
      * 星座运势
      */
-    public static final String HOROSCOPE_URL = BASE_URL + "/horoscope";
+    public static final String HOROSCOPE_URL = BASE_URL + "/horoscope/index.php";
 
     /**
      * 一言
      */
-    public static final String ONE_WORD_URL = BASE_URL + "/one";
+    public static final String ONE_WORD_URL = BASE_URL + "/one/index.php";
 
     /**
      * 视频
      */
-    public static final String VIDEO_URL = BASE_URL + "/video";
+    public static final String VIDEO_URL = BASE_URL + "/video/index.php";
 
     /**
      * 英雄战力
      */
-    public static final String HERO_POWER_URL = BASE_URL + "/hero";
+    public static final String HERO_POWER_URL = BASE_URL + "/hero/index.php";
 
     /**
      * 摸鱼办
      */
-    public static final String FISH_URL = BASE_URL + "/moyu";
+    public static final String FISH_URL = BASE_URL + "/moyu/index.php";
 
     /**
      * 新闻
      */
-    public static final String NEWS_URL = BASE_URL + "/news";
+    public static final String NEWS_URL = BASE_URL + "/news/index.php";
 
     /**
      * 诸葛神签
@@ -62,5 +62,5 @@ public class API {
     /**
      * petpet
      */
-    public static final String PETPET_URL = BASE_URL + "/petpet";
+    public static final String PETPET_URL = BASE_URL + "/petpet/index.php";
 }

@@ -39,8 +39,8 @@ public class AutoGetFortuneThread extends Thread {
                 int week1 = calendar.get(Calendar.DAY_OF_WEEK);
                 FileReader fileReader = new FileReader(filePath);
                 BufferedReader in = new BufferedReader(fileReader);
-                fileReader.close();
                 int week = Integer.parseInt(in.readLine());
+                fileReader.close();
                 in.close();
                 JSONArray groupList = Setting.getGroup();
                 if (week != week1) {
