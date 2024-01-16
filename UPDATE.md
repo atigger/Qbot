@@ -1,3 +1,9 @@
+2023年12月8日v3.5.2更新
+
+1.mirai-core支持到[2.16.0](https://github.com/mamoe/mirai/releases/tag/v2.16.0)
+
+2.修复API可能因为CDN缓存导致的无法使用的问题
+
 2023年9月22日v3.5.1更新
 
 1.优化可能存在的内存泄漏问题

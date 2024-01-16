@@ -47,27 +47,31 @@ public class PluginUtil {
         if (html == null) {
             return "获取失败";
         }
+        String txt = "获取失败";
         try {
             JSONObject json;
             json = JSON.parseObject(html);
-            json = JSON.parseObject(String.valueOf(json.getJSONObject("data").getJSONArray("cards").get(0)));
-            String txt = String.valueOf(json.getJSONObject("mblog").getString("text"));
-            String wbTime = String.valueOf(json.getJSONObject("mblog").getString("created_at"));
-            String nowWeek = utils.getWeek();
-            if (wbTime.contains(nowWeek)) {
-                if (txt.contains(broadcast)) {
-                    txt = txt.replace("<br />", "\n");
-                } else {
-                    txt = "获取失败，获取到广告了";
+            JSONArray jsonArray = JSON.parseArray(String.valueOf(json.getJSONObject("data").getJSONArray("cards")));
+            for (int i = 0; i < jsonArray.size(); i++) {
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                if (jsonObject.getString("card_type").equals("9")) {
+                    txt = String.valueOf(jsonObject.getJSONObject("mblog").getString("text"));
+                    String wbTime = String.valueOf(jsonObject.getJSONObject("mblog").getString("created_at"));
+                    String nowWeek = utils.getWeek();
+                    if (wbTime.contains(nowWeek)) {
+                        if (txt.contains(broadcast)) {
+                            txt = txt.replace("<br />", "\n");
+                            return txt;
+                        }
+                    } else {
+                    }
                 }
-            } else {
-                txt = "获取失败，今日还未发运势";
             }
-            return txt;
+            txt = "获取失败";
         } catch (Exception e) {
-            return "获取失败";
-        }
 
+        }
+        return txt;
     }
 
     /**
@@ -393,7 +397,6 @@ public class PluginUtil {
             return "失败";
         }
     }
-
 
 
     /**

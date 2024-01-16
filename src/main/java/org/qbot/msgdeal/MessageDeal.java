@@ -231,30 +231,8 @@ public class MessageDeal {
         }
 
         if (STRING_BEAUTY.equals(msg) || STRING_BEAUTY_PICTURES.equals(msg)) {
-            ForwardMessageBuilder builder1 = new ForwardMessageBuilder(group);
-            ForwardMessageBuilder builder = new ForwardMessageBuilder(group);
-
-            builder.add(2119517658L, "一位不愿透露姓名的群友", getImageAdd(dataFolderPath + "/image_qr_code.png"));
-            builder.add(2119517658L, "一位不愿透露姓名的群友", new PlainText("注意\n由于tx限制\n请按照以下提示操作\n使用浏览器打开").plus(getImageAdd(dataFolderPath + "/image_tips.png")));
-            builder.add(2119517658L, "一位不愿透露姓名的群友",
-                    new PlainText("注意\n刷新即可切换图片").plus(new Face(271)));
-            ForwardMessage forward = builder.build();
-            ForwardMessage forward1 = builder1.add(2119517658L, "一位不愿透露姓名的群友", forward).build();
-            MessageReceipt<Group> messageReceipts = group.sendMessage(forward1);
-            int recallTimes = Setting.getImageRecall();
-            try {
-                MessageSource.recall(msgchains);
-            } catch (Exception e) {
-                Setting.getBot().getLogger().info("撤回失败1");
-            }
-            try {
-                if (recallTimes != 0) {
-                    Thread.sleep(recallTimes * 1000);
-                    messageReceipts.recall();
-                }
-            } catch (Exception e) {
-                Setting.getBot().getLogger().info("撤回失败");
-            }
+            chain = new MessageChainBuilder().append(new LightApp("{\"app\":\"com.tencent.imagetextbot\",\"desc\":\"\",\"view\":\"index\",\"ver\":\"1.0.0.14\",\"prompt\":\"美女图\",\"appID\":\"\",\"sourceName\":\"\",\"actionData\":\"\",\"actionData_A\":\"\",\"sourceUrl\":\"\",\"meta\":{\"robot\":{\"cover\":\"https:\\/\\/qq.lolimi.cn\\/img\\/api.php?url=https:\\/\\/api.lolimi.cn\\/API\\/tup\\/xjj.php\",\"jump_url\":\"\",\"subtitle\":\"\",\"title\":\"每次打开都会刷新\"}},\"config\":{\"autosize\":1,\"ctime\":1695818144,\"token\":\"a19ec2c7d68007d24235ab986e9a8845\"},\"text\":\"\",\"sourceAd\":\"\",\"extra\":\"\"}")).build();
+            group.sendMessage(chain);
             return;
         }
 
