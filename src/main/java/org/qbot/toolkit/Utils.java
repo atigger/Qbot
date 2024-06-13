@@ -236,11 +236,24 @@ public class Utils {
     }
 
     /**
+     * 生成随机ip
+     */
+    public String generateRandomChinaIP() {
+        Random random = new Random();
+        // China IP address ranges from 58.16.0.0 to 58.25.255.255
+        int firstPart = 58;
+        int secondPart = 16 + random.nextInt(10); // 16 to 25
+        int thirdPart = random.nextInt(256); // 0 to 255
+        int fourthPart = random.nextInt(256); // 0 to 255
+        return firstPart + "." + secondPart + "." + thirdPart + "." + fourthPart;
+    }
+
+    /**
      * 获取音乐信息
      */
     public JSONObject getMusicInfo(String musicName) {
         String url = "https://music.163.com/api/search/get/web?s=" + musicName + "&type=1&limit=1";
-        String html = okHttpClientGet(url, "220.181.108.104");
+        String html = okHttpClientGet(url, generateRandomChinaIP());
         JSONObject json = JSONObject.parseObject(html);
         JSONObject musicInfoJson = json.getJSONObject("result").getJSONArray("songs").getJSONObject(0);
         JSONObject artists = musicInfoJson.getJSONArray("artists").getJSONObject(0);
