@@ -1,12 +1,24 @@
-QQBOT
+# QQBOT
 
-本项目基于 [mirai](https://github.com/mamoe/mirai) [![Version](https://img.shields.io/badge/version-2.16.0-green)](https://github.com/mamoe/mirai/releases/tag/v2.16.0)开发
+[由于QQ官方针对协议库的围追堵截](https://github.com/Mrs4s/go-cqhttp/issues/2471)，基于mirai的QQ机器人大部分已经无法正常使用，本项目不再维护
 
-[如何使用？](https://github.com/mamoe/mirai/blob/dev/mirai-console/docs/ConfiguringProjects.md) 
+本项目已由mirai转向基于[OneBot 11](https://github.com/botuniverse/onebot-11)
+的[NoneBot](https://github.com/nonebot/nonebot)
 
-[如何配置？](CONFIG.md) 
+# 新项目地址
 
-[在群中使用？](https://www.miraiqbot.top) 
+## [pyQBot](https://github.com/atigger/pyQBot)
+
+---
+
+本项目基于 [mirai](https://github.com/mamoe/mirai) [![Version](https://img.shields.io/badge/version-2.16.0-green)](https://github.com/mamoe/mirai/releases/tag/v2.16.0)
+开发
+
+[如何使用？](https://github.com/mamoe/mirai/blob/dev/mirai-console/docs/ConfiguringProjects.md)
+
+[如何配置？](CONFIG.md)
+
+[在群中使用？](https://www.miraiqbot.top)
 
 ---
 
@@ -44,9 +56,9 @@ Tips:有想要的新功能可以提交issue
 
 更新日志：
 
-2024年6月13日v3.5.4更新
+2024年7月17日v3.5.5更新
 
-1.修复听歌功能bug
+1.修复菜单命令无法发出的bug
 
 ---
 [更新历史](UPDATE.md)
